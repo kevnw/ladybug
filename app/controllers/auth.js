@@ -42,17 +42,17 @@ const generateToken = (user) => {
  */
 const setUserInfo = (req) => {
   let user = {
-    _id: req._id,
-    name: req.name,
-    email: req.email,
-    role: req.role,
-    verified: req.verified
+    _id: req.body._id,
+    name: req.body.name,
+    email: req.body.email,
+    role: req.body.role,
+    verified: req.body.verified
   }
   // Adds verification for testing purposes
   if (process.env.NODE_ENV !== 'production') {
     user = {
       ...user,
-      verification: req.verification
+      verification: req.body.verification
     }
   }
   return user
