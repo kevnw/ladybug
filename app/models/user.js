@@ -74,6 +74,45 @@ const UserSchema = new mongoose.Schema(
   }
 )
 
+const hash = (user, salt, next) => {
+  bcrypt.hash(user.password, salt, (error, newHash) => {
+    if (error) {
+      return next(error)
+    }
+    user.password = newHash
+    console.log("didalam hash = " + user);
+    return next()
+  })
+}
+
+const genSalt = (user, SALT_FACTOR, next) => {
+  console.log("masuk genSalt")
+  bcrypt.genSalt(SALT_FACTOR, (err, salt) => {
+    if (err) {
+      return next(err)
+    }
+    return hash(user, salt, next)
+  })
+}
+
+UserSchema.pre('save', function (next) {
+  console.log("next = " + next)
+  const that = this
+  const SALT_FACTOR = 5
+  if (!that.isModified('password')) {
+    console.log("masuk if")
+    return next()
+  }
+  console.log("gak masuk if")
+  return genSalt(that, SALT_FACTOR, next)
+})
+
+UserSchema.methods.comparePassword = function (passwordAttempt, cb) {
+  bcrypt.compare(passwordAttempt, this.password, (err, isMatch) =>
+    err ? cb(err) : cb(null, isMatch)
+  )
+}
+
 UserSchema.methods.follow = (user_id) => {
   if (this.following.indexOf(user_id) === -1) {
     this.following.push(user_id)

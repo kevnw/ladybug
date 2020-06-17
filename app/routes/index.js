@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-
+const AuthController = require('../controllers/auth')
 /*
  * Setup routes for index
  */
@@ -8,6 +8,7 @@ router.get('/', (req, res) => {
   res.render('index')
 })
 
+router.post('/register', AuthController.register)
 /*
  * Handle 404 error
  */

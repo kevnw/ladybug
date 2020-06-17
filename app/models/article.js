@@ -2,11 +2,21 @@ const mongoose = require('mongoose')
 
 const ArticleSchema = new mongoose.Schema(
   {
-    text: String,
-    title: String,
-    description: String,
+    text: {
+      type: String,
+      required: true
+    },
+    title: {
+      type: String,
+      required: true
+    }, 
+    description: {
+      type: String,
+      required: true
+    },
     feature_img: String,
-    claps: Number,
+    upvote: Number,
+    downvote: Number,
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
@@ -23,8 +33,13 @@ const ArticleSchema = new mongoose.Schema(
   }
 )
 
-ArticleSchema.methods.clap = () => {
-  this.claps++;
+ArticleSchema.methods.upvote = () => {
+  this.upvote++
+  return this.save()
+}
+
+ArticleSchema.methods.downvote = () => {
+  this.downvote--
   return this.save()
 }
 
