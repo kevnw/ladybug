@@ -3,8 +3,10 @@ const router = express.Router()
 const AuthController = require('../controllers/auth')
 
 // Load Auth route
-router.use('/', require('./auth'))
+router.use('/users', require('./auth'))
 
+// Load Post route
+router.use('/posts', require('./post'));
 /*
  * Setup routes for index
  */
@@ -22,5 +24,7 @@ router.use('*', (req, res) => {
     }
   })
 })
+
+
 
 module.exports = router

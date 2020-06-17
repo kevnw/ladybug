@@ -188,6 +188,22 @@ const returnRegisterToken = (item, userInfo) => {
  return data
 }
 
+/* Invalidates a token */
+const invalidateToken = async user => {
+  return new Promise((resolve, reject) => {
+    user.accessToken = null;
+    user.accessTokenExpiry = null;
+
+    user.refreshToken = null;
+    user.refreshTokenExpiry = null;
+
+    user.save((err, item) => {
+      if (err) reject(buildErrObject(422, err.message));
+      resolve(item);
+    });
+  });
+};
+
 /********************
  * Public functions *
  ********************/
@@ -247,3 +263,13 @@ exports.login = async (req, res) => {
       handleError(res, error)
   }
 }
+
+/* Signout called by route */
+exports.logout = async (req, res) => {
+  try {
+    await invalidateToken(user);
+    handleSuccess(res, buildSuccObject('User logged out'));
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
+  }
+};
