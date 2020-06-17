@@ -29,6 +29,13 @@ const UserSchema = new mongoose.Schema(
       enum: ['user', 'admin'],
       default: 'user'
     },
+    avatar: {
+      type: String
+    },
+    date: {
+      type: Date,
+      default: Date.now
+    },
     followers: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -80,13 +87,11 @@ const hash = (user, salt, next) => {
       return next(error)
     }
     user.password = newHash
-    console.log("didalam hash = " + user);
     return next()
   })
 }
 
 const genSalt = (user, SALT_FACTOR, next) => {
-  console.log("masuk genSalt")
   bcrypt.genSalt(SALT_FACTOR, (err, salt) => {
     if (err) {
       return next(err)
@@ -96,14 +101,11 @@ const genSalt = (user, SALT_FACTOR, next) => {
 }
 
 UserSchema.pre('save', function (next) {
-  console.log("next = " + next)
   const that = this
   const SALT_FACTOR = 5
   if (!that.isModified('password')) {
-    console.log("masuk if")
     return next()
   }
-  console.log("gak masuk if")
   return genSalt(that, SALT_FACTOR, next)
 })
 

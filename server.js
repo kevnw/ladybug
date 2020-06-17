@@ -1,6 +1,5 @@
 require('dotenv-safe').config()
 const express = require("express")
-const routes = require('./app/routes');
 const mongoose = require('mongoose')
 const cors = require('cors')
 const bodyParser = require('body-parser')
@@ -40,7 +39,7 @@ app.engine('html', require('ejs').renderFile)
 app.set('view engine', 'html')
 app.use(cors())
 app.use(helmet())
-app.use(routes)
+app.use(require('./app/routes'))
 app.listen(app.get('port'))
 
 // Init MongoDB

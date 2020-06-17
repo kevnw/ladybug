@@ -9,17 +9,24 @@ const ArticleSchema = new mongoose.Schema(
     title: {
       type: String,
       required: true
-    }, 
-    description: {
-      type: String,
-      required: true
     },
     feature_img: String,
-    upvote: Number,
-    downvote: Number,
+    upvote: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    ],
+    downvote: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    ],
     author: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'User',
+      required: true
     },
     comments: [
       {
@@ -27,9 +34,14 @@ const ArticleSchema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: 'User'
         },
-        text: String
+        text: String,
+        date: Date.now
       }
-    ]
+    ],
+    date: {
+      type: Date,
+      default: Date.now
+    }
   }
 )
 

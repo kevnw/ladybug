@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
 const auth = require('../middleware/auth')
+const { addHours } = require('date-fns')
 const uuid = require('uuid')
 const {
   handleError,
@@ -8,6 +9,8 @@ const {
   buildErrObject,
   buildSuccObject
 } = require('../middleware/utils');
+const HOURS_TO_BLOCK = 2
+const LOGIN_ATTEMPTS = 5
 
 /*********************
  * Private functions *
@@ -42,17 +45,17 @@ const generateToken = (user) => {
  */
 const setUserInfo = (req) => {
   let user = {
-    _id: req.body._id,
-    name: req.body.name,
-    email: req.body.email,
-    role: req.body.role,
-    verified: req.body.verified
+    _id: req._id,
+    name: req.name,
+    email: req.email,
+    role: req.role,
+    verified: req.verified
   }
   // Adds verification for testing purposes
   if (process.env.NODE_ENV !== 'production') {
     user = {
       ...user,
-      verification: req.body.verification
+      verification: req.verification
     }
   }
   return user
@@ -88,10 +91,7 @@ const registerUser = async (req) => {
       verification: uuid.v4()
     }); 
 
-    console.log("didalam register user, user = " + user)
     user.save((err, item) => {
-      console.log("error = " + err)
-      console.log(item)
       if (err) reject(buildErrObject(422, err.message))
       resolve(item)
     });
@@ -107,6 +107,70 @@ const isEmailRegistered = async email => {
       else resolve(false);
     });
   });
+}
+
+/**
+ * Checks if blockExpires from user is greater than now
+ * @param {Object} user - user object
+ */
+const userIsBlocked = async (user) => {
+  return new Promise((resolve, reject) => {
+    if (user.blockExpires > new Date()) {
+      reject(buildErrObject(409, 'BLOCKED_USER'))
+    }
+    resolve(true)
+  })
+}
+
+/**
+ * Blocks a user by setting blockExpires to the specified date based on constant HOURS_TO_BLOCK
+ * @param {Object} user - user object
+ */
+const blockUser = async (user) => {
+  return new Promise((resolve, reject) => {
+    user.blockExpires = addHours(new Date(), HOURS_TO_BLOCK)
+    user.save((err, result) => {
+      if (err) {
+        reject(buildErrObject(422, err.message))
+      }
+      if (result) {
+        resolve(buildErrObject(409, 'BLOCKED_USER'))
+      }
+    })
+  })
+}
+
+/* Finds user by email  */
+const findVerifiedUserByEmail = async email => {
+  return new Promise((resolve, reject) => {
+    User.findOne({ email })
+      .select('password loginAttempts blockExpires name email role verified verification')
+      .then(user => {
+        if (!user) {
+          reject(buildErrObject(422, 'User does not exist'));
+        } else {
+          resolve(user); // returns mongoose object
+        }
+      })
+      .catch(err => reject(buildErrObject(422, err.message)));
+  });
+};
+
+/**
+ * Adds one attempt to loginAttempts, then compares loginAttempts with the constant LOGIN_ATTEMPTS, if is less returns wrong password, else returns blockUser function
+ * @param {Object} user - user object
+ */
+const passwordsDoNotMatch = async (user) => {
+  user.loginAttempts += 1
+  await saveLoginAttemptsToDB(user)
+  return new Promise((resolve, reject) => {
+    if (user.loginAttempts <= LOGIN_ATTEMPTS) {
+      resolve(buildErrObject(409, 'WRONG_PASSWORD'))
+    } else {
+      resolve(blockUser(user))
+    }
+    reject(buildErrObject(422, 'ERROR'))
+  })
 }
 
 /* Builds the registration token
@@ -134,18 +198,52 @@ const returnRegisterToken = (item, userInfo) => {
  */
 exports.register = async (req, res) => {
   try {
-    console.log("incoming email = " + req.body.email)
-    // if (await isEmailRegistered(req.body.email)) {
-      // handleError(res, buildErrObject(409, 'Email is already registered'));
-      // return;
-    // }
-    // console.log("lewat isEmailRegistered")
+    if (await isEmailRegistered(req.body.email)) {
+      handleError(res, buildErrObject(409, 'Email is already registered'));
+      return;
+    }
     const user = await registerUser(req)
-    console.log("checkpoint 1")
-    const userInfo = setUserInfo(item)
+    const userInfo = setUserInfo(user)
     const response = returnRegisterToken(user, userInfo)
     res.status(201).json(response)
   } catch (error) {
     handleError(res, error)
+  }
+}
+
+/**
+ * Login function called by route
+ * @param {Object} req - request object
+ * @param {Object} res - response object
+ */
+exports.login = async (req, res) => {
+  try {
+    const data = req.body
+    const user = await findVerifiedUserByEmail(data.email)
+    // await userIsBlocked(user)
+    const isPasswordMatch = await auth.checkPassword(data.password, user)
+    if (!isPasswordMatch) {
+      handleError(res, await passwordsDoNotMatch(user))
+    } else {
+      // all ok, register access and return token
+      user.loginAttempts = 0
+      await saveLoginAttemptsToDB(user)
+      const token = generateToken(user._id)
+
+      handleSuccess(
+        res,
+        buildSuccObject({
+          user: {
+            name: user.name,
+            initials: user.name[0],
+            email: user.email,
+            role: user.role
+          },
+          token
+        })
+      );
+    }
+  } catch (error) {
+      handleError(res, error)
   }
 }
