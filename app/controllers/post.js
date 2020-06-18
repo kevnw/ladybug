@@ -50,3 +50,22 @@ exports.deletePost = async (req, res) => {
     })
     .catch(error => handleError(res, buildErrObject(422, error.message)));
 };
+
+exports.getPostInfo = async (req, res) => {
+  Post.findOne({ _id: req.params.postId })
+    .select('_id text title author')
+    .lean()
+    .then(post => {
+      if (post) handleSuccess(res, buildSuccObject(post));
+      else handleError(res, buildErrObject(422, 'Post not found'));
+    })
+    .catch(err => handleError(res, buildErrObject(422, err.message)));
+};
+
+exports.getPostList = async (req, res) => {
+  Post.find()
+    .select('_id text title author')
+    .lean()
+    .then(postList => handleSuccess(res, buildSuccObject(postList)))
+    .catch(err => handleError(res, buildErrObject(422, err.message)));
+};
