@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const validator = require('validator')
-const mongoosePaginate = require('mongoose-paginate-v2')
 
 const UserSchema = new mongoose.Schema(
   {
@@ -54,15 +53,6 @@ const UserSchema = new mongoose.Schema(
     verified: {
       type: Boolean,
       default: false
-    },
-    phone: {
-      type: String
-    },
-    city: {
-      type: String
-    },
-    country: {
-      type: String
     },
     loginAttempts: {
       type: Number,

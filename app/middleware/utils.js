@@ -48,7 +48,5 @@ exports.buildErrObject = (code, message) => {
  * @param {string} message - success text
  */
 exports.buildSuccObject = (message) => {
-  return {
-    msg: message
-  }
+  return message
 }

@@ -223,7 +223,7 @@ exports.register = async (req, res) => {
     const response = returnRegisterToken(user, userInfo)
     res.status(201).json(response)
   } catch (error) {
-    handleError(res, error)
+    handleError(res, buildErrObject(422, err.message));
   }
 }
 
@@ -260,7 +260,7 @@ exports.login = async (req, res) => {
       );
     }
   } catch (error) {
-      handleError(res, error)
+    handleError(res, buildErrObject(422, err.message));
   }
 }
 
