@@ -311,7 +311,7 @@ exports.logout = async (req, res) => {
  */
 exports.getUserFromToken = async (req, res) => {
   try {
-    const tokenEncrypted = req.headers.authorization
+    var tokenEncrypted = req.headers.authorization
     if (tokenEncrypted) {
       tokenEncrypted = tokenEncrypted.replace('Bearer ', '').trim()
       let userId = await getUserIdFromToken(tokenEncrypted)
