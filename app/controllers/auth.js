@@ -7,7 +7,8 @@ const {
   handleError,
   handleSuccess,
   buildErrObject,
-  buildSuccObject
+  buildSuccObject,
+  itemNotFound
 } = require('../middleware/utils');
 const HOURS_TO_BLOCK = 2
 const LOGIN_ATTEMPTS = 5
@@ -24,7 +25,7 @@ const generateToken = (user) => {
   // Gets expiration time
   const expiration =
     Math.floor(Date.now() / 1000) + 60 * process.env.JWT_EXPIRATION_IN_MINUTES
-
+  console.log("expiry time = " +expiration)
   // returns signed and encrypted token
   return auth.encrypt(
     jwt.sign(
@@ -188,6 +189,22 @@ const returnRegisterToken = (item, userInfo) => {
  return data
 }
 
+/**
+ * Gets user id from token
+ * @param {string} token - Encrypted and encoded token
+ */
+const getUserIdFromToken = async (token) => {
+  return new Promise((resolve, reject) => {
+    // Decrypts, verifies and decode token
+    jwt.verify(auth.decrypt(token), process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        reject(utils.buildErrObject(409, 'BAD_TOKEN'))
+      }
+      resolve(decoded.data._id)
+    })
+  })
+}
+
 /* Invalidates a token */
 const invalidateToken = async user => {
   return new Promise((resolve, reject) => {
@@ -203,6 +220,19 @@ const invalidateToken = async user => {
     });
   });
 };
+
+/**
+ * Finds user by ID
+ * @param {string} id - user´s id
+ */
+const findUserById = async (userId) => {
+  return new Promise((resolve, reject) => {
+    User.findById(userId, (err, item) => {
+      itemNotFound(err, item, reject, 'USER_DOES_NOT_EXIST')
+      resolve(item)
+    })
+  })
+}
 
 /********************
  * Public functions *
@@ -272,4 +302,22 @@ exports.logout = async (req, res) => {
   } catch (err) {
     handleError(res, buildErrObject(422, err.message));
   }
-};
+}
+
+/**
+ * Refresh token function called by route
+ * @param {Object} req - request object
+ * @param {Object} res - response object
+ */
+exports.getUserFromToken = async (req, res) => {
+  try {
+    const tokenEncrypted = req.headers.authorization
+      .replace('Bearer ', '')
+      .trim()
+    let userId = await getUserIdFromToken(tokenEncrypted)
+    const user = await findUserById(userId)
+    res.status(200).json(user)
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
+  }
+}
