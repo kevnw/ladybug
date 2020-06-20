@@ -115,9 +115,10 @@ const isEmailRegistered = async email => {
  * @param {Object} user - user object
  */
 const userIsBlocked = async (user) => {
+  console.log(user.blockExpires)
   return new Promise((resolve, reject) => {
     if (user.blockExpires > new Date()) {
-      reject(buildErrObject(409, 'User is blocked. Please try again after' + user.blockExpires))
+      reject(buildErrObject(409, 'User is blocked. Please try again after ' + user.blockExpires))
     }
     resolve(true)
   })
@@ -289,7 +290,7 @@ exports.login = async (req, res) => {
         })
       );
     }
-  } catch (error) {
+  } catch (err) {
     handleError(res, buildErrObject(422, err.message));
   }
 }
