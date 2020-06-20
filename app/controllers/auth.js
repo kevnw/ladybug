@@ -198,7 +198,7 @@ const getUserIdFromToken = async (token) => {
     // Decrypts, verifies and decode token
     jwt.verify(auth.decrypt(token), process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
-        reject(utils.buildErrObject(409, 'BAD_TOKEN'))
+        reject(buildErrObject(409, 'BAD_TOKEN'))
       }
       resolve(decoded.data._id)
     })
@@ -312,11 +312,15 @@ exports.logout = async (req, res) => {
 exports.getUserFromToken = async (req, res) => {
   try {
     const tokenEncrypted = req.headers.authorization
-      .replace('Bearer ', '')
-      .trim()
-    let userId = await getUserIdFromToken(tokenEncrypted)
-    const user = await findUserById(userId)
-    res.status(200).json(user)
+    if (tokenEncrypted) {
+      tokenEncrypted = tokenEncrypted.replace('Bearer ', '').trim()
+      let userId = await getUserIdFromToken(tokenEncrypted)
+      const user = await findUserById(userId)
+      res.status(200).json(user)
+    } else {
+      handleError(res, buildErrObject(409, 'No token available'))
+      return
+    }
   } catch (err) {
     handleError(res, buildErrObject(422, err.message));
   }
