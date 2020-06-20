@@ -117,7 +117,7 @@ const isEmailRegistered = async email => {
 const userIsBlocked = async (user) => {
   return new Promise((resolve, reject) => {
     if (user.blockExpires > new Date()) {
-      reject(buildErrObject(409, 'BLOCKED_USER'))
+      reject(buildErrObject(409, 'User is blocked. Please try again after' + user.blockExpires))
     }
     resolve(true)
   })
@@ -166,7 +166,7 @@ const passwordsDoNotMatch = async (user) => {
   await saveLoginAttemptsToDB(user)
   return new Promise((resolve, reject) => {
     if (user.loginAttempts <= LOGIN_ATTEMPTS) {
-      resolve(buildErrObject(409, 'WRONG_PASSWORD'))
+      resolve(buildErrObject(409, 'Invalid credentials'))
     } else {
       resolve(blockUser(user))
     }
@@ -266,7 +266,7 @@ exports.login = async (req, res) => {
   try {
     const data = req.body
     const user = await findVerifiedUserByEmail(data.email)
-    // await userIsBlocked(user)
+    await userIsBlocked(user)
     const isPasswordMatch = await auth.checkPassword(data.password, user)
     if (!isPasswordMatch) {
       handleError(res, await passwordsDoNotMatch(user))
