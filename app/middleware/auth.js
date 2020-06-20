@@ -3,6 +3,15 @@ const secret = process.env.JWT_SECRET
 const algorithm = 'aes-192-cbc'
 const key = crypto.scryptSync(secret, 'salt', 24)
 const iv = Buffer.alloc(16, 0)
+const jwt = require('jsonwebtoken')
+
+const {
+  handleError,
+  handleSuccess,
+  buildErrObject,
+  buildSuccObject,
+  itemNotFound
+} = require('./utils')
 
 module.exports = {
   /**
@@ -54,5 +63,17 @@ module.exports = {
     } catch (err) {
       return err
     }
+  },
+
+  async findUserIdFromToken(token) {
+    return new Promise((resolve, reject) => {
+      // Decrypts, verifies and decode token
+      jwt.verify(decrypt(token), process.env.JWT_SECRET, (err, decoded) => {
+        if (err) {
+          reject(buildErrObject(409, 'BAD_TOKEN'))
+        }
+        resolve(decoded.data._id)
+      })
+    })
   }
 }

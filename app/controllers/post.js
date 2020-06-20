@@ -1,4 +1,5 @@
 const Post = require('../models/Post')
+const Module = require('../models/Module')
 
 const {
   handleError,

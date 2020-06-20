@@ -1,13 +1,18 @@
 const PostController = require('../controllers/post')
 const express = require('express')
-const Post = require('../models/Post')
 const router = express.Router()
 
+/*
+ * Retrieves all post
+ */
 router.get(
   '/',
   PostController.getPostList
 );
 
+/*
+ * Retrieves specific post according to postId
+ */
 router.get(
   '/:postId',
   PostController.getPostInfo

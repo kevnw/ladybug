@@ -3,6 +3,7 @@ const User = require('../models/User')
 const auth = require('../middleware/auth')
 const { addHours } = require('date-fns')
 const uuid = require('uuid')
+
 const {
   handleError,
   handleSuccess,
@@ -25,7 +26,6 @@ const generateToken = (user) => {
   // Gets expiration time
   const expiration =
     Math.floor(Date.now() / 1000) + 60 * process.env.JWT_EXPIRATION_IN_MINUTES
-  console.log("expiry time = " +expiration)
   // returns signed and encrypted token
   return auth.encrypt(
     jwt.sign(
@@ -115,7 +115,6 @@ const isEmailRegistered = async email => {
  * @param {Object} user - user object
  */
 const userIsBlocked = async (user) => {
-  console.log(user.blockExpires)
   return new Promise((resolve, reject) => {
     if (user.blockExpires > new Date()) {
       reject(buildErrObject(409, 'User is blocked. Please try again after ' + user.blockExpires))
@@ -136,7 +135,7 @@ const blockUser = async (user) => {
         reject(buildErrObject(422, err.message))
       }
       if (result) {
-        resolve(buildErrObject(409, 'BLOCKED_USER'))
+        resolve(buildErrObject(409, 'User is blocked. Please try again after ' + user.blockExpires))
       }
     })
   })
@@ -318,6 +317,24 @@ exports.getUserFromToken = async (req, res) => {
       let userId = await getUserIdFromToken(tokenEncrypted)
       const user = await findUserById(userId)
       res.status(200).json(user)
+    } else {
+      handleError(res, buildErrObject(409, 'No token available'))
+      return
+    }
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
+  }
+}
+
+/* Verifies token validity */
+exports.verifyToken = async (req, res, next) => {
+  try {
+    var tokenEncrypted = req.headers.authorization
+    if (tokenEncrypted) {
+      tokenEncrypted = tokenEncrypted.replace('Bearer ', '').trim()
+      let userId = await getUserIdFromToken(tokenEncrypted)
+      req.body._id = userId
+      return next()
     } else {
       handleError(res, buildErrObject(409, 'No token available'))
       return

@@ -4,6 +4,9 @@ const router = express.Router()
 // Load Auth route
 router.use('/users', require('./auth'))
 
+// Load Module route
+router.use('/modules', require('./module'))
+
 // Load Post route
 router.use('/posts', require('./post'));
 /*

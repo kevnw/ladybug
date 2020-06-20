@@ -35,16 +35,10 @@ const UserSchema = new mongoose.Schema(
       type: Date,
       default: Date.now
     },
-    followers: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-      }
-    ],
     following: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Module'
       }
     ],
     verification: {
@@ -93,6 +87,7 @@ const genSalt = (user, SALT_FACTOR, next) => {
 UserSchema.pre('save', function (next) {
   const that = this
   const SALT_FACTOR = 5
+  that.following = []
   if (!that.isModified('password')) {
     return next()
   }
@@ -105,19 +100,16 @@ UserSchema.methods.comparePassword = function (passwordAttempt, cb) {
   )
 }
 
-UserSchema.methods.follow = (user_id) => {
-  if (this.following.indexOf(user_id) === -1) {
-    this.following.push(user_id)
+UserSchema.methods.followModule = (module_id) => {
+  console.log(this.following)
+  if (this.following.indexOf(module_id) === -1) {
+    this.following.push(module_id)
   }
   return this.save()
 }
 
-UserSchema.methods.addFollower = (fs) => {
-  this.followers.push(fs)
-}
-
-UserSchema.methods.unfollow = (user_id) => {
-  const index = this.following.indexOf(user_id)
+UserSchema.methods.unfollow = (module_id) => {
+  const index = this.following.indexOf(module_id)
   if (index > -1) {
     this.following = this.following.splice(index, 1)
   }
