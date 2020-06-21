@@ -4,10 +4,12 @@ const UniversitySchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true
+      required: true,
+      unique: true
     },
     acronym: {
-      type: String
+      type: String,
+      required: true
     },
     logo: String,
     modules: [
@@ -18,11 +20,5 @@ const UniversitySchema = new mongoose.Schema(
     ]
   }
 )
-
-UniversitySchema.methods.addModule = (module) => {
-  this.modules.push(module)
-  
-  return this.save()
-}
 
 module.exports = mongoose.model('University', UniversitySchema)

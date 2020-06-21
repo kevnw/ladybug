@@ -1,36 +1,25 @@
-const PostController = require('../controllers/post')
+const PostController = require('../controllers/posts')
 const express = require('express')
 const router = express.Router()
 
 /*
- * Retrieves all post
+ * Create post route
  */
-router.get(
-  '/',
-  PostController.getPostList
-);
-
-/*
- * Retrieves specific post according to postId
- */
-router.get(
-  '/:postId',
-  PostController.getPostInfo
-)
+router.get('/', PostController.getPostList)
 
 /*
  * Create post route
  */
-router.post('/', PostController.createPost)
+router.post('/add', PostController.createPost)
 
 /*
  * Update post route
  */
-router.post('/:postId', PostController.updatePost)
+router.post('/edit/:postId', PostController.updatePost)
 
 /*
  * Delete post route
  */
-router.delete('/:postId', PostController.deletePost)
+router.delete('/delete', PostController.deletePost)
 
 module.exports = router

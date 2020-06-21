@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const validator = require('validator')
+const ModuleSchema = require('./Module')
 
 const UserSchema = new mongoose.Schema(
   {
@@ -36,8 +37,8 @@ const UserSchema = new mongoose.Schema(
       default: Date.now
     },
     following: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
+      { 
+        type: mongoose.Schema.Types.ObjectId, 
         ref: 'Module'
       }
     ],
@@ -87,7 +88,6 @@ const genSalt = (user, SALT_FACTOR, next) => {
 UserSchema.pre('save', function (next) {
   const that = this
   const SALT_FACTOR = 5
-  that.following = []
   if (!that.isModified('password')) {
     return next()
   }
@@ -98,22 +98,6 @@ UserSchema.methods.comparePassword = function (passwordAttempt, cb) {
   bcrypt.compare(passwordAttempt, this.password, (err, isMatch) =>
     err ? cb(err) : cb(null, isMatch)
   )
-}
-
-UserSchema.methods.followModule = (module_id) => {
-  console.log(this.following)
-  if (this.following.indexOf(module_id) === -1) {
-    this.following.push(module_id)
-  }
-  return this.save()
-}
-
-UserSchema.methods.unfollow = (module_id) => {
-  const index = this.following.indexOf(module_id)
-  if (index > -1) {
-    this.following = this.following.splice(index, 1)
-  }
-  return this.save()
 }
 
 module.exports = mongoose.model('User', UserSchema)

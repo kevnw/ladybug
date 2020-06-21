@@ -1,20 +1,20 @@
-const UserController = require('../controllers/user')
+const UserController = require('../controllers/users')
 const AuthController = require('../controllers/auth')
-const ModuleController = require('../controllers/module')
+const ModuleController = require('../controllers/modules')
+const PostController = require('../controllers/posts')
 const express = require('express')
-const Module = require('../models/Module')
 const router = express.Router()
 
 /*
- * Retrieves all modules
+ * Get all modules
  */
 router.get(
   '/',
   ModuleController.getModuleList
-);
+)
 
 /*
- * Retrieves specific post according to postId
+ * Get particular module info
  */
 router.get(
   '/:moduleId',
@@ -24,17 +24,41 @@ router.get(
 /*
  * Create module route
  */
-router.post('/', ModuleController.createModule)
+router.post(
+  '/add',
+  ModuleController.createModule
+);
 
 /*
- * Delete post route
+ * Delete module route
  */
-router.delete('/:moduleId', ModuleController.deleteModule)
+router.delete(
+  '/delete',
+  ModuleController.deleteModule
+);
 
+/*
+ * Add post to array route
+ */
 router.put(
-  '/:moduleName',
-  AuthController.verifyToken,
-  UserController.followModule
+  '/posts/add/:moduleId',
+  ModuleController.addPost
+)
+
+/*
+ * Delete module from array route
+ */
+router.put(
+  '/posts/delete/:moduleId',
+  ModuleController.deletePost
+)
+
+/*
+ * Get particular post info
+ */
+router.get(
+  '/posts/:moduleId',
+  ModuleController.getPostList
 )
 
 module.exports = router

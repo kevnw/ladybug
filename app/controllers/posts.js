@@ -1,5 +1,4 @@
 const Post = require('../models/Post')
-const Module = require('../models/Module')
 
 const {
   handleError,
@@ -15,6 +14,14 @@ const {
  /********************
  * Public functions *
  ********************/
+
+exports.getPostList = async (req, res) => {
+  Post.find()
+    .select('_id text title author')
+    .lean()
+    .then(postList => handleSuccess(res, buildSuccObject(postList)))
+    .catch(err => handleError(res, buildErrObject(422, err.message)));
+};
 
 exports.createPost = async (req, res) => {
   var newPost = new Post({
@@ -44,7 +51,7 @@ exports.updatePost = async (req, res) => {
 };
 
 exports.deletePost = async (req, res) => {
-  Post.deleteOne({ _id: req.params.postId })
+  Post.deleteOne({ _id: req.body.postId })
     .then(result => {
       if (result.n) handleSuccess(res, buildSuccObject('Post deleted'));
       else handleError(res, buildErrObject(422, 'Post not found'));
@@ -53,7 +60,7 @@ exports.deletePost = async (req, res) => {
 };
 
 exports.getPostInfo = async (req, res) => {
-  Post.findOne({ _id: req.params.postId })
+  Post.findOne({ _id: req.body.postId })
     .select('_id text title author')
     .lean()
     .then(post => {
@@ -63,10 +70,4 @@ exports.getPostInfo = async (req, res) => {
     .catch(err => handleError(res, buildErrObject(422, err.message)));
 };
 
-exports.getPostList = async (req, res) => {
-  Post.find()
-    .select('_id text title author')
-    .lean()
-    .then(postList => handleSuccess(res, buildSuccObject(postList)))
-    .catch(err => handleError(res, buildErrObject(422, err.message)));
-};
+
