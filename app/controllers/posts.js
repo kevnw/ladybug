@@ -33,7 +33,7 @@ exports.createPost = async (req, res) => {
   newPost
     .save()
     .then(post =>
-      handleSuccess(res, buildSuccObject('New post created'))
+      handleSuccess(res, buildSuccObject(post))
     )
     .catch(error => handleError(res, buildErrObject(422, error.message)));
 };

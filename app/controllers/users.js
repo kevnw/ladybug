@@ -136,16 +136,34 @@ exports.unfollowModule = async (req, res) => {
 
 exports.getFollowedModulesFromUni = async (req, res) => {
   try {
-    const uni = await findUniById(req.body.uniId)
+    // const uni = await findUniById(req.body.uniId)
     const user = await findUserById(req.body._id)
     var temp = []
-    user.following.forEach(element => {
-      if (uni.modules.indexOf(element) > -1) {
-        temp.push(element)
-      }
-    })
+    // user.following.forEach(element => {
+      // if (uni.modules.indexOf(element) > -1) {
+        // temp.push(element)
+      // }
+    // })
 
-    handleSuccess(res, buildSuccObject(temp))
+    University.find()
+    .select('name modules acronym').sort({name: 1})
+    .lean()
+    .then(universityList => {
+      universityList.forEach(uni => {
+        user.following.forEach(module => {
+          uni.modules.forEach(id => {
+            if (("" + id) == ("" + module)) {
+              temp.push(module)
+            }
+          })
+        })
+        uni.modules = temp
+        temp = []
+    })
+      handleSuccess(res, buildSuccObject(universityList))
+    })
+    .catch(err => handleError(res, buildErrObject(422, err.message)));
+
   } catch (err) {
     handleError(res, buildErrObject(422, err.message));
   }

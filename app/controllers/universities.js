@@ -28,28 +28,6 @@ const findUniversityByName = async name => {
   });
 };
 
- /* Finds module by university and name  */
- const findModuleyById = async (id) => {
-  return new Promise((resolve, reject) => {
-    Module.findOne({ _id: id })
-      .select('_id name title description posts followers')
-      .then(mod => {
-        if (!mod) {
-          reject(buildErrObject(422, 'Module does not exist'));
-        } else {
-          resolve(mod); // returns mongoose object
-        }
-      })
-      .catch(err => reject(buildErrObject(422, err.message)));
-  });
-};
-
-const test = async () => {
-  return new Promise((resolve, reject) => {
-    resolve([])
-  })
-}
-
  /********************
  * Public functions *
  ********************/
