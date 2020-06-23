@@ -58,7 +58,8 @@ exports.createModule = async (req, res) => {
   var newModule = new Module({
     name: req.body.module.name,
     title: req.body.module.title,
-    description: req.body.module.description
+    description: req.body.module.description,
+    university: req.body.module.university
   });
 
   newModule
@@ -91,7 +92,7 @@ exports.getModuleInfo = async (req, res) => {
 
 exports.getModuleList = async (req, res) => {
   Module.find()
-    .select('_id name title description posts followers')
+    .select('_id name title description university posts followers')
     .lean()
     .then(moduleList => handleSuccess(res, buildSuccObject(moduleList)))
     .catch(err => handleError(res, buildErrObject(422, err.message)));

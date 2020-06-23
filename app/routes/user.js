@@ -3,7 +3,14 @@ const UserController = require('../controllers/users')
 const express = require('express')
 const router = express.Router()
 
-router.get('/', AuthController.getUserFromToken)
+router.get('/', 
+AuthController.getUserFromToken
+)
+
+router.get('/modules', 
+AuthController.verifyToken,
+UserController.getFollowedModulesFromUni
+)
 
 /*
  * Register route

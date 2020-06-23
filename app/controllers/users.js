@@ -1,6 +1,6 @@
 const User = require('../models/User')
 const Module = require('../models/Module')
-const auth = require('../middleware/auth')
+const University = require('../models/University');
 
 const {
   handleError,
@@ -8,6 +8,7 @@ const {
   buildErrObject,
   buildSuccObject
 } = require('../middleware/utils');
+
 
 /*********************
  * Private functions *
@@ -29,7 +30,23 @@ const findUserById = async id => {
   });
 };
 
-/* Finds module by name  */
+/* Finds university by id  */
+const findUniById = async id => {
+  return new Promise((resolve, reject) => {
+    University.findOne({ _id: id })
+      .select('_id name acronym modules')
+      .then(uni => {
+        if (!uni) {
+          reject(buildErrObject(422, 'University does not exist'));
+        } else {
+          resolve(uni); // returns mongoose object
+        }
+      })
+      .catch(err => reject(buildErrObject(422, err.message)));
+  });
+};
+
+/* Finds module by id  */
 const findModuleById = async id => {
   return new Promise((resolve, reject) => {
     Module.findOne({ _id: id })
@@ -112,6 +129,23 @@ exports.unfollowModule = async (req, res) => {
     user.save()
     mod.save()
     handleSuccess(res, buildSuccObject(mod.followers))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
+  }
+}
+
+exports.getFollowedModulesFromUni = async (req, res) => {
+  try {
+    const uni = await findUniById(req.body.uniId)
+    const user = await findUserById(req.body._id)
+    var temp = []
+    user.following.forEach(element => {
+      if (uni.modules.indexOf(element) > -1) {
+        temp.push(element)
+      }
+    })
+
+    handleSuccess(res, buildSuccObject(temp))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message));
   }

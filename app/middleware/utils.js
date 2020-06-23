@@ -25,7 +25,7 @@ exports.handleError = (res, err) => {
 exports.handleSuccess = (res, obj) => {
   // Prints obj in console
   if (process.env.NODE_ENV === 'development') {
-    console.log(obj);
+    // console.log(obj);
   }
   // Sends obj to user
   res.status(200).json(obj);

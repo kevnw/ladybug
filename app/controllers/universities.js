@@ -28,6 +28,28 @@ const findUniversityByName = async name => {
   });
 };
 
+ /* Finds module by university and name  */
+ const findModuleyById = async (id) => {
+  return new Promise((resolve, reject) => {
+    Module.findOne({ _id: id })
+      .select('_id name title description posts followers')
+      .then(mod => {
+        if (!mod) {
+          reject(buildErrObject(422, 'Module does not exist'));
+        } else {
+          resolve(mod); // returns mongoose object
+        }
+      })
+      .catch(err => reject(buildErrObject(422, err.message)));
+  });
+};
+
+const test = async () => {
+  return new Promise((resolve, reject) => {
+    resolve([])
+  })
+}
+
  /********************
  * Public functions *
  ********************/
@@ -44,8 +66,20 @@ exports.getUniInfo = async (req, res) => {
 };
 
 exports.getModuleList = async (req, res) => {
-  const uni = await findUniversityByName(req.params.uniName)
-  handleSuccess(res, buildSuccObject(uni.modules))
+  try {
+    const uni = await findUniversityByName(req.params.uniName)
+    Module.find({ university: uni._id })
+    .select('_id name title description posts followers')
+    .sort({name: 1})
+    .lean()
+    .then(moduleList => {
+      handleSuccess(res, buildSuccObject(moduleList))
+    })
+    .catch(err => handleError(res, buildErrObject(422, err.message)));
+
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
+  } 
 };
 
 exports.createUni = async (req, res) => {

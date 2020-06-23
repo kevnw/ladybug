@@ -28,7 +28,8 @@ const ModuleSchema = new mongoose.Schema(
     ],
     university: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'University'
+      ref: 'University',
+      required: true
     }
   }
 )
