@@ -63,17 +63,6 @@ module.exports = {
     } catch (err) {
       return err
     }
-  },
-
-  async findUserIdFromToken(token) {
-    return new Promise((resolve, reject) => {
-      // Decrypts, verifies and decode token
-      jwt.verify(decrypt(token), process.env.JWT_SECRET, (err, decoded) => {
-        if (err) {
-          reject(buildErrObject(409, 'BAD_TOKEN'))
-        }
-        resolve(decoded.data._id)
-      })
-    })
   }
+  
 }

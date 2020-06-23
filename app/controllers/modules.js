@@ -17,7 +17,7 @@ const {
 const findModuleyById = async (id) => {
   return new Promise((resolve, reject) => {
     Module.findOne({ _id: id })
-      .select('_id name description posts followers')
+      .select('_id name title description posts followers')
       .then(mod => {
         if (!mod) {
           reject(buildErrObject(422, 'Module does not exist'));
@@ -57,6 +57,7 @@ exports.getPostList = async (req, res) => {
 exports.createModule = async (req, res) => {
   var newModule = new Module({
     name: req.body.module.name,
+    title: req.body.module.title,
     description: req.body.module.description
   });
 
@@ -79,7 +80,7 @@ exports.deleteModule = async (req, res) => {
 
 exports.getModuleInfo = async (req, res) => {
   Module.findOne({ _id: req.params.moduleId })
-    .select('_id name description posts followers')
+    .select('_id name title description posts followers')
     .lean()
     .then(mod => {
       if (mod) handleSuccess(res, buildSuccObject(mod));
@@ -90,7 +91,7 @@ exports.getModuleInfo = async (req, res) => {
 
 exports.getModuleList = async (req, res) => {
   Module.find()
-    .select('_id name description posts followers')
+    .select('_id name title description posts followers')
     .lean()
     .then(moduleList => handleSuccess(res, buildSuccObject(moduleList)))
     .catch(err => handleError(res, buildErrObject(422, err.message)));

@@ -22,5 +22,3 @@ exports.getUniversityList = async (req, res) => {
     .then(universityList => handleSuccess(res, buildSuccObject(universityList)))
     .catch(err => handleError(res, buildErrObject(422, err.message)));
 };
-
-

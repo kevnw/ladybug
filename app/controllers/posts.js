@@ -69,5 +69,3 @@ exports.getPostInfo = async (req, res) => {
     })
     .catch(err => handleError(res, buildErrObject(422, err.message)));
 };
-
-
