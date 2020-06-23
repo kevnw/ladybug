@@ -3,6 +3,7 @@ const User = require('../models/User')
 const auth = require('../middleware/auth')
 const { addHours } = require('date-fns')
 const uuid = require('uuid')
+const UserMailer = require('../mailers/user_mailer')
 
 const {
   handleError,
@@ -251,7 +252,14 @@ exports.register = async (req, res) => {
     const user = await registerUser(req)
     const userInfo = setUserInfo(user)
     const response = returnRegisterToken(user, userInfo)
-    res.status(201).json(response)
+    UserMailer.verifyRegistration(userInfo)
+      .then((info, response) => {
+        handleSuccess(
+          res,
+          buildSuccObject('User has been created. Please verify your email!')
+        );
+      })
+      .catch(err => handleError(res, buildErrObject(422, err.message)));
   } catch (error) {
     handleError(res, buildErrObject(422, err.message));
   }

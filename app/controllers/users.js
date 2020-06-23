@@ -149,6 +149,7 @@ exports.getFollowedModulesFromUni = async (req, res) => {
     .select('name modules acronym').sort({name: 1})
     .lean()
     .then(universityList => {
+      const fixedList = []
       universityList.forEach(uni => {
         user.following.forEach(module => {
           uni.modules.forEach(id => {
@@ -158,9 +159,12 @@ exports.getFollowedModulesFromUni = async (req, res) => {
           })
         })
         uni.modules = temp
+        if (temp.length >= 1) {
+          fixedList.push(uni)
+        }
         temp = []
     })
-      handleSuccess(res, buildSuccObject(universityList))
+      handleSuccess(res, buildSuccObject(fixedList))
     })
     .catch(err => handleError(res, buildErrObject(422, err.message)));
 
