@@ -7,22 +7,21 @@ console.log(__dirname)
 const emailTemplatesDir = __dirname + '/../../views/mailers'
 
 /* Sends registration email */
-exports.verifyRegistration = async user => {
+exports.verifyRegistration = async response => {
+  const user = response.user
   return new Promise((resolve, reject) => {
     const file = fs.readFileSync(
       emailTemplatesDir + '/verify_registration.ejs',
       'ascii'
     );
 
-    console.log(user)
-
     var verificationUrl =
-      'http://localhost:3001' +
+      'http://localhost:5000' +
       '/verify' +
-      '?' +
-      querystring.stringify({
-        id: user._id
-      });
+      '/' + response.token
+      // querystring.stringify({
+        // email: user.email
+      // });
 
     const data = {
       from: 'Ladybug <ladybug.officials@gmail.com>',

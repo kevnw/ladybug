@@ -235,6 +235,25 @@ const findUserById = async (userId) => {
   })
 }
 
+/**
+ * Verifies an user
+ * @param {Object} user - user object
+ */
+const verifyUser = async (user) => {
+  return new Promise((resolve, reject) => {
+    user.verified = true
+    user.save((err, item) => {
+      if (err) {
+        reject(buildErrObject(422, err.message))
+      }
+      resolve({
+        email: item.email,
+        verified: item.verified
+      })
+    })
+  })
+}
+
 /********************
  * Public functions *
  ********************/
@@ -252,7 +271,7 @@ exports.register = async (req, res) => {
     const user = await registerUser(req)
     const userInfo = setUserInfo(user)
     const response = returnRegisterToken(user, userInfo)
-    UserMailer.verifyRegistration(userInfo)
+    UserMailer.verifyRegistration(response)
       .then((info, response) => {
         handleSuccess(
           res,
@@ -350,4 +369,20 @@ exports.verifyToken = async (req, res, next) => {
   } catch (err) {
     handleError(res, buildErrObject(422, err.message));
   }
+}
+
+/**
+ * Verify function called by route
+ * @param {Object} req - request object
+ * @param {Object} res - response object
+ */
+exports.verify = async (req, res) => {
+  try {
+    const userId = await getUserIdFromToken(req.params.token)
+    const user = await findUserById(userId)
+    
+    handleSuccess(res, buildSuccObject(await verifyUser(user)))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
+  } 
 }

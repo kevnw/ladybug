@@ -40,6 +40,11 @@ const PostSchema = new mongoose.Schema(
         }
       }
     ],
+    module: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Module',
+      required: true
+    },
     date: {
       type: Date,
       default: Date.now()

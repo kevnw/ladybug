@@ -29,29 +29,43 @@ const findModuleyById = async (id) => {
   });
 };
 
-  /* Finds university by name  */
-const findUniversityByName = async name => {
+ /**
+ * Finds user by ID
+ * @param {string} id - user´s id
+ */
+const findPostById = async (postId) => {
   return new Promise((resolve, reject) => {
-    University.findOne({ acronym: name })
-      .select('name modules _id')
-      .then(uni => {
-        if (!uni) {
-          reject(buildErrObject(422, 'University does not exist'));
+    Post.findOne({ _id: postId })
+      .select('_id text title author comments')
+      .then(post => {
+        if (!post) {
+          reject(buildErrObject(422, 'Post does not exist'));
         } else {
-          resolve(uni); // returns mongoose object
+          resolve(post); // returns mongoose object
         }
       })
       .catch(err => reject(buildErrObject(422, err.message)));
-  });
-};
+  })
+}
 
  /********************
  * Public functions *
  ********************/
 
 exports.getPostList = async (req, res) => {
-  const mod = await findModuleyById(req.params.moduleId)
-  handleSuccess(res, buildSuccObject(mod.posts))
+  try {
+    const temp = []
+    const mod = await findModuleyById(req.params.moduleId)
+    
+    for (const element of mod.posts) {
+      const post = await findPostById(element)
+      temp.push(post)
+    }
+
+    handleSuccess(res, buildSuccObject(temp))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
+  }
 };
 
 exports.createModule = async (req, res) => {

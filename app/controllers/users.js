@@ -136,14 +136,8 @@ exports.unfollowModule = async (req, res) => {
 
 exports.getFollowedModulesFromUni = async (req, res) => {
   try {
-    // const uni = await findUniById(req.body.uniId)
     const user = await findUserById(req.body._id)
     var temp = []
-    // user.following.forEach(element => {
-      // if (uni.modules.indexOf(element) > -1) {
-        // temp.push(element)
-      // }
-    // })
 
     University.find()
     .select('name modules acronym').sort({name: 1})

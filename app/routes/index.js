@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const AuthController = require('../controllers/auth')
 
 // Load Auth route
 router.use('/users', require('./user'))
@@ -22,6 +23,11 @@ router.use('/posts', require('./post'));
 router.get('/', (req, res) => {
   res.render('index')
 })
+
+router.get(
+  '/verify/:token',
+  AuthController.verify
+)
 
 /*
  * Handle 404 error

@@ -27,7 +27,8 @@ exports.createPost = async (req, res) => {
   var newPost = new Post({
     text: req.body.post.text,
     title: req.body.post.title,
-    author: req.body.post.author
+    author: req.body.post.author,
+    module: req.body.post.module
   });
 
   newPost
