@@ -69,7 +69,7 @@ exports.followModule = async (req, res) => {
 
     user.save()
     mod.save()
-    handleSuccess(res, buildSuccObject('User ' + user.name + ' successfully followed ' + mod.name))
+    handleSuccess(res, buildSuccObject(mod.followers))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message));
   }
