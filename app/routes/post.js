@@ -5,9 +5,17 @@ const express = require('express')
 const router = express.Router()
 
 /*
- * Create post route
+ * Get all post route
  */
 router.get('/', PostController.getPostList)
+
+/*
+ * Get particular module info
+ */
+router.get(
+  '/:postId',
+  PostController.getPostInfo
+)
 
 /*
  * Create post route
@@ -41,6 +49,14 @@ PostController.upvote
 router.put('/downvote/:postId', 
 AuthController.verifyToken,
 PostController.downvote
+)
+
+/*
+ * Comment post route
+ */
+router.put('/comment/:postId', 
+AuthController.verifyToken,
+PostController.comment
 )
 
 module.exports = router

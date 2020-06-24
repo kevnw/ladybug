@@ -19,9 +19,6 @@ exports.verifyRegistration = async response => {
       'http://localhost:5000' +
       '/verify' +
       '/' + response.token
-      // querystring.stringify({
-        // email: user.email
-      // });
 
     const data = {
       from: 'Ladybug <ladybug.officials@gmail.com>',
@@ -29,7 +26,6 @@ exports.verifyRegistration = async response => {
       subject: 'Registration Confirmation',
       html: ejs.render(file, { user, verificationUrl })
     };
-    console.log("verificationUrl = " +verificationUrl)
 
     emailer.sendMail(data, (err, info, response) => {
       if (err) reject(err);

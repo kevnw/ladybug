@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const gravatar = require('gravatar')
 const User = require('../models/User')
 const auth = require('../middleware/auth')
 const { addHours } = require('date-fns')
@@ -92,6 +93,10 @@ const registerUser = async (req) => {
       password: req.body.password,
       verification: uuid.v4()
     }); 
+
+    var names = user.name.split(" ")
+    const url = encodeURI('https://ui-avatars.com/api/?rounded=true&name=' + names[0] + '+' + names[names.length - 1])
+    user.avatar = url
 
     user.save((err, item) => {
       if (err) reject(buildErrObject(422, err.message))
@@ -380,7 +385,7 @@ exports.verify = async (req, res) => {
   try {
     const userId = await getUserIdFromToken(req.params.token)
     const user = await findUserById(userId)
-    
+
     handleSuccess(res, buildSuccObject(await verifyUser(user)))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message));

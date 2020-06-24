@@ -155,7 +155,7 @@ exports.deletePost = async (req, res) => {
 
 exports.getPostInfo = async (req, res) => {
   Post.findOne({ _id: req.params.postId })
-    .select('_id text title author')
+    .select('_id text title author module')
     .lean()
     .then(post => {
       if (post) handleSuccess(res, buildSuccObject(post));
@@ -215,6 +215,15 @@ exports.downvote = async (req, res) => {
 
     post.save()
     handleSuccess(res, buildSuccObject(post))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message))
+  }
+}
+
+exports.comment = async (req, res) => {
+  try {
+    const post = await findPostById(req.params.postId)
+    
   } catch (err) {
     handleError(res, buildErrObject(422, err.message))
   }
