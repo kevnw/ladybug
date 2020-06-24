@@ -40,6 +40,12 @@ const PostSchema = new mongoose.Schema(
         date: {
           type: Date,
           default: Date.now()
+        },
+        authorName: {
+          type: String
+        },
+        avatar: {
+          type: String
         }
       }
     ],

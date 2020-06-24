@@ -49,7 +49,7 @@ const findUserById = async id => {
 const findPostById = async (id) => {
   return new Promise((resolve, reject) => {
     Post.findOne({ _id: id })
-      .select('_id name module moduleName authorName upvote downvote')
+      .select('_id module moduleName authorName upvote downvote comments')
       .then(post => {
         if (!post) {
           reject(buildErrObject(422, 'Post does not exist'));
@@ -155,7 +155,7 @@ exports.deletePost = async (req, res) => {
 
 exports.getPostInfo = async (req, res) => {
   Post.findOne({ _id: req.params.postId })
-    .select('_id text title author module authorName upvote downvote')
+    .select('_id text title author module authorName upvote downvote comments moduleName')
     .lean()
     .then(post => {
       if (post) handleSuccess(res, buildSuccObject(post));
@@ -170,6 +170,8 @@ exports.upvote = async (req, res) => {
     const user = await findUserById(req.body._id)
 
     const downvote_idx = post.downvote.indexOf(user._id)
+    const upvote_idx = post.upvote.indexOf(user._id)
+
     if (downvote_idx > -1) {
       const temp = []
       for (i = 0; i < post.downvote.length; i++) {
@@ -180,9 +182,16 @@ exports.upvote = async (req, res) => {
       post.downvote = temp
     } 
 
-    const upvote_idx = post.upvote.indexOf(user._id)
     if (upvote_idx <= -1) {
       post.upvote.unshift(user._id)
+    } else {
+      const temp = []
+      for (i = 0; i < post.upvote.length; i++) {
+        if (i != upvote_idx) {
+          temp.push(post.upvote[i])
+        }
+      }
+      post.upvote = temp
     }
 
     post.save()
@@ -198,6 +207,8 @@ exports.downvote = async (req, res) => {
     const user = await findUserById(req.body._id)
 
     const upvote_idx = post.upvote.indexOf(user._id)
+    const downvote_idx = post.downvote.indexOf(user._id)
+
     if (upvote_idx > -1) {
       const temp = []
       for (i = 0; i < post.upvote.length; i++) {
@@ -208,9 +219,16 @@ exports.downvote = async (req, res) => {
       post.upvote = temp
     }
 
-    const downvote_idx = post.downvote.indexOf(user._id)
     if (downvote_idx <= -1) {
       post.downvote.unshift(user._id)
+    } else {
+      const temp = []
+      for (i = 0; i < post.downvote.length; i++) {
+        if (i != downvote_idx) {
+          temp.push(post.downvote[i])
+        }
+      }
+      post.downvote = temp
     }
 
     post.save()
@@ -223,7 +241,38 @@ exports.downvote = async (req, res) => {
 exports.comment = async (req, res) => {
   try {
     const post = await findPostById(req.params.postId)
-    
+    const user = await findUserById(req.body._id)
+
+    var comment = {
+      author: user._id,
+      text: req.body.text,
+      authorName: user.name,
+      avatar: user.avatar
+    }
+
+    post.comments.unshift(comment)
+    post.save()
+    handleSuccess(res, buildSuccObject(post.comments))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message))
+  }
+}
+
+exports.deleteComment = async (req, res) => {
+  try {
+    const post = await findPostById(req.params.postId)
+    const commentId = req.params.commentId
+    const temp = []
+
+    for (i = 0; i < post.comments.length; i++) {
+      if (post.comments[i]._id != commentId) {
+        temp.push(post.comments[i])
+      }
+    }
+
+    post.comments = temp
+    post.save()
+    handleSuccess(res, buildSuccObject(post.comments))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message))
   }

@@ -59,4 +59,13 @@ AuthController.verifyToken,
 PostController.comment
 )
 
+
+/*
+ * Delete comment post route
+ */
+router.delete('/:postId/:commentId', 
+AuthController.verifyToken,
+PostController.deleteComment
+)
+
 module.exports = router
