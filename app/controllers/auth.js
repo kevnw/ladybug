@@ -95,7 +95,7 @@ const registerUser = async (req) => {
     }); 
 
     var names = user.name.split(" ")
-    const url = encodeURI('https://ui-avatars.com/api/?rounded=true&name=' + names[0] + '+' + names[names.length - 1])
+    const url = encodeURI('https://avatar.oxro.io/avatar.svg?name=' + names[0] + '+' + names[names.length - 1] + '&background=fff4e6&color=e5c296')
     user.avatar = url
 
     user.save((err, item) => {
