@@ -17,7 +17,7 @@ const {
 const findUserById = async id => {
   return new Promise((resolve, reject) => {
     User.findOne({ _id: id })
-      .select('name')
+      .select('_id name')
       .then(user => {
         if (!user) {
           reject(buildErrObject(422, 'User does not exist'));
@@ -49,7 +49,7 @@ const findUserById = async id => {
 const findPostById = async (id) => {
   return new Promise((resolve, reject) => {
     Post.findOne({ _id: id })
-      .select('_id name module moduleName authorName')
+      .select('_id name module moduleName authorName upvote downvote')
       .then(post => {
         if (!post) {
           reject(buildErrObject(422, 'Post does not exist'));
@@ -99,7 +99,7 @@ exports.createPost = async (req, res) => {
   
     newPost.authorName = author.name
     newPost.moduleName = mod.name
-    mod.posts.push(newPost._id)
+    mod.posts.unshift(newPost._id)
   
     mod.save()
     newPost
@@ -164,4 +164,58 @@ exports.getPostInfo = async (req, res) => {
     .catch(err => handleError(res, buildErrObject(422, err.message)));
 };
 
+exports.upvote = async (req, res) => {
+  try {
+    const post = await findPostById(req.params.postId)
+    const user = await findUserById(req.body._id)
 
+    const downvote_idx = post.downvote.indexOf(user._id)
+    if (downvote_idx > -1) {
+      const temp = []
+      for (i = 0; i < post.downvote.length; i++) {
+        if (i != downvote_idx) {
+          temp.push(post.downvote[i])
+        }
+      }
+      post.downvote = temp
+    } 
+
+    const upvote_idx = post.upvote.indexOf(user._id)
+    if (upvote_idx <= -1) {
+      post.upvote.unshift(user._id)
+    }
+
+    post.save()
+    handleSuccess(res, buildSuccObject(post))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message))
+  }
+}
+
+exports.downvote = async (req, res) => {
+  try {
+    const post = await findPostById(req.params.postId)
+    const user = await findUserById(req.body._id)
+
+    const upvote_idx = post.upvote.indexOf(user._id)
+    if (upvote_idx > -1) {
+      const temp = []
+      for (i = 0; i < post.upvote.length; i++) {
+        if (i != upvote_idx) {
+          temp.push(post.upvote[i])
+        }
+      }
+      post.upvote = temp
+    }
+
+    const downvote_idx = post.downvote.indexOf(user._id)
+    if (downvote_idx <= -1) {
+      post.downvote.unshift(user._id)
+    }
+
+    post.save()
+    handleSuccess(res, buildSuccObject(post))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message))
+  }
+}

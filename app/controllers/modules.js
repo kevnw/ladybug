@@ -13,11 +13,11 @@ const {
  * Private functions *
  *********************/
 
- /* Finds module by university and name  */
+ /* Finds module by Id */
 const findModuleyById = async (id) => {
   return new Promise((resolve, reject) => {
     Module.findOne({ _id: id })
-      .select('_id name title description posts followers')
+      .select('_id name title description posts followers university')
       .then(mod => {
         if (!mod) {
           reject(buildErrObject(422, 'Module does not exist'));
@@ -31,7 +31,7 @@ const findModuleyById = async (id) => {
 
  /**
  * Finds user by ID
- * @param {string} id - user´s id
+ * @param {string} id - post's id
  */
 const findPostById = async (postId) => {
   return new Promise((resolve, reject) => {
@@ -42,6 +42,25 @@ const findPostById = async (postId) => {
           reject(buildErrObject(422, 'Post does not exist'));
         } else {
           resolve(post); // returns mongoose object
+        }
+      })
+      .catch(err => reject(buildErrObject(422, err.message)));
+  })
+}
+
+/**
+ * Finds university by ID
+ * @param {string} id - universitiy's id
+ */
+const findUniversityById = async (uniId) => {
+  return new Promise((resolve, reject) => {
+    University.findOne({ _id: uniId })
+      .select('_id name acronym')
+      .then(uni => {
+        if (!uni) {
+          reject(buildErrObject(422, 'University does not exist'));
+        } else {
+          resolve(uni); // returns mongoose object
         }
       })
       .catch(err => reject(buildErrObject(422, err.message)));
@@ -93,14 +112,19 @@ exports.deleteModule = async (req, res) => {
 };
 
 exports.getModuleInfo = async (req, res) => {
-  Module.findOne({ _id: req.params.moduleId })
-    .select('_id name title description posts followers')
-    .lean()
-    .then(mod => {
-      if (mod) handleSuccess(res, buildSuccObject(mod));
-      else handleError(res, buildErrObject(422, 'Module not found'));
-    })
-    .catch(err => handleError(res, buildErrObject(422, err.message)));
+  try {
+    let mod = await findModuleyById(req.params.moduleId)
+    const uni = await findUniversityById(mod.university)
+
+    mod = {
+      ...mod._doc,
+      acronym: uni.acronym
+    }
+    
+    handleSuccess(res, buildSuccObject(mod))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
+  }
 };
 
 exports.getModuleList = async (req, res) => {

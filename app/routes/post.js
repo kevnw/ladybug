@@ -27,4 +27,20 @@ router.post('/edit/:postId', PostController.updatePost)
  */
 router.delete('/delete/:postId', PostController.deletePost)
 
+/*
+ * Upvote post route
+ */
+router.put('/upvote/:postId',
+AuthController.verifyToken, 
+PostController.upvote
+)
+
+/*
+ * Downvote post route
+ */
+router.put('/downvote/:postId', 
+AuthController.verifyToken,
+PostController.downvote
+)
+
 module.exports = router
