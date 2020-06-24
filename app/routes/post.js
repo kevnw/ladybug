@@ -25,6 +25,6 @@ router.post('/edit/:postId', PostController.updatePost)
 /*
  * Delete post route
  */
-router.delete('/delete', PostController.deletePost)
+router.delete('/delete/:postId', PostController.deletePost)
 
 module.exports = router

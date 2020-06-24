@@ -127,7 +127,7 @@ exports.updatePost = async (req, res) => {
 
 exports.deletePost = async (req, res) => {
   try {
-    const post = await findPostById(req.body.postId)
+    const post = await findPostById(req.params.postId)
     const mod = await findModuleyById(post.module)
 
     const post_idx = mod.posts.indexOf("" + post._id)
@@ -154,7 +154,7 @@ exports.deletePost = async (req, res) => {
 };
 
 exports.getPostInfo = async (req, res) => {
-  Post.findOne({ _id: req.body.postId })
+  Post.findOne({ _id: req.params.postId })
     .select('_id text title author')
     .lean()
     .then(post => {
