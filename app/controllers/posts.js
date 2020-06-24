@@ -17,7 +17,7 @@ const {
 const findUserById = async id => {
   return new Promise((resolve, reject) => {
     User.findOne({ _id: id })
-      .select('_id name')
+      .select('_id name avatar')
       .then(user => {
         if (!user) {
           reject(buildErrObject(422, 'User does not exist'));
@@ -96,9 +96,10 @@ exports.createPost = async (req, res) => {
 
     const author = await findUserById(newPost.author)
     const mod = await findModuleyById(newPost.module)
-  
+    
     newPost.authorName = author.name
     newPost.moduleName = mod.name
+    newPost.avatar = author.avatar
     mod.posts.unshift(newPost._id)
   
     mod.save()

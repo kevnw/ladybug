@@ -57,6 +57,12 @@ const PostSchema = new mongoose.Schema(
     moduleName: {
       type: String
     },
+    avatar: {
+      type: String
+    }, 
+    uniName: {
+      type: String
+    },
     date: {
       type: Date,
       default: Date.now()
