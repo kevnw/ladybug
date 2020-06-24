@@ -155,7 +155,7 @@ exports.deletePost = async (req, res) => {
 
 exports.getPostInfo = async (req, res) => {
   Post.findOne({ _id: req.params.postId })
-    .select('_id text title author module')
+    .select('_id text title author module authorName upvote downvote')
     .lean()
     .then(post => {
       if (post) handleSuccess(res, buildSuccObject(post));
