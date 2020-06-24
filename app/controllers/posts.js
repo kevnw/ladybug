@@ -1,4 +1,6 @@
 const Post = require('../models/Post')
+const User = require('../models/User')
+const Module = require('../models/Module')
 
 const {
   handleError,
@@ -10,6 +12,66 @@ const {
 /*********************
  * Private functions *
  *********************/
+
+ /* Finds user by id  */
+const findUserById = async id => {
+  return new Promise((resolve, reject) => {
+    User.findOne({ _id: id })
+      .select('name')
+      .then(user => {
+        if (!user) {
+          reject(buildErrObject(422, 'User does not exist'));
+        } else {
+          resolve(user); // returns mongoose object
+        }
+      })
+      .catch(err => reject(buildErrObject(422, err.message)));
+  });
+};
+
+ /* Finds module by id */
+ const findModuleyById = async (id) => {
+  return new Promise((resolve, reject) => {
+    Module.findOne({ _id: id })
+      .select('_id name posts')
+      .then(mod => {
+        if (!mod) {
+          reject(buildErrObject(422, 'Module does not exist'));
+        } else {
+          resolve(mod); // returns mongoose object
+        }
+      })
+      .catch(err => reject(buildErrObject(422, err.message)));
+  });
+};
+
+/* Finds post by id*/
+const findPostById = async (id) => {
+  return new Promise((resolve, reject) => {
+    Post.findOne({ _id: id })
+      .select('_id name module moduleName authorName')
+      .then(post => {
+        if (!post) {
+          reject(buildErrObject(422, 'Post does not exist'));
+        } else {
+          resolve(post); // returns mongoose object
+        }
+      })
+      .catch(err => reject(buildErrObject(422, err.message)));
+  });
+};
+
+/* Deletes post from database */
+const deletePostFromDb = async (id) => {
+  return new Promise((resolve, reject) => {
+    Post.deleteOne({ _id: id })
+    .then(result => {
+      if (result.n) resolve(buildSuccObject('Post deleted'));
+      else reject(buildErrObject(422, 'Post not found'));
+    })
+    .catch(error => handleError(res, buildErrObject(422, error.message)));
+  })
+}
 
  /********************
  * Public functions *
@@ -24,19 +86,31 @@ exports.getPostList = async (req, res) => {
 };
 
 exports.createPost = async (req, res) => {
-  var newPost = new Post({
-    text: req.body.post.text,
-    title: req.body.post.title,
-    author: req.body.post.author,
-    module: req.body.post.module
-  });
+  try {
+    var newPost = new Post({
+      text: req.body.post.text,
+      title: req.body.post.title,
+      author: req.body._id,
+      module: req.body.post.module
+    });
 
-  newPost
-    .save()
-    .then(post =>
-      handleSuccess(res, buildSuccObject(post))
-    )
-    .catch(error => handleError(res, buildErrObject(422, error.message)));
+    const author = await findUserById(newPost.author)
+    const mod = await findModuleyById(newPost.module)
+  
+    newPost.authorName = author.name
+    newPost.moduleName = mod.name
+    mod.posts.push(newPost._id)
+  
+    mod.save()
+    newPost
+      .save()
+      .then(post =>
+        handleSuccess(res, buildSuccObject(post))
+      )
+      .catch(error => handleError(res, buildErrObject(422, error.message)));
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message))
+  }
 };
 
 exports.updatePost = async (req, res) => {
@@ -52,12 +126,31 @@ exports.updatePost = async (req, res) => {
 };
 
 exports.deletePost = async (req, res) => {
-  Post.deleteOne({ _id: req.body.postId })
-    .then(result => {
-      if (result.n) handleSuccess(res, buildSuccObject('Post deleted'));
-      else handleError(res, buildErrObject(422, 'Post not found'));
-    })
-    .catch(error => handleError(res, buildErrObject(422, error.message)));
+  try {
+    const post = await findPostById(req.body.postId)
+    const mod = await findModuleyById(post.module)
+
+    const post_idx = mod.posts.indexOf("" + post._id)
+
+    if (post_idx > -1) {
+      const temp = []
+      for (i = 0; i < mod.posts.length; i++) {
+        if (i != post_idx) {
+          temp.push(mod.posts[i])
+        }
+      }
+      mod.posts = temp
+    } else {
+      handleError(res, buildErrObject(422, 'Post does not belong to ' + mod.name))
+      return
+    }
+
+    mod.save()
+    await deletePostFromDb(post._id)
+    handleSuccess(res, buildSuccObject('Post delete and removed from ' + mod.name))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message))
+  }
 };
 
 exports.getPostInfo = async (req, res) => {
@@ -70,3 +163,5 @@ exports.getPostInfo = async (req, res) => {
     })
     .catch(err => handleError(res, buildErrObject(422, err.message)));
 };
+
+

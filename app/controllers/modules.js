@@ -36,7 +36,7 @@ const findModuleyById = async (id) => {
 const findPostById = async (postId) => {
   return new Promise((resolve, reject) => {
     Post.findOne({ _id: postId })
-      .select('_id text title author comments')
+      .select('_id text title author comments upvote downvote authorName moduleName')
       .then(post => {
         if (!post) {
           reject(buildErrObject(422, 'Post does not exist'));
@@ -56,12 +56,11 @@ exports.getPostList = async (req, res) => {
   try {
     const temp = []
     const mod = await findModuleyById(req.params.moduleId)
-    
     for (const element of mod.posts) {
       const post = await findPostById(element)
       temp.push(post)
     }
-
+    
     handleSuccess(res, buildSuccObject(temp))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message));

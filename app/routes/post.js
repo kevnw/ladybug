@@ -1,4 +1,6 @@
 const PostController = require('../controllers/posts')
+const AuthController = require('../controllers/auth')
+
 const express = require('express')
 const router = express.Router()
 
@@ -10,7 +12,10 @@ router.get('/', PostController.getPostList)
 /*
  * Create post route
  */
-router.post('/add', PostController.createPost)
+router.post('/add', 
+AuthController.verifyToken,
+PostController.createPost
+)
 
 /*
  * Update post route

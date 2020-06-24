@@ -30,22 +30,6 @@ const findUserById = async id => {
   });
 };
 
-/* Finds university by id  */
-const findUniById = async id => {
-  return new Promise((resolve, reject) => {
-    University.findOne({ _id: id })
-      .select('_id name acronym modules')
-      .then(uni => {
-        if (!uni) {
-          reject(buildErrObject(422, 'University does not exist'));
-        } else {
-          resolve(uni); // returns mongoose object
-        }
-      })
-      .catch(err => reject(buildErrObject(422, err.message)));
-  });
-};
-
 /* Finds module by id  */
 const findModuleById = async id => {
   return new Promise((resolve, reject) => {

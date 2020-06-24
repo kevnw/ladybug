@@ -27,6 +27,9 @@ const PostSchema = new mongoose.Schema(
       ref: 'User',
       required: true
     },
+    authorName: {
+      type: String
+    },
     comments: [
       {
         author: {
@@ -44,6 +47,9 @@ const PostSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Module',
       required: true
+    },
+    moduleName: {
+      type: String
     },
     date: {
       type: Date,
