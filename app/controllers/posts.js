@@ -49,7 +49,7 @@ const findUserById = async id => {
 const findPostById = async (id) => {
   return new Promise((resolve, reject) => {
     Post.findOne({ _id: id })
-      .select('_id module moduleName authorName upvote downvote comments')
+      .select('_id module moduleName authorName upvote downvote comments avatar')
       .then(post => {
         if (!post) {
           reject(buildErrObject(422, 'Post does not exist'));
@@ -79,7 +79,7 @@ const deletePostFromDb = async (id) => {
 
 exports.getPostList = async (req, res) => {
   Post.find()
-    .select('_id text title author')
+    .select('_id text title author avatar')
     .lean()
     .then(postList => handleSuccess(res, buildSuccObject(postList)))
     .catch(err => handleError(res, buildErrObject(422, err.message)));
@@ -156,7 +156,7 @@ exports.deletePost = async (req, res) => {
 
 exports.getPostInfo = async (req, res) => {
   Post.findOne({ _id: req.params.postId })
-    .select('_id text title author module authorName upvote downvote comments moduleName')
+    .select('_id text title author module authorName upvote downvote comments moduleName avatar')
     .lean()
     .then(post => {
       if (post) handleSuccess(res, buildSuccObject(post));
