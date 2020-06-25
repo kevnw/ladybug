@@ -251,7 +251,7 @@ exports.comment = async (req, res) => {
       avatar: user.avatar
     }
 
-    post.comments.unshift(comment)
+    post.comments.push(comment)
     post.save()
     handleSuccess(res, buildSuccObject(post.comments))
   } catch (err) {

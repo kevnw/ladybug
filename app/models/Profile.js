@@ -45,7 +45,7 @@ const ProfileSchema = new mongoose.Schema(
         type: String
       }
     },
-    experience: [
+    experiences: [
       {
         title: {
           type: String
@@ -67,7 +67,7 @@ const ProfileSchema = new mongoose.Schema(
         }
       }
     ],
-    education: [
+    educations: [
       {
         school: {
           type: String

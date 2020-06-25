@@ -17,6 +17,9 @@ router.use('/modules', require('./module'));
 // Load Post route
 router.use('/posts', require('./post'));
 
+// Load Profile route
+router.use('/profiles', require('./profile'))
+
 /*
  * Setup routes for index
  */
