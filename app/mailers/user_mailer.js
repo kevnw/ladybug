@@ -3,7 +3,6 @@ const ejs = require('ejs')
 const querystring = require('querystring');
 
 const emailer = require('../middleware/emailer')
-console.log(__dirname)
 const emailTemplatesDir = __dirname + '/../../views/mailers'
 
 /* Sends registration email */

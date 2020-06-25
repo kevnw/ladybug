@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
-const gravatar = require('gravatar')
 const User = require('../models/User')
+const Profile = require('../models/Profile')
 const auth = require('../middleware/auth')
 const { addHours } = require('date-fns')
 const uuid = require('uuid')
@@ -81,6 +81,21 @@ const saveLoginAttemptsToDB = async (user) => {
   })
 }
 
+const createProfile = async (credentials) => {
+  return new Promise ((resolve, reject) => {
+    const profile = new Profile({
+      user: credentials._id,
+      name: credentials.name,
+      avatar: credentials.avatar,
+      dateJoined: Date.now()
+    })
+
+    profile.save((err, item) => {
+      if (err) reject(buildErrObject(422, err.message))
+      resolve(item)
+    })
+  })
+}
 /**
  * Registers a new user in database
  * @param {Object} req - request object
@@ -275,12 +290,13 @@ exports.register = async (req, res) => {
     }
     const user = await registerUser(req)
     const userInfo = setUserInfo(user)
-    const response = returnRegisterToken(user, userInfo)
-    UserMailer.verifyRegistration(response)
+    await createProfile(userInfo)
+    const responseToken = returnRegisterToken(user, userInfo)
+    UserMailer.verifyRegistration(responseToken)
       .then((info, response) => {
         handleSuccess(
           res,
-          buildSuccObject('User has been created. Please verify your email!')
+          buildSuccObject(responseToken)
         );
       })
       .catch(err => handleError(res, buildErrObject(422, err.message)));

@@ -7,6 +7,15 @@ const ProfileSchema = new mongoose.Schema(
       ref: 'User',
       required: true
     },
+    name: {
+      type: String
+    },
+    avatar: {
+      type: String
+    },
+    dateJoined: {
+      type: Date
+    },
     status: {
       type: String
     },
@@ -31,7 +40,10 @@ const ProfileSchema = new mongoose.Schema(
       },
       instagram: {
         type: String,
-      },
+      }, 
+      website: {
+        type: String
+      }
     },
     experience: [
       {

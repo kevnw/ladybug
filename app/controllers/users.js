@@ -1,6 +1,7 @@
 const User = require('../models/User')
 const Module = require('../models/Module')
 const University = require('../models/University');
+const Post = require('../models/Post')
 
 const {
   handleError,
@@ -45,6 +46,17 @@ const findModuleById = async id => {
       .catch(err => reject(buildErrObject(422, err.message)));
   });
 };
+
+const findAllPost = async () => {
+  return new Promise((resolve, reject) => {
+    Post.find()
+    .select('_id text title author avatar authorName moduleName')
+    .lean()
+    .then(postList => resolve(buildSuccObject(postList)))
+    .catch(err => reject(buildErrObject(422, err.message)));
+  })
+  
+}
 
  /********************
  * Public functions *
@@ -146,6 +158,24 @@ exports.getFollowedModulesFromUni = async (req, res) => {
     })
     .catch(err => handleError(res, buildErrObject(422, err.message)));
 
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
+  }
+}
+
+exports.getAllPostFromUser = async (req, res) => {
+  try {
+    const userId = req.params.userId
+    const postList = await findAllPost()
+    const temp = []
+
+    for (i = 0; i < postList.length; i++) {
+      if (postList[i].author == userId) {
+        temp.push(postList[i])
+      }
+    }
+
+    handleSuccess(res, buildSuccObject(temp))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message));
   }

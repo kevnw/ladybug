@@ -32,4 +32,5 @@ module.exports = () => {
 
   mongoose.connection.on('error', console.log)
   mongoose.connection.on('disconnected', connect)
+  mongoose.set('useFindAndModify', false);
 }
