@@ -1,4 +1,5 @@
 const UniversityController = require('../controllers/universities')
+const ModuleController = require('../controllers/modules')
 const express = require('express')
 const router = express.Router()
 
@@ -32,6 +33,14 @@ router.delete(
 router.get(
   '/modules/:uniName',
   UniversityController.getModuleList
+);
+
+/*
+ * Get module info from acronym and module name
+ */
+router.get(
+  '/modules/:uniAcronym/:moduleName',
+  ModuleController.getModuleInfoFromAcronym
 );
 
 /*

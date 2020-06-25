@@ -67,6 +67,25 @@ const findUniversityById = async (uniId) => {
   })
 }
 
+/**
+ * Finds university by acronym
+ * @param {string} id - universitiy's id
+ */
+const findUniversityByAcronym= async (acronym) => {
+  return new Promise((resolve, reject) => {
+    University.findOne({ acronym: acronym })
+      .select('_id name modules')
+      .then(uni => {
+        if (!uni) {
+          reject(buildErrObject(422, 'University does not exist'));
+        } else {
+          resolve(uni); // returns mongoose object
+        }
+      })
+      .catch(err => reject(buildErrObject(422, err.message)));
+  })
+}
+
  /********************
  * Public functions *
  ********************/
@@ -121,6 +140,22 @@ exports.getModuleInfo = async (req, res) => {
       acronym: uni.acronym
     }
     
+    handleSuccess(res, buildSuccObject(mod))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
+  }
+};
+
+exports.getModuleInfoFromAcronym = async (req, res) => {
+  try {
+    const uni = await findUniversityByAcronym(req.params.uniAcronym)
+    const temp = []
+    for (i = 0; i < uni.modules.length; i++) {
+      const mod = await findModuleyById(uni.modules[i])
+      temp.push(mod)
+    }
+
+    const mod = temp.find(element => (element.name == req.params.moduleName))
     handleSuccess(res, buildSuccObject(mod))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message));
