@@ -1,7 +1,5 @@
 const fs = require('fs')
 const ejs = require('ejs')
-const querystring = require('querystring');
-
 const emailer = require('../middleware/emailer')
 const emailTemplatesDir = __dirname + '/../../views/mailers'
 
@@ -32,3 +30,7 @@ exports.verifyRegistration = async response => {
     });
   });
 };
+
+exports.forgotPassword = async response => {
+
+}

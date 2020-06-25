@@ -11,7 +11,15 @@ const UniversitySchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    logo: String,
+    logo: {
+      type: String
+    },
+    overview: {
+      type: String
+    },
+    website: {
+      type: String
+    }, 
     modules: [
       {
         type: mongoose.Schema.Types.ObjectId,

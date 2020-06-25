@@ -1,4 +1,5 @@
 const User = require('../models/User')
+const Post = require('../models/Post')
 const Profile = require('../models/Profile')
 
 const {
@@ -11,6 +12,17 @@ const {
 /*********************
  * Private functions *
  *********************/
+
+ /* Finds all post written by that user */
+ const findAllPost = async () => {
+   return new Promise((resolve, reject) => {
+    Post.find()
+    .select('_id text title author avatar comments')
+    .lean()
+    .then(postList => handleSuccess(res, buildSuccObject(postList)))
+    .catch(err => handleError(res, buildErrObject(422, err.message)));
+   })
+ }
 
  /* Finds user by id */
 const findUserById = async id => {
@@ -60,6 +72,37 @@ const findProfileByUserId = async (userId) => {
   } catch (err) {
     handleError(res, buildErrObject(422, err.message))
   }
+ }
+
+ exports.editName = async (req, res) => {
+   try {
+    const userId = req.body._id
+    const newName = req.body.name
+    const user = await findUserById(userId)
+    const profile = await findProfileByUserId(userId)
+    const postList = await findAllPost()
+
+    for (i = 0; i < postList.length; i++) {
+      if (postList[i].author == userId) {
+        postList[i].name = newName
+      }
+      for (j = 0; j < postList[i].comments.length; j++) {
+        if (postList[i].comments[j].author == userId) {
+          postList[i].comments[j].authorName = newName
+        }
+      }
+      postList[i].save()
+    }
+
+    user.name = newName
+    profile.name = newName
+    profile.save()
+    user.save()
+
+    handleSuccess(res, profile)
+   } catch (err) {
+    handleError(res, buildErrObject(422, err.message))
+   } 
  }
 
  exports.getProfileInfo = async (req, res) => {
