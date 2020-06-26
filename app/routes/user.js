@@ -17,6 +17,11 @@ AuthController.verifyToken,
 UserController.getFollowedModulesFromUni
 )
 
+router.post('/changename',
+AuthController.verify,
+ProfileController.editName
+)
+
 /*
  * Register route
  */
@@ -44,23 +49,6 @@ router.put(
   '/unfollow/:moduleId',
   AuthController.verifyToken,
   UserController.unfollowModule
-)
-
-/*
- * Edit profile route
- */
-router.post(
-  '/profile',
-  AuthController.verifyToken,
-  ProfileController.editProfile
-)
-
-/*
- * Get profile route
- */
-router.get(
-  '/profile/:userId',
-  ProfileController.getProfileInfo
 )
 
 module.exports = router
