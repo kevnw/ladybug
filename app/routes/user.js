@@ -8,8 +8,12 @@ router.get('/',
 AuthController.getUserFromToken
 )
 
+router.get('/posts',
+AuthController.verifyToken,
+UserController.getAllPostFromUserToken)
+
 router.get('/posts/:userId', 
-UserController.getAllPostFromUser
+UserController.getAllPostFromUserId
 )
 
 router.get('/modules', 
@@ -18,7 +22,7 @@ UserController.getFollowedModulesFromUni
 )
 
 router.post('/changename',
-AuthController.verify,
+AuthController.verifyToken,
 ProfileController.editName
 )
 

@@ -20,8 +20,8 @@ const {
     Post.find()
     .select('_id text title author avatar comments')
     .lean()
-    .then(postList => handleSuccess(res, buildSuccObject(postList)))
-    .catch(err => handleError(res, buildErrObject(422, err.message)));
+    .then(postList => resolve(postList))
+    .catch(err => reject(buildErrObject(422, err.message)));
    })
  }
 
@@ -91,15 +91,16 @@ const findProfileByUserId = async (userId) => {
     const postList = await findAllPost()
 
     for (i = 0; i < postList.length; i++) {
-      if (postList[i].author == userId) {
-        postList[i].name = newName
+      const temp = postList[i]
+      if (temp.author == userId) {
+        temp.name = newName
       }
       for (j = 0; j < postList[i].comments.length; j++) {
-        if (postList[i].comments[j].author == userId) {
-          postList[i].comments[j].authorName = newName
+        if (temp.comments[j].author == userId) {
+          temp.comments[j].authorName = newName
         }
       }
-      postList[i].save()
+      temp.save()
     }
 
     user.name = newName

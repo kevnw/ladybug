@@ -162,9 +162,27 @@ exports.getFollowedModulesFromUni = async (req, res) => {
   }
 }
 
-exports.getAllPostFromUser = async (req, res) => {
+exports.getAllPostFromUserId = async (req, res) => {
   try {
     const userId = req.params.userId
+    const postList = await findAllPost()
+    const temp = []
+
+    for (i = 0; i < postList.length; i++) {
+      if (postList[i].author == userId) {
+        temp.push(postList[i])
+      }
+    }
+
+    handleSuccess(res, buildSuccObject(temp))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
+  }
+}
+
+exports.getAllPostFromUserToken = async (req, res) => {
+  try {
+    const userId = req.body._id
     const postList = await findAllPost()
     const temp = []
 
