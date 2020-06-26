@@ -16,7 +16,7 @@ const {
 const findUniversityByName = async name => {
   return new Promise((resolve, reject) => {
     University.findOne({ acronym: name })
-      .select('name modules ._id')
+      .select('name modules _id')
       .then(uni => {
         if (!uni) {
           reject(buildErrObject(422, 'University does not exist'));

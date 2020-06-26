@@ -1,6 +1,7 @@
 const Post = require('../models/Post')
 const User = require('../models/User')
 const Module = require('../models/Module')
+const University = require('../models/University')
 
 const {
   handleError,
@@ -49,7 +50,7 @@ const findUserById = async id => {
 const findPostById = async (id) => {
   return new Promise((resolve, reject) => {
     Post.findOne({ _id: id })
-      .select('_id module moduleName authorName upvote downvote comments avatar')
+      .select('_id module moduleName authorName upvote downvote comments avatar uniName uniAcronym')
       .then(post => {
         if (!post) {
           reject(buildErrObject(422, 'Post does not exist'));
@@ -73,13 +74,28 @@ const deletePostFromDb = async (id) => {
   })
 }
 
+ /* Finds university by name  */
+ const findUniversityById = async id => {
+  return new Promise((resolve, reject) => {
+    University.findOne({ _id: id })
+      .select('name modules _id acronym')
+      .then(uni => {
+        if (!uni) {
+          reject(buildErrObject(422, 'University does not exist'));
+        } else {
+          resolve(uni); // returns mongoose object
+        }
+      })
+      .catch(err => reject(buildErrObject(422, err.message)));
+  });
+};
+
  /********************
  * Public functions *
  ********************/
 
 exports.getPostList = async (req, res) => {
   Post.find()
-    .select('_id text title author avatar')
     .lean()
     .then(postList => handleSuccess(res, buildSuccObject(postList)))
     .catch(err => handleError(res, buildErrObject(422, err.message)));
@@ -96,10 +112,13 @@ exports.createPost = async (req, res) => {
 
     const author = await findUserById(newPost.author)
     const mod = await findModuleyById(newPost.module)
+    const uni = await findUniversityById(mod.univeristy)
     
     newPost.authorName = author.name
     newPost.moduleName = mod.name
     newPost.avatar = author.avatar
+    newPost.uniName = uni.name
+    newPost.uniAcronym = uni.acronym
     mod.posts.unshift(newPost._id)
   
     mod.save()

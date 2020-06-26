@@ -63,6 +63,9 @@ const PostSchema = new mongoose.Schema(
     uniName: {
       type: String
     },
+    uniAcronym: {
+      type: String
+    },
     date: {
       type: Date,
       default: Date.now()

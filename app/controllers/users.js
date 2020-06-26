@@ -50,7 +50,6 @@ const findModuleById = async id => {
 const findAllPost = async () => {
   return new Promise((resolve, reject) => {
     Post.find()
-    .select('_id text title author avatar authorName moduleName')
     .lean()
     .then(postList => resolve(buildSuccObject(postList)))
     .catch(err => reject(buildErrObject(422, err.message)));
