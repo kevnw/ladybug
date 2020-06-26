@@ -34,7 +34,7 @@ const findUserById = async id => {
  const findModuleyById = async (id) => {
   return new Promise((resolve, reject) => {
     Module.findOne({ _id: id })
-      .select('_id name posts')
+      .select('_id name posts university')
       .then(mod => {
         if (!mod) {
           reject(buildErrObject(422, 'Module does not exist'));
@@ -114,6 +114,7 @@ exports.createPost = async (req, res) => {
     const mod = await findModuleyById(newPost.module)
     const uni = await findUniversityById(mod.univeristy)
     
+
     newPost.authorName = author.name
     newPost.moduleName = mod.name
     newPost.avatar = author.avatar
