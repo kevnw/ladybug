@@ -105,6 +105,16 @@ const findProfileByUserId = async (userId) => {
    } 
  }
 
+ exports.getProfile = async (req, res) => {
+   try {
+    const profile = await findProfileByUserId(req.body._id)
+    
+    handleSuccess(res, profile)
+   } catch (err) {
+     handleError(res, buildErrObject(422, err.message))
+   }
+ }
+
  exports.getProfileInfo = async (req, res) => {
   try {
     const profile = await findProfileByUserId(req.params.userId)

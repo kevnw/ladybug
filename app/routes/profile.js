@@ -16,6 +16,15 @@ router.post(
  * Get profile route
  */
 router.get(
+  '/',
+  AuthController.verifyToken,
+  ProfileController.getProfile
+)
+
+/*
+ * Get profile by user ID route
+ */
+router.get(
   '/:userId',
   ProfileController.getProfileInfo
 )

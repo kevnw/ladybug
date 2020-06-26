@@ -112,7 +112,7 @@ exports.createPost = async (req, res) => {
 
     const author = await findUserById(newPost.author)
     const mod = await findModuleyById(newPost.module)
-    const uni = await findUniversityById(mod.univeristy)
+    const uni = await findUniversityById(mod.university)
     
 
     newPost.authorName = author.name
