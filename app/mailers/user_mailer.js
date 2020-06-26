@@ -32,5 +32,12 @@ exports.verifyRegistration = async response => {
 };
 
 exports.forgotPassword = async response => {
+  return new Promise ((resolve, reject) => {
+    const file = fs.readFileSync(
+      emailTemplatesDir + '/verify_registration.ejs',
+      'ascii'
+    );
 
+    
+  })
 }

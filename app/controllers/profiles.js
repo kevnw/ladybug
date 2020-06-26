@@ -44,7 +44,6 @@ const findUserById = async id => {
 const findProfileByUserId = async (userId) => {
   return new Promise((resolve, reject) => {
     Profile.findOne({ user: userId })
-      .select('_id user name dateJoined experiences educations')
       .then(profile => {
         if (!profile) {
           reject(buildErrObject(422, 'Profile does not exist'));
@@ -139,7 +138,7 @@ const findProfileByUserId = async (userId) => {
 
     profile.experiences.unshift(req.body.experience)
     profile.save()
-    handleSuccess(res, profile.experiences)
+    handleSuccess(res, profile)
   } catch (err) {
     handleError(res, buildErrObject(422, err.message))
   }
@@ -160,7 +159,7 @@ const findProfileByUserId = async (userId) => {
     
     profile.experiences = temp
     profile.save()
-    handleSuccess(res, profile.experiences)
+    handleSuccess(res, profile)
    } catch (err) {
     handleError(res, buildErrObject(422, err.message))
    }
@@ -177,7 +176,7 @@ exports.addEducation = async (req, res) => {
 
   profile.educations.unshift(req.body.education)
   profile.save()
-  handleSuccess(res, profile.educations)
+  handleSuccess(res, profile)
   } catch (err) {
   handleError(res, buildErrObject(422, err.message))
   }
@@ -199,7 +198,7 @@ exports.deleteEducation = async (req, res) => {
   
   profile.educations = temp
   profile.save()
-  handleSuccess(res, profile.educations)
+  handleSuccess(res, profile)
   } catch (err) {
   handleError(res, buildErrObject(422, err.message))
   }
