@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/User')
 const Profile = require('../models/Profile')
 const auth = require('../middleware/auth')
+const avatar = require('../middleware/avatar')
 const { addHours } = require('date-fns')
 const uuid = require('uuid')
 const UserMailer = require('../mailers/user_mailer')
@@ -52,7 +53,8 @@ const setUserInfo = (req) => {
     name: req.name,
     email: req.email,
     role: req.role,
-    verified: req.verified
+    verified: req.verified,
+    avatar: req.avatar
   }
   // Adds verification for testing purposes
   if (process.env.NODE_ENV !== 'production') {
@@ -109,9 +111,7 @@ const registerUser = async (req) => {
       verification: uuid.v4()
     }); 
 
-    var names = user.name.split(" ")
-    const url = encodeURI('https://avatar.oxro.io/avatar.svg?name=' + names[0] + '+' + names[names.length - 1] + '&background=fff4e6&color=e5c296')
-    user.avatar = url
+    user.avatar = avatar.generateAvatarUrl(user.name)
 
     user.save((err, item) => {
       if (err) reject(buildErrObject(422, err.message))

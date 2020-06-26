@@ -46,19 +46,24 @@ const ProfileSchema = new mongoose.Schema(
     experiences: [
       {
         title: {
-          type: String
+          type: String,
+          required:true
         },
         company: {
-          type: String
+          type: String,
+          required: true
         },
         startDate: {
-          type: Date
+          type: Date,
+          required: true
         },
         endDate: {
-          type: Date
+          type: Date,
+          required: true
         },
         current: {
-          type: Boolean
+          type: Boolean,
+          default: false
         },
         description: {
           type: String
@@ -68,22 +73,28 @@ const ProfileSchema = new mongoose.Schema(
     educations: [
       {
         school: {
-          type: String
+          type: String, 
+          required: true
         },
         degree: {
-          type: String
+          type: String,
+          required: true
         },
         fieldOfStudy: {
-          type: String
+          type: String,
+          required: true
         },
         startDate: {
-          type: Date
+          type: Date,
+          required: true
         },
         endDate: {
-          type: Date
+          type: Date,
+          required: true
         },
         current: {
-          type: Boolean
+          type: Boolean,
+          default: false
         },
         description: {
           type: String

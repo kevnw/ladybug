@@ -1,6 +1,7 @@
 const User = require('../models/User')
 const Post = require('../models/Post')
 const Profile = require('../models/Profile')
+const avatar = require('../middleware/avatar')
 
 const {
   handleError,
@@ -65,8 +66,9 @@ const findProfileByUserId = async (userId) => {
     let splittedSkills = []
     if (newProfile.skills) {
       splittedSkills = newProfile.skills.split(",").map(item => item.trim())
+      newProfile.skills = splittedSkills
     }
-    
+
     newProfile.skills = splittedSkills
     const profile = await Profile.findOneAndUpdate({
       user: req.body._id
@@ -101,6 +103,7 @@ const findProfileByUserId = async (userId) => {
     }
 
     user.name = newName
+    user.avatar = avatar.generateAvatarUrl(newName)
     profile.name = newName
     profile.save()
     user.save()
