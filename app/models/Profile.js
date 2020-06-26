@@ -19,9 +19,7 @@ const ProfileSchema = new mongoose.Schema(
     status: {
       type: String
     },
-    skills: {
-      type: String
-    },
+    skills: [String],
     bio: {
       type: String
     },

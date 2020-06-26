@@ -62,10 +62,17 @@ const findProfileByUserId = async (userId) => {
 
  exports.editProfile = async (req, res) => {
   try {
+    const newProfile = req.body.profile
+    let splittedSkills = []
+    if (newProfile.skills) {
+      splittedSkills = newProfile.skills.split(",").map(item => item.trim())
+    }
+    
+    newProfile.skills = splittedSkills
     const profile = await Profile.findOneAndUpdate({
       user: req.body._id
     }, 
-    req.body.profile, 
+    newProfile, 
     { new: true })
 
     handleSuccess(res, profile)
