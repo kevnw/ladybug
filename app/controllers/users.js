@@ -145,7 +145,12 @@ exports.getFollowedModulesFromUni = async (req, res) => {
         user.following.forEach(module => {
           uni.modules.forEach(id => {
             if (("" + id) == ("" + module)) {
-              temp.push(module)
+              const mod = await findModuleById(module)
+              mod = {
+                _id: mod._id,
+                name: mod.name
+              }
+              temp.push(mod)
             }
           })
         })

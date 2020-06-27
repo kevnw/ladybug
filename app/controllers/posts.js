@@ -229,7 +229,9 @@ exports.upvote = async (req, res) => {
       post.upvote = temp
     }
 
-    post.nOfUpvote = post.upvotes.length
+    if (post.upvotes) {
+      post.nOfUpvote = post.upvotes.length
+    }
     post.save()
     handleSuccess(res, buildSuccObject(post))
   } catch (err) {
@@ -267,7 +269,9 @@ exports.downvote = async (req, res) => {
       post.downvote = temp
     }
 
-    post.nOfUpvote = post.upvotes.length
+    if(post.upvotes) {
+      post.nOfUpvote = post.upvotes.length
+    }
     post.save()
     handleSuccess(res, buildSuccObject(post))
   } catch (err) {
@@ -318,6 +322,7 @@ exports.deleteComment = async (req, res) => {
 exports.givePostRecommendations = async (req, res) => {
   try {
     const postList = await sortedPost()
+    console.log(postList)
     const temp = []
     for (i = 0; i < 3; i++) {
       temp.push(postList[i])
