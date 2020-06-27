@@ -1,7 +1,4 @@
-const UserController = require('../controllers/users')
-const AuthController = require('../controllers/auth')
 const ModuleController = require('../controllers/modules')
-const PostController = require('../controllers/posts')
 const express = require('express')
 const router = express.Router()
 
@@ -11,6 +8,14 @@ const router = express.Router()
 router.get(
   '/',
   ModuleController.getModuleList
+)
+
+/*
+ * Get modules recommendations
+ */
+router.get(
+  '/recommendations',
+  ModuleController.giveModuleRecommendations
 )
 
 /*

@@ -298,3 +298,19 @@ exports.deleteComment = async (req, res) => {
     handleError(res, buildErrObject(422, err.message))
   }
 }
+
+exports.givePostRecommendations = async (req, res) => {
+  try {
+    Post.find()
+    .sort((x1, x2) => {
+      return x1.upvote.length - x2.upvote.length
+    })
+    .lean()
+    .then(postList => {
+      handleSuccess(res, buildSuccObject(postList))
+    })
+    .catch(err => handleError(res, buildErrObject(422, err.message)));
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message))
+  }
+}

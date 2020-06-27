@@ -215,3 +215,19 @@ exports.deletePost = async (req, res) => {
     handleError(res, buildErrObject(422, err.message))
   }
 }
+
+exports.giveModuleRecommendations = async (req, res) => {
+  try {
+    Module.find()
+    .sort((x1, x2) => {
+      return x1.followers.length - x2.followers.length
+    })
+    .lean()
+    .then(moduleList => {
+      handleSuccess(res, buildSuccObject(moduleList))
+    })
+    .catch(err => handleError(res, buildErrObject(422, err.message)));
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message))
+  }
+}

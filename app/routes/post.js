@@ -10,6 +10,14 @@ const router = express.Router()
 router.get('/', PostController.getPostList)
 
 /*
+ * Get post recommendations
+ */
+router.get(
+  '/recommendations',
+  PostController.givePostRecommendations
+)
+
+/*
  * Get particular module info
  */
 router.get(
