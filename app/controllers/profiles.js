@@ -219,8 +219,8 @@ exports.createProfile = async (req, res) => {
     })
 
     profile.save((err, item) => {
-      if (err) reject(buildErrObject(422, err.message))
-      resolve(item)
+      if (err) handleError(res, buildErrObject(422, err.message))
+      handleSuccess(res, item)
     })
   } catch (err) {
     handleError(res, buildErrObject(422, err.message))
