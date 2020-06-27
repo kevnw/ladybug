@@ -267,6 +267,7 @@ exports.downvote = async (req, res) => {
       post.downvote = temp
     }
 
+    post.nOfUpvote = post.upvotes.length
     post.save()
     handleSuccess(res, buildSuccObject(post))
   } catch (err) {
