@@ -94,8 +94,8 @@ const deletePostFromDb = async (id) => {
 const sortedPost = async () => {
   return new Promise((resolve, reject) => {
     Post.find()
-    .toArray()
     .sort({ nOfUpvote: 1 })
+    .lean()
     .then(postList => {
       resolve(postList)
     })

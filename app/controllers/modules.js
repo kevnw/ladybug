@@ -89,8 +89,8 @@ const findUniversityByAcronym= async (acronym) => {
 const sortedModule = async () => {
   return new Promise((resolve, reject) => {
     Module.find()
-    .toArray()
     .sort({ nOfFollowers: 1 })
+    .lean()
     .then(moduleList => {
       resolve(moduleList)
     })
