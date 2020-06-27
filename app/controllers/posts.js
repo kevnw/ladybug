@@ -302,10 +302,10 @@ exports.deleteComment = async (req, res) => {
 exports.givePostRecommendations = async (req, res) => {
   try {
     Post.find()
+    .toArray()
     .sort((x1, x2) => {
       return x1.upvote.length - x2.upvote.length
     })
-    .lean()
     .then(postList => {
       handleSuccess(res, buildSuccObject(postList))
     })

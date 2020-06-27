@@ -218,10 +218,10 @@ exports.deletePost = async (req, res) => {
 exports.giveModuleRecommendations = async (req, res) => {
   try {
     Module.find()
+    .toArray()
     .sort((x1, x2) => {
       return x1.followers.length - x2.followers.length
     })
-    .lean()
     .then(moduleList => {
       handleSuccess(res, buildSuccObject(moduleList))
     })
