@@ -12,13 +12,16 @@ const UniversitySchema = new mongoose.Schema(
       required: true
     },
     logo: {
-      type: String
+      type: String,
+      required: true
     },
     overview: {
-      type: String
+      type: String,
+      required: true
     },
     website: {
-      type: String
+      type: String,
+      required: true
     }, 
     modules: [
       {

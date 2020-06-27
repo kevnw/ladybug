@@ -16,7 +16,6 @@ const {
 const findUniversityByName = async name => {
   return new Promise((resolve, reject) => {
     University.findOne({ acronym: name })
-      .select('name modules _id')
       .then(uni => {
         if (!uni) {
           reject(buildErrObject(422, 'University does not exist'));
@@ -63,7 +62,10 @@ exports.getModuleList = async (req, res) => {
 exports.createUni = async (req, res) => {
   var newUni = new University({
     name: req.body.name,
-    acronym: req.body.acronym
+    acronym: req.body.acronym,
+    overview: req.body.overview,
+    website: req.body.website,
+    logo: req.body.logo
   });
 
   newUni
