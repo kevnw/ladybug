@@ -85,6 +85,19 @@ const findUniversityByAcronym= async (acronym) => {
   })
 }
 
+/* Returns all modules sorted from followers */
+const sortedModule = async () => {
+  return new Promise((resolve, reject) => {
+    Module.find()
+    .toArray()
+    .sort({ nOfFollowers: 1 })
+    .then(moduleList => {
+      resolve(moduleList)
+    })
+    .catch(err => reject(buildErrObject(422, err.message)));
+  })
+}
+
  /********************
  * Public functions *
  ********************/
@@ -218,13 +231,13 @@ exports.deletePost = async (req, res) => {
 
 exports.giveModuleRecommendations = async (req, res) => {
   try {
-    Module.find()
-    .toArray()
-    .sort({ nOfFollowers: 1 })
-    .then(moduleList => {
-      handleSuccess(res, buildSuccObject(moduleList))
-    })
-    .catch(err => handleError(res, buildErrObject(422, err.message)));
+    const moduleList = await sortedModule()
+    const temp = []
+    for (i = 0; i < 3; i++) {
+      temp.push(moduleList[i])
+    }
+
+    handleSuccess(res, buildSuccObject(temp))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message))
   }

@@ -90,6 +90,19 @@ const deletePostFromDb = async (id) => {
   });
 };
 
+/* Returns all post sorted from upvote */
+const sortedPost = async () => {
+  return new Promise((resolve, reject) => {
+    Post.find()
+    .toArray()
+    .sort({ nOfUpvote: 1 })
+    .then(postList => {
+      resolve(postList)
+    })
+    .catch(err => reject(buildErrObject(422, err.message)));
+  })
+}
+
  /********************
  * Public functions *
  ********************/
@@ -303,15 +316,13 @@ exports.deleteComment = async (req, res) => {
 
 exports.givePostRecommendations = async (req, res) => {
   try {
-    Post.find()
-    .toArray()
-    .sort((x1, x2) => {
-      return x1.upvote.length - x2.upvote.length
-    })
-    .then(postList => {
-      handleSuccess(res, buildSuccObject(postList))
-    })
-    .catch(err => handleError(res, buildErrObject(422, err.message)));
+    const postList = await sortedPost()
+    const temp = []
+    for (i = 0; i < 3; i++) {
+      temp.push(postList[i])
+    }
+
+    handleSuccess(res, buildSuccObject(temp))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message))
   }
