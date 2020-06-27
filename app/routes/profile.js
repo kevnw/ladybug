@@ -12,6 +12,12 @@ router.post(
   ProfileController.editProfile
 )
 
+router.post(
+  '/create',
+  AuthController.verifyToken,
+  ProfileController.createProfile
+)
+
 /*
  * Get profile route
  */

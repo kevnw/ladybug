@@ -207,3 +207,22 @@ exports.deleteEducation = async (req, res) => {
   handleError(res, buildErrObject(422, err.message))
   }
 }
+
+exports.createProfile = async (req, res) => {
+  try {
+    const credentials = await findUserById(req.body._id)
+    const profile = new Profile({
+      user: credentials._id,
+      name: credentials.name,
+      avatar: credentials.avatar,
+      dateJoined: Date.now()
+    })
+
+    profile.save((err, item) => {
+      if (err) reject(buildErrObject(422, err.message))
+      resolve(item)
+    })
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message))
+  }
+}
