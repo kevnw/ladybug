@@ -36,7 +36,6 @@ const findModuleyById = async (id) => {
 const findPostById = async (postId) => {
   return new Promise((resolve, reject) => {
     Post.findOne({ _id: postId })
-      .select('_id text title author comments upvote downvote authorName moduleName avatar')
       .then(post => {
         if (!post) {
           reject(buildErrObject(422, 'Post does not exist'));

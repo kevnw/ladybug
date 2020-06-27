@@ -107,7 +107,8 @@ exports.createPost = async (req, res) => {
       text: req.body.post.text,
       title: req.body.post.title,
       author: req.body._id,
-      module: req.body.post.module
+      module: req.body.post.module,
+      date: Date.now()
     });
 
     const author = await findUserById(newPost.author)
@@ -176,7 +177,6 @@ exports.deletePost = async (req, res) => {
 
 exports.getPostInfo = async (req, res) => {
   Post.findOne({ _id: req.params.postId })
-    .select('_id text title author module authorName upvote downvote comments moduleName avatar')
     .lean()
     .then(post => {
       if (post) handleSuccess(res, buildSuccObject(post));
