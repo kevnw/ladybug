@@ -89,7 +89,7 @@ const findUniversityByAcronym= async (acronym) => {
 const sortedModule = async () => {
   return new Promise((resolve, reject) => {
     Module.find()
-    .sort({ nOfFollowers: 1 })
+    .sort({ nOfFollowers: -1 })
     .lean()
     .then(moduleList => {
       resolve(moduleList)
@@ -118,20 +118,27 @@ exports.getPostList = async (req, res) => {
 };
 
 exports.createModule = async (req, res) => {
-  var newModule = new Module({
-    name: req.body.module.name,
-    title: req.body.module.title,
-    description: req.body.module.description,
-    university: req.body.module.university,
-    nOfFollowers: 0
-  });
+  try {
+    var newModule = new Module({
+      name: req.body.module.name,
+      title: req.body.module.title,
+      description: req.body.module.description,
+      university: req.body.module.university,
+      nOfFollowers: 0
+    });
 
-  newModule
-    .save()
-    .then(mod =>
-      handleSuccess(res, buildSuccObject('New module created'))
-    )
-    .catch(error => handleError(res, buildErrObject(422, error.message)));
+    const uni = await findUniversityById(newModule.university)
+    newModule.uniAcronym = uni.acronym
+  
+    newModule
+      .save()
+      .then(mod =>
+        handleSuccess(res, buildSuccObject('New module created'))
+      )
+      .catch(error => handleError(res, buildErrObject(422, error.message)));
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
+  }
 };
 
 exports.deleteModule = async (req, res) => {

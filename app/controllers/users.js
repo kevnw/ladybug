@@ -50,13 +50,54 @@ const findModuleById = async id => {
 const findAllPost = async () => {
   return new Promise((resolve, reject) => {
     Post.find()
+    .sort({ date: -1 })
     .lean()
     .then(postList => resolve(buildSuccObject(postList)))
     .catch(err => reject(buildErrObject(422, err.message)));
   })
-  
 }
 
+const getAllModules = async () => {
+  return new Promise((resolve, reject) => {
+    Module.find()
+    .select('_id name')
+    .lean()
+    .then(modulesList => {
+      resolve(modulesList)
+    })
+    .catch(err => reject(buildErrObject(422, err.message))) 
+  })
+}
+
+const modulesFromUni = async (userId) => {
+  return new Promise(async (resolve, reject) => {
+    const user = await findUserById(userId)
+    var temp = []
+
+    University.find()
+    .select('name modules acronym').sort({name: 1})
+    .lean()
+    .then(universityList => {
+      const fixedList = []
+      universityList.forEach(uni => {
+        user.following.forEach(module => {
+          uni.modules.forEach(id => {
+            if (("" + id) == ("" + module)) {
+              temp.push(module)
+            }
+          })
+        })
+        uni.modules = temp
+        if (temp.length >= 1) {
+          fixedList.push(uni)
+        }
+        temp = []
+    })
+      resolve(fixedList)
+    })
+    .catch(err => reject(buildErrObject(422, err.message)));
+  })
+}
  /********************
  * Public functions *
  ********************/
@@ -133,37 +174,31 @@ exports.unfollowModule = async (req, res) => {
 
 exports.getFollowedModulesFromUni = async (req, res) => {
   try {
-    const user = await findUserById(req.body._id)
-    var temp = []
+    const list = await modulesFromUni(req.body._id)
+    const allModules = await getAllModules()
 
-    University.find()
-    .select('name modules acronym').sort({name: 1})
-    .lean()
-    .then(universityList => {
-      const fixedList = []
-      universityList.forEach(uni => {
-        user.following.forEach(module => {
-          uni.modules.forEach(id => {
-            if (("" + id) == ("" + module)) {
-              const mod = await findModuleById(module)
-              mod = {
-                _id: mod._id,
-                name: mod.name
-              }
-              temp.push(mod)
-            }
-          })
+    const temp = []
+    list.forEach(element => {
+      const obj = {
+        _id: element._id,
+        name: element.name,
+        acronym: element.acronym,
+        modules: []
+      }
+      element.modules.forEach(mod => {
+        allModules.forEach(mod2 => {
+          if ("" + mod2._id == "" + mod._id) {
+            obj.modules.push({
+              _id: mod._id,
+              name: mod2.name
+            })
+          }
         })
-        uni.modules = temp
-        if (temp.length >= 1) {
-          fixedList.push(uni)
-        }
-        temp = []
+      })
+      temp.push(obj)
     })
-      handleSuccess(res, buildSuccObject(fixedList))
-    })
-    .catch(err => handleError(res, buildErrObject(422, err.message)));
 
+    handleSuccess(res, buildSuccObject(temp))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message));
   }

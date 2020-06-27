@@ -33,6 +33,9 @@ const ModuleSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'University',
       required: true
+    },
+    uniAcronym: {
+      type: String
     }
   }
 )

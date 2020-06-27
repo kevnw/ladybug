@@ -94,7 +94,7 @@ const deletePostFromDb = async (id) => {
 const sortedPost = async () => {
   return new Promise((resolve, reject) => {
     Post.find()
-    .sort({ nOfUpvote: 1 })
+    .sort({ nOfUpvote: -1 })
     .lean()
     .then(postList => {
       resolve(postList)
@@ -322,7 +322,6 @@ exports.deleteComment = async (req, res) => {
 exports.givePostRecommendations = async (req, res) => {
   try {
     const postList = await sortedPost()
-    console.log(postList)
     const temp = []
     for (i = 0; i < 3; i++) {
       temp.push(postList[i])
