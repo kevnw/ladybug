@@ -33,7 +33,6 @@ const findUniversityByName = async name => {
 
 exports.getUniInfo = async (req, res) => {
   University.findOne({ acronym: req.params.uniName })
-    .select('_id name modules')
     .lean()
     .then(uni => {
       if (uni) handleSuccess(res, buildSuccObject(uni));
