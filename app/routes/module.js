@@ -10,6 +10,11 @@ router.get(
   ModuleController.getModuleList
 )
 
+router.get(
+  '/nus/:moduleName',
+  ModuleController.getModuleFromNUSMODS
+)
+
 /*
  * Get modules recommendations
  */

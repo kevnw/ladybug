@@ -1,6 +1,7 @@
 const Module = require('../models/Module')
 const Post = require('../models/Post')
 const University = require('../models/University')
+const axios = require('axios')
 
 const {
   handleError,
@@ -184,7 +185,6 @@ exports.getModuleInfoFromAcronym = async (req, res) => {
 
 exports.getModuleList = async (req, res) => {
   Module.find()
-    .select('_id name title description university posts followers')
     .lean()
     .then(moduleList => handleSuccess(res, buildSuccObject(moduleList)))
     .catch(err => handleError(res, buildErrObject(422, err.message)));
@@ -245,6 +245,24 @@ exports.giveModuleRecommendations = async (req, res) => {
     }
 
     handleSuccess(res, buildSuccObject(temp))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message))
+  }
+}
+
+exports.getModuleFromNUSMODS = async (req, res) => {
+  try {
+    const url = 'https://api.nusmods.com/v2/2019-2020/modules/' + req.params.moduleName + '.json'
+    axios.get(url)
+    .then(response => {
+      if (response) {
+        handleSuccess(res, buildSuccObject(response.data))
+      }
+      handleError(res, buildErrObject("Module not found!"))
+    })
+    .catch(err => {
+      handleError(res, buildErrObject(err.message))
+    })
   } catch (err) {
     handleError(res, buildErrObject(422, err.message))
   }
