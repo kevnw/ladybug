@@ -221,15 +221,12 @@ exports.upvote = async (req, res) => {
       post.upvote.unshift(user._id)
     } else {
       const temp = []
-      if (post.upvote.length > 0) {
-        for (i = 0; i < post.upvote.length; i++) {
-          if (i != upvote_idx) {
-            temp.push(post.upvote[i])
-          }
+      for (i = 0; i < post.upvote.length; i++) {
+        if (i != upvote_idx) {
+          temp.push(post.upvote[i])
         }
-      } else {
-        post.upvote = temp
       }
+      post.upvote = temp
     }
 
     post.nOfUpvote = post.upvote.length
