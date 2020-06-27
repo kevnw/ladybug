@@ -22,6 +22,9 @@ const PostSchema = new mongoose.Schema(
         ref: 'User'
       }
     ],
+    nOfUpvote: {
+      type: Number
+    },
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',

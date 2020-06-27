@@ -35,7 +35,7 @@ const findUserById = async id => {
 const findModuleById = async id => {
   return new Promise((resolve, reject) => {
     Module.findOne({ _id: id })
-      .select('_id name description posts followers')
+      .select('_id name description posts followers nOfFollowers')
       .then(mod => {
         if (!mod) {
           reject(buildErrObject(422, 'Module does not exist'));
@@ -79,6 +79,7 @@ exports.followModule = async (req, res) => {
       handleError(res, buildErrObject(422, 'User already followed ' + mod.name))
     }
 
+    mod.nOfFollowers = mod.followers.length
     user.save()
     mod.save()
     handleSuccess(res, buildSuccObject(mod.followers))
@@ -121,6 +122,7 @@ exports.unfollowModule = async (req, res) => {
       return
     }
   
+    mod.nOfFollowers = mod.followers.length
     user.save()
     mod.save()
     handleSuccess(res, buildSuccObject(mod.followers))

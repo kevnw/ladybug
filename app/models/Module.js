@@ -26,6 +26,9 @@ const ModuleSchema = new mongoose.Schema(
         ref: 'User' 
       }
     ],
+    nOfFollowers: {
+      type: Number
+    },
     university: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'University',

@@ -50,7 +50,7 @@ const findUserById = async id => {
 const findPostById = async (id) => {
   return new Promise((resolve, reject) => {
     Post.findOne({ _id: id })
-      .select('_id module moduleName authorName upvote downvote comments avatar uniName uniAcronym')
+      .select('_id module moduleName authorName upvote downvote comments avatar uniName uniAcronym nOfUpvote')
       .then(post => {
         if (!post) {
           reject(buildErrObject(422, 'Post does not exist'));
@@ -108,7 +108,8 @@ exports.createPost = async (req, res) => {
       title: req.body.post.title,
       author: req.body._id,
       module: req.body.post.module,
-      date: Date.now()
+      date: Date.now(),
+      nOfUpvote: 0
     });
 
     const author = await findUserById(newPost.author)
@@ -215,6 +216,7 @@ exports.upvote = async (req, res) => {
       post.upvote = temp
     }
 
+    post.nOfUpvote = post.upvotes.length
     post.save()
     handleSuccess(res, buildSuccObject(post))
   } catch (err) {

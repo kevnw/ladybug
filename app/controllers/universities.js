@@ -48,7 +48,7 @@ exports.getModuleList = async (req, res) => {
     const uni = await findUniversityByName(req.params.uniName)
     Module.find({ university: uni._id })
     .select('_id name title description posts followers')
-    .sort({name: 1})
+    .sort({ name: 1 })
     .lean()
     .then(moduleList => {
       handleSuccess(res, buildSuccObject(moduleList))

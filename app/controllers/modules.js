@@ -109,7 +109,8 @@ exports.createModule = async (req, res) => {
     name: req.body.module.name,
     title: req.body.module.title,
     description: req.body.module.description,
-    university: req.body.module.university
+    university: req.body.module.university,
+    nOfFollowers: 0
   });
 
   newModule
@@ -219,9 +220,7 @@ exports.giveModuleRecommendations = async (req, res) => {
   try {
     Module.find()
     .toArray()
-    .sort((x1, x2) => {
-      return x1.followers.length - x2.followers.length
-    })
+    .sort({ nOfFollowers: 1 })
     .then(moduleList => {
       handleSuccess(res, buildSuccObject(moduleList))
     })
