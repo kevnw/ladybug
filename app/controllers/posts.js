@@ -221,17 +221,18 @@ exports.upvote = async (req, res) => {
       post.upvote.unshift(user._id)
     } else {
       const temp = []
-      for (i = 0; i < post.upvote.length; i++) {
-        if (i != upvote_idx) {
-          temp.push(post.upvote[i])
+      if (post.upvote.length > 0) {
+        for (i = 0; i < post.upvote.length; i++) {
+          if (i != upvote_idx) {
+            temp.push(post.upvote[i])
+          }
         }
+      } else {
+        post.upvote = temp
       }
-      post.upvote = temp
     }
 
-    if (post.upvotes) {
-      post.nOfUpvote = post.upvotes.length
-    }
+    post.nOfUpvote = post.upvote.length
     post.save()
     handleSuccess(res, buildSuccObject(post))
   } catch (err) {
@@ -269,9 +270,7 @@ exports.downvote = async (req, res) => {
       post.downvote = temp
     }
 
-    if(post.upvotes) {
-      post.nOfUpvote = post.upvotes.length
-    }
+    post.nOfUpvote = post.upvote.length    
     post.save()
     handleSuccess(res, buildSuccObject(post))
   } catch (err) {
