@@ -37,6 +37,7 @@
     "validator": "^13.1.1"
   },
   "devDependencies": {
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "concurrently": "^5.2.0"
   }
 }
