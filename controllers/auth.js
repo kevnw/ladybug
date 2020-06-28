@@ -298,7 +298,7 @@ exports.register = async (req, res) => {
       })
       .catch(err => handleError(res, buildErrObject(422, err.message)));
   } catch (error) {
-    handleError(res, buildErrObject(422, err.message));
+    handleError(res, buildErrObject(422, error.message));
   }
 }
 

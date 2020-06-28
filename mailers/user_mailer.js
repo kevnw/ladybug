@@ -1,7 +1,7 @@
 const fs = require('fs')
 const ejs = require('ejs')
 const emailer = require('../middleware/emailer')
-const emailTemplatesDir = __dirname + '/../../views/mailers'
+const emailTemplatesDir = __dirname + '/../views/mailers'
 
 /* Sends registration email */
 exports.verifyRegistration = async response => {

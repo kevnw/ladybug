@@ -21,7 +21,7 @@ module.exports = () => {
         dbStatus = `*    DB Connection: OK\n****************************\n`
         console.log('****************************')
         console.log('*    Starting Server')
-        console.log(`*    Port: ${process.env.PORT || 3000}`)
+        console.log(`*    Port: ${process.env.PORT || 5000}`)
         console.log(`*    NODE_ENV: ${process.env.NODE_ENV}`)
         console.log(`*    Database: MongoDB`)
         console.log(dbStatus)
