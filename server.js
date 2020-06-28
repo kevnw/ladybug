@@ -16,7 +16,7 @@ cloudinary.config({
   api_secret: ''
 })
 
-app.use(require('./app/routes'))
+app.use(require('./routes'))
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
