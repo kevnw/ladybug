@@ -20,12 +20,12 @@ router.use('/posts', require('./post'));
 // Load Profile route
 router.use('/profiles', require('./profile'))
 
-/*
- * Setup routes for index
- */
-router.get('/', (req, res) => {
-  res.render('index')
-})
+// /*
+//  * Setup routes for index
+//  */
+// router.get('/', (req, res) => {
+//   res.render('index')
+// })
 
 router.get(
   '/verify/:token',

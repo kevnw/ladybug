@@ -16,6 +16,8 @@ cloudinary.config({
   api_secret: ''
 })
 
+app.use(require('./app/routes'))
+
 if (process.env.NODE_ENV === "production") {
   app.use(express.static('client/build'));
 
@@ -50,7 +52,6 @@ app.set('view engine', 'html')
 app.use(cors())
 app.use(helmet())
 app.use(compression())
-app.use(require('./app/routes'))
 app.listen(app.get('port'))
 
 // Init MongoDB
