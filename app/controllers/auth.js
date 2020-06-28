@@ -397,9 +397,13 @@ exports.verifyToken = async (req, res, next) => {
 exports.verify = async (req, res) => {
   try {
     const userId = await getUserIdFromToken(req.params.token)
-    const user = await findUserById(userId)
+    let user = await findUserById(userId)
 
-    handleSuccess(res, buildSuccObject(await verifyUser(user)))
+    user = await verifyUser(user)
+    handleSuccess(res, buildSuccObject({
+      user,
+      token: req.params.token
+    }))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message));
   } 

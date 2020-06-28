@@ -32,12 +32,28 @@ exports.verifyRegistration = async response => {
 };
 
 exports.forgotPassword = async response => {
+  const user = response.user
   return new Promise ((resolve, reject) => {
     const file = fs.readFileSync(
       emailTemplatesDir + '/forgot_password.ejs',
       'ascii'
     );
 
+    var forgotPasswordUrl = 
+      'http://localhost:3000' +
+      '/forgot' +
+      '/' + response.token
 
+    const data = {
+      from: 'Ladybug <ladybug.officials@gmail.com>',
+      to: user.email,
+      subject: 'Forgot Password Request',
+      html: ejs.render(file, { user, forgotPasswordUrl })
+    }
+
+    emailer.sendMail(data, (err, info, response) => {
+      if (err) reject(err);
+      else resolve(info, response);
+    });
   })
 }
