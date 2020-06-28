@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server",
     "server": "cross-env NODE_ENV=development nodemon server",
-    "client": "npm start --prefix ../client",
+    "client": "npm start --prefix client",
     "dev": "cross-env NODE_ENV=development concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [],
