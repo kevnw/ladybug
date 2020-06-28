@@ -266,10 +266,7 @@ const verifyUser = async (user) => {
       if (err) {
         reject(buildErrObject(422, err.message))
       }
-      resolve({
-        email: item.email,
-        verified: item.verified
-      })
+      resolve(item)
     })
   })
 }

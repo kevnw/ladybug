@@ -13,7 +13,7 @@ exports.verifyRegistration = async response => {
     );
 
     var verificationUrl =
-      'http://localhost:5000' +
+      'http://localhost:3000' +
       '/verify' +
       '/' + response.token
 
@@ -34,10 +34,10 @@ exports.verifyRegistration = async response => {
 exports.forgotPassword = async response => {
   return new Promise ((resolve, reject) => {
     const file = fs.readFileSync(
-      emailTemplatesDir + '/verify_registration.ejs',
+      emailTemplatesDir + '/forgot_password.ejs',
       'ascii'
     );
 
-    
+
   })
 }
