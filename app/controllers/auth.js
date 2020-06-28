@@ -328,7 +328,8 @@ exports.login = async (req, res) => {
             name: user.name,
             initials: user.name[0],
             email: user.email,
-            role: user.role
+            role: user.role,
+            verified: user.verified
           },
           token
         })
