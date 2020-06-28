@@ -16,6 +16,16 @@ cloudinary.config({
   api_secret: ''
 })
 
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static('client/build'));
+
+  app.use(function(req, res, next) {
+      res.header("Access-Control-Allow-Origin", "https://orbital-trackr.herokuapp.com"); // update to match the domain you will make the request from
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      next();
+  });
+}
+
 // Setup express server port from ENV, default: 3000
 app.set('port', process.env.PORT || 3000)
 
