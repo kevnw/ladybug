@@ -12,8 +12,9 @@ exports.verifyRegistration = async response => {
       'ascii'
     );
 
+    const domain = process.env.NODE_ENV == "production" ? 'https://ask-ladybug.herokuapp.com' : 'http://localhost:3000'
     var verificationUrl =
-      'http://localhost:3000' +
+      domain +
       '/verify' +
       '/' + response.token
 
