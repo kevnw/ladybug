@@ -26,6 +26,11 @@ AuthController.verifyToken,
 ProfileController.editName
 )
 
+router.get(
+  '/verify/:token',
+  AuthController.verify
+)
+
 /*
  * Register route
  */

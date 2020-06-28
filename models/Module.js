@@ -14,6 +14,9 @@ const ModuleSchema = new mongoose.Schema(
       type: String,
       required: true
     },
+    logo: {
+      type: String,
+    },
     posts: [
       { 
         type: mongoose.Schema.Types.ObjectId, 

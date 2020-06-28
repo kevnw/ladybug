@@ -108,7 +108,7 @@ export const logout = () => (dispatch) => {
 export const verifyUser = (token) => async (dispatch) => {
   setAuthToken(token);
   try {
-    const res = await axios.get(`/verify/${token}`);
+    const res = await axios.get(`/users/verify/${token}`);
     // console.log(res.data);
 
     dispatch({
