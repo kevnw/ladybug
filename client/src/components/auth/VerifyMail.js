@@ -8,7 +8,7 @@ const VerifyMail = ({ auth }) => {
   return (
     <Fragment>
       <div className="red-background">
-        <div className="center-position">
+        <div className="center-page">
           <div className="ui center-text white-text">
             <img src={mailImg} className="ui large image centered" />
             {!auth.loading && auth.isAuthenticated && auth.user && (
