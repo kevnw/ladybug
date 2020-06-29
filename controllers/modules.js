@@ -142,7 +142,6 @@ exports.createModule = async (req, res) => {
 
     const uni = await findUniversityById(newModule.university)
     const checkMod = await findModuleyByName(newModule.name, uni._id)
-    console.log(checkMod)
     if (checkMod) {
       handleError(res, buildErrObject(422, 'Module already exists!'))
       return;
