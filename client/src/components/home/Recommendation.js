@@ -24,21 +24,24 @@ const Recommendation = ({
         recommendedPosts &&
         recommendedModules &&
         recommendedPosts.length > 0 &&
-        recommendedPosts.map((post, index) => (
-          <Fragment key={post._id}>
-            <PostItem post={post} />
-            {index === 0 && recommendedModules.length > 0 && (
-              <div className="ui segment">
-                <p>Discover New Modules</p>
-                <div className="ui three doubling cards">
-                  {recommendedModules.map((module) => (
-                    <CategoryItem module={module} key={module._id} />
-                  ))}
-                </div>
-              </div>
-            )}
-          </Fragment>
-        ))}
+        recommendedPosts.map(
+          (post, index) =>
+            post && (
+              <Fragment key={post._id}>
+                <PostItem post={post} />
+                {index === 0 && recommendedModules.length > 0 && (
+                  <div className="ui segment">
+                    <p>Discover New Modules</p>
+                    <div className="ui three doubling cards">
+                      {recommendedModules.map((module) => (
+                        <CategoryItem module={module} key={module._id} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </Fragment>
+            )
+        )}
     </Fragment>
   );
 };
