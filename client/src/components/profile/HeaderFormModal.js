@@ -67,7 +67,7 @@ const HeaderFormModal = ({ setShowingHeader, profile, updateProfile }) => {
         <label className="header">Status</label>
         <div className="ui input">
           <select name="status" value={status} onChange={(e) => onChange(e)}>
-            <option value="">Select your status</option>
+            <option value="0">Select your status</option>
             <option value="Student">Student</option>
             <option value="Teaching Assistant">Teaching Assistant</option>
             <option value="Instructor">Instructor</option>

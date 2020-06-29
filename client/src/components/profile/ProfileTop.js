@@ -31,47 +31,49 @@ const ProfileTop = ({ user, profile, setShowingHeader }) => {
               )}
             </h4>
           </div>
-          {profile.status && <div className="lead">{`${profile.status}`}</div>}
+          {profile.status != '0' && (
+            <div className="lead">{`${profile.status}`}</div>
+          )}
           <div className="icons">
             {profile.social && profile.social.website && (
-              <Link
+              <a
                 to={`${profile.social.website}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="white-link"
               >
                 <i className="big globe icon"></i>
-              </Link>
+              </a>
             )}
             {profile.social && profile.social.twitter && (
-              <Link
+              <a
                 to={`${profile.social.twitter}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="white-link"
               >
                 <i className="big twitter icon"></i>
-              </Link>
+              </a>
             )}
             {profile.social && profile.social.facebook && (
-              <Link
+              <a
                 to={`${profile.social.facebook}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="white-link"
               >
                 <i className="big facebook icon"></i>
-              </Link>
+              </a>
             )}
             {profile.social && profile.social.linkedin && (
-              <Link
+              <a
                 to={`${profile.social.linkedin}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="white-link"
               >
                 <i className="big linkedin icon"></i>
-              </Link>
+              </a>
             )}
             {profile.social && profile.social.youtube && (
               <a
@@ -84,14 +86,14 @@ const ProfileTop = ({ user, profile, setShowingHeader }) => {
               </a>
             )}
             {profile.social && profile.social.instagram && (
-              <Link
+              <a
                 to={`${profile.social.instagram}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="white-link"
               >
                 <i className="big instagram icon"></i>
-              </Link>
+              </a>
             )}
           </div>
         </div>

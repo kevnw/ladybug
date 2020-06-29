@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import Modal from '../Modal';
-import { getModules, getFollowedModules } from '../../actions/module';
+import { getFollowedModules } from '../../actions/module';
 import { addPost } from '../../actions/post';
 
 const PostFormModal = ({
@@ -11,16 +11,12 @@ const PostFormModal = ({
   setShowing,
   setSelectedModule,
   getFollowedModules,
-  getModules,
-  module: { followedModules, modules, loading },
+  module: { followedModules, loading },
   user,
 }) => {
-  let moduleList;
-
   useEffect(() => {
     getFollowedModules();
-    getModules();
-  }, [getModules, getFollowedModules]);
+  }, [getFollowedModules]);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -30,8 +26,6 @@ const PostFormModal = ({
   });
 
   const { title, text, author, module } = formData;
-
-  moduleList = _.mapValues(_.keyBy(modules, '_id'));
 
   const closeModalHandler = () => {
     setShowing(false);
@@ -75,9 +69,9 @@ const PostFormModal = ({
             followedModules.map((university) =>
               university.modules.map((module) => (
                 <option
-                  key={module}
-                  value={`${module}`}
-                >{`${university.acronym} - ${moduleList[module].name}`}</option>
+                  key={module._id}
+                  value={`${module._id}`}
+                >{`${university.acronym} - ${module.name}`}</option>
               ))
             )}
         </select>
@@ -110,7 +104,6 @@ const PostFormModal = ({
 
   return (
     !loading &&
-    moduleList &&
     followedModules &&
     user && (
       <Modal
@@ -126,7 +119,6 @@ const PostFormModal = ({
 PostFormModal.propTypes = {
   module: PropTypes.object.isRequired,
   getFollowedModules: PropTypes.func.isRequired,
-  getModules: PropTypes.func.isRequired,
   addPost: PropTypes.func.isRequired,
 };
 
@@ -137,6 +129,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   getFollowedModules,
-  getModules,
   addPost,
 })(PostFormModal);
