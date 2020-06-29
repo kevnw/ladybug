@@ -31,7 +31,7 @@ const ProfileTop = ({ user, profile, setShowingHeader }) => {
               )}
             </h4>
           </div>
-          {profile.status != '0' && (
+          {profile.status != '0' && profile.status && (
             <div className="lead">{`${profile.status}`}</div>
           )}
           <div className="icons">
