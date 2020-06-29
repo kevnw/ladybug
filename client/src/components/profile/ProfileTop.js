@@ -37,7 +37,7 @@ const ProfileTop = ({ user, profile, setShowingHeader }) => {
           <div className="icons">
             {profile.social && profile.social.website && (
               <a
-                to={`${profile.social.website}`}
+                href={`${profile.social.website}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="white-link"
@@ -47,7 +47,7 @@ const ProfileTop = ({ user, profile, setShowingHeader }) => {
             )}
             {profile.social && profile.social.twitter && (
               <a
-                to={`${profile.social.twitter}`}
+                href={`${profile.social.twitter}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="white-link"
@@ -57,7 +57,7 @@ const ProfileTop = ({ user, profile, setShowingHeader }) => {
             )}
             {profile.social && profile.social.facebook && (
               <a
-                to={`${profile.social.facebook}`}
+                href={`${profile.social.facebook}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="white-link"
@@ -67,7 +67,7 @@ const ProfileTop = ({ user, profile, setShowingHeader }) => {
             )}
             {profile.social && profile.social.linkedin && (
               <a
-                to={`${profile.social.linkedin}`}
+                href={`${profile.social.linkedin}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="white-link"
@@ -87,7 +87,7 @@ const ProfileTop = ({ user, profile, setShowingHeader }) => {
             )}
             {profile.social && profile.social.instagram && (
               <a
-                to={`${profile.social.instagram}`}
+                href={`${profile.social.instagram}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="white-link"
