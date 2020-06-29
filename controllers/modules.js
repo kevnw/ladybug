@@ -30,6 +30,18 @@ const findModuleyById = async (id) => {
   });
 };
 
+ /* Finds module by Id */
+ const findModuleyByName = async (name, uni) => {
+  return new Promise((resolve, reject) => {
+    Module.findOne({ name: name, university: uni })
+      .select('_id name title description posts followers university')
+      .then(mod => {
+        resolve(mod)
+      })
+      .catch(err => reject(buildErrObject(422, err.message)));
+  });
+};
+
  /**
  * Finds user by ID
  * @param {string} id - post's id
@@ -55,7 +67,7 @@ const findPostById = async (postId) => {
 const findUniversityById = async (uniId) => {
   return new Promise((resolve, reject) => {
     University.findOne({ _id: uniId })
-      .select('_id name acronym')
+      .select('_id name acronym modules')
       .then(uni => {
         if (!uni) {
           reject(buildErrObject(422, 'University does not exist'));
@@ -129,8 +141,17 @@ exports.createModule = async (req, res) => {
     });
 
     const uni = await findUniversityById(newModule.university)
+    const checkMod = await findModuleyByName(newModule.name, uni._id)
+    console.log(checkMod)
+    if (checkMod) {
+      handleError(res, buildErrObject(422, 'Module already exists!'))
+      return;
+    }
+    
     newModule.uniAcronym = uni.acronym
-  
+    uni.modules.push(newModule._id)
+
+    uni.save()
     newModule
       .save()
       .then(mod =>

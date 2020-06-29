@@ -54,6 +54,10 @@ export default function (state = initialState, action) {
         ...state,
         posts: state.posts.filter((post) => post._id !== payload),
         loading: false,
+        postsByUser: state.postsByUser.filter((post) => post._id !== payload),
+        recommendedPosts: state.recommendedPosts.filter(
+          (post) => post._id !== payload
+        ),
       };
     case ADD_POST:
       return {
