@@ -7,7 +7,7 @@ import CategoryItem from './CategoryItem';
 import CategoryFormModal from './CategoryFormModal';
 import Alert from '../layout/Alert';
 import { getModules } from '../../actions/module';
-import { getUniversities } from '../../actions/university';
+import { getUniversities, getUniversity } from '../../actions/university';
 
 const Categories = ({
   getUniversities,
@@ -23,9 +23,12 @@ const Categories = ({
   const moduleLoading = module.loading;
 
   useEffect(() => {
-    getUniversities();
     getModules();
-  }, [getUniversities, getModules]);
+  }, []);
+
+  useEffect(() => {
+    getUniversities();
+  }, []);
 
   moduleList = _.mapValues(_.keyBy(modules, '_id'));
 
