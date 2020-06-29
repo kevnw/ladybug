@@ -16,8 +16,7 @@ const Home = ({
 }) => {
   useEffect(() => {
     getFollowedModules();
-  }, [getFollowedModules]);
-
+  }, [getFollowedModules, followedModules.length]);
 
   const [isShowing, setShowing] = useState(false);
   const [selectedModule, setSelectedModule] = useState(null);
