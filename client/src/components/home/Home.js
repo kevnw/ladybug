@@ -18,6 +18,7 @@ const Home = ({
     getFollowedModules();
   }, [getFollowedModules]);
 
+
   const [isShowing, setShowing] = useState(false);
   const [selectedModule, setSelectedModule] = useState(null);
 

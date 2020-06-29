@@ -5,12 +5,12 @@ const Modal = (props) => {
     <div
       onClick={props.onDismiss}
       className="ui dimmer modals visible active"
-      style={{ position: 'absolute' }}
+      style={{ position: 'fixed' }}
     >
       <div
         onClick={(e) => e.stopPropagation()}
         className="ui standard modal visible active"
-        style={{ position: 'relative' }}
+        style={{ position: 'flexible' }}
       >
         <div className="header">{props.title}</div>
         <div className="scrolling content">{props.content}</div>
