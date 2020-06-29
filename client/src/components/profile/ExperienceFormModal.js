@@ -111,13 +111,13 @@ const ExperienceFormModal = ({ setShowingExperience, addExperience }) => {
         </div>
       </div>
       <div className="field">
-        <label className="header">End Date</label>
+        <label className="header">Description</label>
         <div className="ui input">
           <textarea
             name="description"
             cols="30"
             rows="5"
-            placeholder="Program Description"
+            placeholder="Description"
             value={description}
             onChange={(e) => onChange(e)}
           ></textarea>
