@@ -27,7 +27,7 @@ const Profile = ({
     } else {
       getProfileById(match.params.id);
     }
-  }, [getProfileById, getCurrentProfile]);
+  }, [getProfileById, getCurrentProfile, match.params.id]);
 
   const [activeTab, setActiveTab] = useState('overview');
   const [isShowingBio, setShowingBio] = useState(false);
