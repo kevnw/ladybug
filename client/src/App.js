@@ -11,6 +11,8 @@ import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
 import VerifyMail from './components/auth/VerifyMail';
 import Verify from './components/auth/Verify';
+import ForgotPassword from './components/auth/ForgotPassword';
+import ResetPassword from './components/auth/ResetPassword';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Home from './components/home/Home';
@@ -41,6 +43,12 @@ const App = () => {
             <Route exact path="/register" component={Register} />
             <Route exact path="/verification" component={VerifyMail} />
             <Route exact path="/verify/:token" component={Verify} />
+            <Route exact path="/forgot-password" component={ForgotPassword} />
+            <Route
+              exact
+              path="/reset-password/:token"
+              component={ResetPassword}
+            />
             {/* Change to private route */}
             <PrivateRoute exact path="/home" component={Home} />
             <PrivateRoute exact path="/explore" component={Categories} />

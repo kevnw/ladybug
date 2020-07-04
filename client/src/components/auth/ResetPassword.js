@@ -4,22 +4,26 @@ import { Link, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Alert from '../layout/Alert';
 
-import { login } from '../../actions/auth';
+import { setAlert } from '../../actions/alert';
 
-const Login = ({ login, auth }) => {
+const ResetPassword = ({ auth, setAlert }) => {
   const [formData, setFormData] = useState({
-    email: '',
     password: '',
+    password2: '',
   });
 
-  const { email, password } = formData;
+  const { password, password2 } = formData;
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    login(email, password);
+    if (password !== password2) {
+      setAlert('Passwords do not match', 'error');
+    } else {
+      //   register({ name, email, password });
+    }
   };
 
   if (
@@ -47,33 +51,35 @@ const Login = ({ login, auth }) => {
         <div className="ui container-body">
           <Alert />
           <div className="form-center">
-            <h1 className="large white-text center-text">Welcome back!</h1>
+            <h1 className="large white-text center-text">Reset Password</h1>
             <form className="ui form" onSubmit={onSubmit}>
               <div className="ui raised segment">
-                <h3 className="ui dividing header"> Login to Your Account</h3>
+                <h3 className="ui dividing header"> Reset your password</h3>
                 <div className="field">
-                  <label className="header">Email</label>
-                  <div className="ui left icon input">
-                    <i className="envelope icon"></i>
-                    <input
-                      type="text"
-                      name="email"
-                      placeholder="Email address"
-                      value={email}
-                      onChange={(e) => onChange(e)}
-                    />
-                  </div>
-                </div>
-                <div className="field">
-                  <label className="">Password</label>
+                  <label className="">New Password</label>
                   <div className="ui left icon input">
                     <i className="lock icon"></i>
                     <input
                       type="password"
                       name="password"
-                      placeholder="Password"
+                      placeholder="New password"
                       value={password}
                       onChange={(e) => onChange(e)}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="field">
+                  <label className="">Confirm New Password</label>
+                  <div className="ui left icon input">
+                    <i className="lock icon"></i>
+                    <input
+                      type="password"
+                      name="password2"
+                      placeholder="Confirm new password"
+                      value={password2}
+                      onChange={(e) => onChange(e)}
+                      required
                     />
                   </div>
                 </div>
@@ -81,17 +87,14 @@ const Login = ({ login, auth }) => {
                   type="submit"
                   className="ui vertical animated fluid large submit button red-button"
                 >
-                  <div className="visible content">Login</div>
+                  <div className="visible content">Reset Password</div>
                   <div className="hidden content">
                     <i className="sign-in icon"></i>
                   </div>
                 </button>
               </div>
               <div className="ui bottom attached message">
-                New to us? <Link to="/register">Register</Link>
-                <Link style={{ float: 'right' }} to="/forgot-password">
-                  Forgot Password?
-                </Link>
+                <Link to="/login">Back to Login</Link>
               </div>
             </form>
           </div>
@@ -101,8 +104,8 @@ const Login = ({ login, auth }) => {
   );
 };
 
-Login.propTypes = {
-  login: PropTypes.func.isRequired,
+ResetPassword.propTypes = {
+  setAlert: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
 };
 
@@ -110,4 +113,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { login })(Login);
+export default connect(mapStateToProps, { setAlert })(ResetPassword);
