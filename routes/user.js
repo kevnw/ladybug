@@ -8,6 +8,14 @@ router.get('/',
 AuthController.getUserFromToken
 )
 
+router.get('/forgot',
+AuthController.sendForgotPassword
+)
+
+router.put('/reset-password/:token',
+AuthController.resetPassword
+)
+
 router.get('/posts',
 AuthController.verifyToken,
 UserController.getAllPostFromUserToken)

@@ -32,18 +32,18 @@ exports.verifyRegistration = async response => {
   });
 };
 
-exports.forgotPassword = async response => {
-  const user = response.user
+exports.forgotPassword = async (user, token) => {
   return new Promise ((resolve, reject) => {
     const file = fs.readFileSync(
       emailTemplatesDir + '/forgot_password.ejs',
       'ascii'
     );
 
+    const domain = process.env.NODE_ENV == "production" ? 'https://ask-ladybug.herokuapp.com' : 'http://localhost:3000'
     var forgotPasswordUrl = 
-      'http://localhost:3000' +
-      '/forgot' +
-      '/' + response.token
+      domain +
+      '/reset-password' +
+      '/' + token
 
     const data = {
       from: 'Ladybug <ladybug.officials@gmail.com>',

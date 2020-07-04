@@ -166,10 +166,9 @@ const blockUser = async (user) => {
 const findVerifiedUserByEmail = async email => {
   return new Promise((resolve, reject) => {
     User.findOne({ email })
-      .select('password loginAttempts blockExpires name email role verified verification')
       .then(user => {
         if (!user) {
-          reject(buildErrObject(422, 'User does not exist'));
+          reject(buildErrObject(422, 'Email is not registered'));
         } else {
           resolve(user); // returns mongoose object
         }
@@ -209,6 +208,17 @@ const returnRegisterToken = (item, userInfo) => {
  }
  return data
 }
+
+const updatePassword = async (user, newPassword) => {
+  return new Promise((resolve, reject) => {
+    user.password = newPassword;
+    user.save((err, item) => {
+      if (err) reject(buildErrObject(422, err.message));
+      if (!item) reject(buildErrObject(422, 'User not found'));
+      resolve(item);
+    });
+  });
+};
 
 /**
  * Gets user id from token
@@ -408,4 +418,41 @@ exports.verify = async (req, res) => {
   } catch (err) {
     handleError(res, buildErrObject(422, err.message));
   } 
+}
+
+/**
+ * Sends forgot password request function called by route
+ * @param {Object} req - request object
+ * @param {Object} res - response object
+ */
+exports.sendForgotPassword = async (req, res) => {
+  try {
+    const data = req.body
+    const user = await findVerifiedUserByEmail(data.email)
+    const token = generateToken(user._id)
+    
+    UserMailer.forgotPassword(user, token)
+    .then((info, response) => {
+      handleSuccess(
+        res,
+        buildSuccObject("Email sent to " + data.email)
+      )
+    })
+    .catch(err => handleError(res, buildErrObject(422, err.message)))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
+  }
+}
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const token = req.params.token
+    const userId = await getUserIdFromToken(token)
+    let user = await findUserById(userId)
+
+    await updatePassword(user, req.body.user.newPassword)
+    handleSuccess(res, buildSuccObject('Password updated!'));
+  } catch (err) {
+  handleError(res, buildErrObject(422, err.message));
+  }
 }
