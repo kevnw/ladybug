@@ -154,7 +154,7 @@ exports.updatePost = async (req, res) => {
     .then(result => {
       if (result.n) {
         if (result.nModified)
-          handleSuccess(res, buildSuccObject('Post updated'));
+          handleSuccess(res, buildSuccObject(result));
         else handleError(res, buildErrObject(422, 'No changes made'));
       } else handleError(res, buildErrObject(422, 'Post not found'));
     })
