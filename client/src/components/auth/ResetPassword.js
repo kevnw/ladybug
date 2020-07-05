@@ -5,8 +5,9 @@ import PropTypes from 'prop-types';
 import Alert from '../layout/Alert';
 
 import { setAlert } from '../../actions/alert';
+import { resetPassword } from '../../actions/auth';
 
-const ResetPassword = ({ auth, setAlert }) => {
+const ResetPassword = ({ auth, setAlert, resetPassword, history, match }) => {
   const [formData, setFormData] = useState({
     password: '',
     password2: '',
@@ -22,7 +23,11 @@ const ResetPassword = ({ auth, setAlert }) => {
     if (password !== password2) {
       setAlert('Passwords do not match', 'error');
     } else {
-      //   register({ name, email, password });
+      resetPassword(
+        { user: { newPassword: password } },
+        match.params.token,
+        history
+      );
     }
   };
 
@@ -93,9 +98,9 @@ const ResetPassword = ({ auth, setAlert }) => {
                   </div>
                 </button>
               </div>
-              <div className="ui bottom attached message">
+              {/* <div className="ui bottom attached message">
                 <Link to="/login">Back to Login</Link>
-              </div>
+              </div> */}
             </form>
           </div>
         </div>
@@ -106,6 +111,7 @@ const ResetPassword = ({ auth, setAlert }) => {
 
 ResetPassword.propTypes = {
   setAlert: PropTypes.func.isRequired,
+  resetPassword: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
 };
 
@@ -113,4 +119,6 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { setAlert })(ResetPassword);
+export default connect(mapStateToProps, { setAlert, resetPassword })(
+  ResetPassword
+);

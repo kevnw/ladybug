@@ -76,7 +76,6 @@ export const login = (email, password) => async (dispatch) => {
 
   try {
     const res = await axios.post('/users/login', body, config);
-    // console.log(res.data);
 
     dispatch({
       type: LOGIN_SUCCESS,
@@ -122,5 +121,59 @@ export const verifyUser = (token) => async (dispatch) => {
     dispatch({
       type: VERIFY_FAIL,
     });
+  }
+};
+
+// Forgot Password
+export const forgotPassword = (email) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const body = JSON.stringify({ email });
+
+    const res = await axios.post(`/users/forgot`, body, config);
+
+    dispatch(setAlert(`${res.data}`, 'success'));
+  } catch (err) {
+    const errors = err.response.data.errors;
+    console.log(err.response.data);
+
+    if (errors) {
+      dispatch(setAlert(errors.msg, 'error'));
+    }
+  }
+};
+
+// Reset Password
+export const resetPassword = (formData, token, history) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    console.log(formData);
+
+    const res = await axios.put(
+      `/users/reset-password/${token}`,
+      formData,
+      config
+    );
+
+    console.log(res.data);
+
+    // dispatch(setAlert(`${res.data}`, 'success'));
+    history.push('/password-updated');
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      dispatch(setAlert(errors.msg, 'error'));
+    }
   }
 };

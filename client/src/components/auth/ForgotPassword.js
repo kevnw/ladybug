@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Alert from '../layout/Alert';
+import { forgotPassword } from '../../actions/auth';
 
-const ForgotPassword = ({ auth }) => {
+const ForgotPassword = ({ auth, forgotPassword }) => {
   const [formData, setFormData] = useState({
     email: '',
   });
@@ -16,7 +17,7 @@ const ForgotPassword = ({ auth }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    // login(email, password);
+    forgotPassword(email);
   };
 
   if (
@@ -34,7 +35,6 @@ const ForgotPassword = ({ auth }) => {
     auth.user &&
     !auth.user.verified
   ) {
-    // console.log(auth);
     return <Redirect to="/verification" />;
   }
 
@@ -88,10 +88,11 @@ const ForgotPassword = ({ auth }) => {
 
 ForgotPassword.propTypes = {
   auth: PropTypes.object.isRequired,
+  forgotPassword: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps)(ForgotPassword);
+export default connect(mapStateToProps, { forgotPassword })(ForgotPassword);

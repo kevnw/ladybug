@@ -13,6 +13,7 @@ import VerifyMail from './components/auth/VerifyMail';
 import Verify from './components/auth/Verify';
 import ForgotPassword from './components/auth/ForgotPassword';
 import ResetPassword from './components/auth/ResetPassword';
+import PasswordUpdated from './components/auth/PasswordUpdated';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Home from './components/home/Home';
@@ -44,6 +45,7 @@ const App = () => {
             <Route exact path="/verification" component={VerifyMail} />
             <Route exact path="/verify/:token" component={Verify} />
             <Route exact path="/forgot-password" component={ForgotPassword} />
+            <Route exact path="/password-updated" component={PasswordUpdated} />
             <Route
               exact
               path="/reset-password/:token"
