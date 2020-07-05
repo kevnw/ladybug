@@ -166,6 +166,7 @@ const blockUser = async (user) => {
 const findVerifiedUserByEmail = async email => {
   return new Promise((resolve, reject) => {
     User.findOne({ email })
+      .select('password loginAttempts blockExpires name email role verified verification')
       .then(user => {
         if (!user) {
           reject(buildErrObject(422, 'Email is not registered'));
