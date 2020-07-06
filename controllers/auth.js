@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
 const Profile = require('../models/Profile')
+const Post = require('../models/Post')
 const auth = require('../middleware/auth')
 const avatar = require('../middleware/avatar')
 const { addHours } = require('date-fns')
@@ -282,6 +283,22 @@ const verifyUser = async (user) => {
   })
 }
 
+/* Finds post by id*/
+const findPostById = async (id) => {
+  return new Promise((resolve, reject) => {
+    Post.findOne({ _id: id })
+      .select('_id text title module author moduleName authorName upvote downvote comments avatar uniName uniAcronym nOfUpvote')
+      .then(post => {
+        if (!post) {
+          reject(buildErrObject(422, 'Post does not exist'));
+        } else {
+          resolve(post); // returns mongoose object
+        }
+      })
+      .catch(err => reject(buildErrObject(422, err.message)));
+  });
+};
+
 /********************
  * Public functions *
  ********************/
@@ -455,5 +472,52 @@ exports.resetPassword = async (req, res) => {
     handleSuccess(res, buildSuccObject('Password updated!'));
   } catch (err) {
   handleError(res, buildErrObject(422, err.message));
+  }
+}
+
+exports.verifyUserIdentityForComment = async (req, res, next) => {
+  try {
+    var tokenEncrypted = req.headers.authorization
+    if (tokenEncrypted) {
+      tokenEncrypted = tokenEncrypted.replace('Bearer ', '').trim()
+      let userId = await getUserIdFromToken(tokenEncrypted)
+      const post = await findPostById(req.params.postId)
+      const comment = post.comments.find(element => element._id == req.params.commentId)
+      if (comment) {
+        if (comment.author == userId) {
+          return next()
+        } else {
+          handleError(res, buildErrObject(409, 'User not authorized to delete this comment'))
+        }
+      } else {
+        handleError(res, buildErrObject(409, 'Comment not found'))
+      }
+    } else {
+      handleError(res, buildErrObject(409, 'No token available'))
+      return
+    }
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
+  }
+}
+
+exports.verifyUserIdentityForPost = async (req, res, next) => {
+  try {
+    var tokenEncrypted = req.headers.authorization
+    if (tokenEncrypted) {
+      tokenEncrypted = tokenEncrypted.replace('Bearer ', '').trim()
+      let userId = await getUserIdFromToken(tokenEncrypted)
+      const post = await findPostById(req.params.postId)
+      if (post.author == userId) {
+        return next()
+      } else {
+        handleError(res, buildErrObject(409, 'User not authorized to delete this post'))
+      }
+    } else {
+      handleError(res, buildErrObject(409, 'No token available'))
+      return
+    }
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
   }
 }

@@ -3,10 +3,12 @@ const mongoose = require('mongoose')
 const RequestSchema = new mongoose.Schema(
   {
     university: {
-      type: String
+      type: String,
+      required: true
     },
     module: {
-      type: String
+      type: String,
+      required: true
     },
     description: {
       type: String

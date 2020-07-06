@@ -44,7 +44,8 @@ PostController.updatePost
 /*
  * Delete post route
  */
-router.delete('/delete/:postId', 
+router.delete('/delete/:postId',
+AuthController.verifyUserIdentityForPost,
 AuthController.verifyToken,
 PostController.deletePost
 )
@@ -78,6 +79,7 @@ PostController.comment
  * Delete comment post route
  */
 router.delete('/:postId/:commentId', 
+AuthController.verifyUserIdentityForComment,
 AuthController.verifyToken,
 PostController.deleteComment
 )
