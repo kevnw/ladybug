@@ -50,7 +50,7 @@ const findUserById = async id => {
 const findPostById = async (id) => {
   return new Promise((resolve, reject) => {
     Post.findOne({ _id: id })
-      .select('_id module moduleName authorName upvote downvote comments avatar uniName uniAcronym nOfUpvote')
+      .select('_id text title module moduleName authorName upvote downvote comments avatar uniName uniAcronym nOfUpvote')
       .then(post => {
         if (!post) {
           reject(buildErrObject(422, 'Post does not exist'));
@@ -150,15 +150,17 @@ exports.createPost = async (req, res) => {
 };
 
 exports.updatePost = async (req, res) => {
-  Post.updateOne({ _id: req.params.postId }, req.body.post)
-    .then(result => {
-      if (result.n) {
-        if (result.nModified)
-          handleSuccess(res, buildSuccObject(result));
-        else handleError(res, buildErrObject(422, 'No changes made'));
-      } else handleError(res, buildErrObject(422, 'Post not found'));
-    })
-    .catch(error => handleError(res, buildErrObject(422, error.message)));
+  try {
+    const post = await findPostById(req.params.postId)
+
+    post.text = req.body.post.text
+    post.title = req.body.post.title
+
+    post.save()
+    handleSuccess(res, buildSuccObject(post));
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message))
+  }
 };
 
 exports.deletePost = async (req, res) => {
