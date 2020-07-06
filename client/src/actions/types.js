@@ -26,6 +26,7 @@ export const GET_POSTS_RECOMMENDATIONS = 'GET_POSTS_RECOMMENDATIONS';
 export const GET_POSTS_BY_USER = 'GET_POSTS_BY_USER,';
 export const POST_ERROR = 'POST_ERROR';
 export const ADD_POST = 'ADD_POST';
+export const UPDATE_POST = 'UPDATE_POST';
 export const DELETE_POST = 'DELETE_POST';
 export const UPDATE_VOTES = 'UPDATE_VOTES';
 export const GET_POST = 'GET_POST';

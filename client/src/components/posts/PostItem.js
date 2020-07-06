@@ -1,8 +1,9 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Moment from 'react-moment';
+import EditPostFormModal from './EditPostFormModal';
 import { deletePost, upvotePost, downvotePost } from '../../actions/post';
 
 const PostItem = ({ post, auth, deletePost, upvotePost, downvotePost }) => {
@@ -21,6 +22,9 @@ const PostItem = ({ post, auth, deletePost, upvotePost, downvotePost }) => {
     uniAcronym,
   } = post;
   // console.log(uniAcronym);
+
+  const [isShowing, setShowing] = useState(false);
+
   return (
     <div className="ui segment">
       <div className="ui top attached label red-label">
@@ -102,15 +106,24 @@ const PostItem = ({ post, auth, deletePost, upvotePost, downvotePost }) => {
             <div className="ui basic label">{`${comments.length}`}</div>
           </div>
           {!auth.loading && author === auth.user._id && (
-            <button
-              onClick={() => deletePost(_id)}
-              className="ui right floated icon small button"
-            >
-              <i className="ui icon trash"></i>
-            </button>
+            <Fragment>
+              <button
+                onClick={() => setShowing(true)}
+                className="ui right floated icon small button"
+              >
+                <i className="ui icon pencil"></i>
+              </button>
+              <button
+                onClick={() => deletePost(_id)}
+                className="ui right floated icon small button"
+              >
+                <i className="ui icon trash"></i>
+              </button>
+            </Fragment>
           )}
         </div>
       </div>
+      {isShowing && <EditPostFormModal setShowing={setShowing} post={post} />}
     </div>
   );
 };

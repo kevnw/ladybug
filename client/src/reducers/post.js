@@ -5,6 +5,7 @@ import {
   UPDATE_VOTES,
   DELETE_POST,
   ADD_POST,
+  UPDATE_POST,
   GET_POST,
   ADD_COMMENT,
   REMOVE_COMMENT,
@@ -63,6 +64,34 @@ export default function (state = initialState, action) {
       return {
         ...state,
         posts: [payload, ...state.posts],
+        loading: false,
+      };
+    case UPDATE_POST:
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post._id === payload.id
+            ? { ...post, text: payload.post.text, title: payload.post.title }
+            : post
+        ),
+        postsByUser: state.postsByUser.map((post) =>
+          post._id === payload.id
+            ? { ...post, text: payload.post.text, title: payload.post.title }
+            : post
+        ),
+        recommendedPosts: state.recommendedPosts.map((post) =>
+          post._id === payload.id
+            ? { ...post, text: payload.post.text, title: payload.post.title }
+            : post
+        ),
+        post:
+          state.post && state.post._id === payload.id
+            ? {
+                ...state.post,
+                text: payload.post.text,
+                title: payload.post.title,
+              }
+            : null,
         loading: false,
       };
     case POST_ERROR:

@@ -8,6 +8,7 @@ import {
   UPDATE_VOTES,
   DELETE_POST,
   ADD_POST,
+  UPDATE_POST,
   GET_POST,
   ADD_COMMENT,
   REMOVE_COMMENT,
@@ -64,6 +65,31 @@ export const addPost = (formData) => async (dispatch) => {
     });
 
     dispatch(setAlert('Post Created', 'success'));
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+// Update post
+export const updatePost = (formData, postId) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  try {
+    const res = await axios.post(`/posts/edit/${postId}`, formData, config);
+
+    dispatch({
+      type: UPDATE_POST,
+      payload: { post: res.data, id: postId },
+    });
+
+    dispatch(setAlert('Post Updated', 'success'));
   } catch (err) {
     dispatch({
       type: POST_ERROR,
