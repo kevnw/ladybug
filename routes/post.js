@@ -36,12 +36,18 @@ PostController.createPost
 /*
  * Update post route
  */
-router.post('/edit/:postId', PostController.updatePost)
+router.post('/edit/:postId', 
+AuthController.verifyToken,
+PostController.updatePost
+)
 
 /*
  * Delete post route
  */
-router.delete('/delete/:postId', PostController.deletePost)
+router.delete('/delete/:postId', 
+AuthController.verifyToken,
+PostController.deletePost
+)
 
 /*
  * Upvote post route
