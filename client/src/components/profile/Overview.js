@@ -1,8 +1,9 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Moment from 'react-moment';
 import { deleteEducation, deleteExperience } from '../../actions/profile';
+import ExperienceItem from './ExperienceItem';
+import EducationItem from './EducationItem';
 
 const Overview = ({
   user,
@@ -11,8 +12,6 @@ const Overview = ({
   setShowingSkills,
   setShowingEducation,
   setShowingExperience,
-  deleteEducation,
-  deleteExperience,
 }) => {
   return (
     <div>
@@ -80,44 +79,12 @@ const Overview = ({
             {profile.experiences && profile.experiences.length > 0 ? (
               <Fragment>
                 {profile.experiences.map((experience) => (
-                  <div
+                  <ExperienceItem
                     key={experience._id}
-                    className="ui segment"
-                    style={{ border: 'none', boxShadow: 'none' }}
-                  >
-                    <h3>{`${experience.company}`}</h3>
-                    {user._id === profile.user && (
-                      <button
-                        onClick={() => deleteExperience(experience._id)}
-                        className="ui right floated icon small button"
-                      >
-                        <i className="ui icon trash"></i>
-                      </button>
-                    )}
-                    <p>
-                      <Moment format="DD/MM/YYYY">
-                        {experience.startDate}
-                      </Moment>{' '}
-                      -{' '}
-                      {experience.current ? (
-                        ' Current'
-                      ) : (
-                        <Moment format="DD/MM/YYYY">
-                          {experience.endDate}
-                        </Moment>
-                      )}
-                    </p>
-                    <p>
-                      <strong>Position: </strong>
-                      {`${experience.title}`}
-                    </p>
-                    {experience.description && (
-                      <p>
-                        <strong>Description: </strong>
-                        {`${experience.description}`}
-                      </p>
-                    )}
-                  </div>
+                    experience={experience}
+                    user={user}
+                    profile={profile}
+                  />
                 ))}
               </Fragment>
             ) : (
@@ -141,44 +108,12 @@ const Overview = ({
             {profile.educations && profile.educations.length > 0 ? (
               <Fragment>
                 {profile.educations.map((education) => (
-                  <div
+                  <EducationItem
                     key={education._id}
-                    className="ui segment"
-                    style={{ border: 'none', boxShadow: 'none' }}
-                  >
-                    <h3>{`${education.school}`}</h3>
-                    {user._id === profile.user && (
-                      <button
-                        onClick={() => deleteEducation(education._id)}
-                        className="ui right floated icon small button"
-                      >
-                        <i className="ui icon trash"></i>
-                      </button>
-                    )}
-                    <p>
-                      <Moment format="DD/MM/YYYY">{education.startDate}</Moment>{' '}
-                      -{' '}
-                      {education.current ? (
-                        ' Current'
-                      ) : (
-                        <Moment format="DD/MM/YYYY">{education.endDate}</Moment>
-                      )}
-                    </p>
-                    <p>
-                      <strong>Degree: </strong>
-                      {`${education.degree}`}
-                    </p>
-                    <p>
-                      <strong>Field of Study: </strong>
-                      {`${education.fieldOfStudy}`}
-                    </p>
-                    {education.description && (
-                      <p>
-                        <strong>Description: </strong>
-                        {`${education.description}`}
-                      </p>
-                    )}
-                  </div>
+                    education={education}
+                    user={user}
+                    profile={profile}
+                  />
                 ))}
               </Fragment>
             ) : (

@@ -42,7 +42,7 @@ const BioFormModal = ({ setShowingBio, profile, updateProfile }) => {
       <div className="field">
         <label className="header">Bio</label>
         <div className="ui input">
-          <input
+          <textarea
             type="text"
             name="bio"
             value={bio}

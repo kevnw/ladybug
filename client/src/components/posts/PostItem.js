@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Moment from 'react-moment';
 import EditPostFormModal from './EditPostFormModal';
+import ConfirmationModal from '../ConfirmationModal';
 import { deletePost, upvotePost, downvotePost } from '../../actions/post';
 
 const PostItem = ({ post, auth, deletePost, upvotePost, downvotePost }) => {
@@ -24,6 +25,20 @@ const PostItem = ({ post, auth, deletePost, upvotePost, downvotePost }) => {
   // console.log(uniAcronym);
 
   const [isShowing, setShowing] = useState(false);
+  const [modalShowing, setModalShowing] = useState(false);
+  const closeModalHandler = () => {
+    setModalShowing(false);
+  };
+  const actions = (
+    <Fragment>
+      <button onClick={() => deletePost(_id)} className="ui button red-button">
+        Yes
+      </button>
+      <button onClick={closeModalHandler} className="ui button">
+        Cancel
+      </button>
+    </Fragment>
+  );
 
   return (
     <div className="ui segment">
@@ -114,7 +129,8 @@ const PostItem = ({ post, auth, deletePost, upvotePost, downvotePost }) => {
                 <i className="ui icon pencil"></i>
               </button>
               <button
-                onClick={() => deletePost(_id)}
+                // onClick={() => deletePost(_id)}
+                onClick={() => setModalShowing(true)}
                 className="ui right floated icon small button"
               >
                 <i className="ui icon trash"></i>
@@ -124,6 +140,14 @@ const PostItem = ({ post, auth, deletePost, upvotePost, downvotePost }) => {
         </div>
       </div>
       {isShowing && <EditPostFormModal setShowing={setShowing} post={post} />}
+      {modalShowing && (
+        <ConfirmationModal
+          onDismiss={closeModalHandler}
+          title="Delete Post"
+          content="Are you sure you want to delete this post?"
+          actions={actions}
+        />
+      )}
     </div>
   );
 };

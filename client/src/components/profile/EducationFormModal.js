@@ -105,9 +105,9 @@ const EducationFormModal = ({ setShowingEducation, addEducation }) => {
         </div>
       </div>
       <div className="field">
-        {/* <div className="ui input"> */}
         <input
           type="checkbox"
+          className="ui checkbox"
           name="current"
           checked={current}
           value={current}
@@ -117,7 +117,6 @@ const EducationFormModal = ({ setShowingEducation, addEducation }) => {
           }}
         />
         {' Current School'}
-        {/* </div> */}
       </div>
       <div className="field">
         <label className="header">End Date</label>

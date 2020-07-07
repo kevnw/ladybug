@@ -84,9 +84,9 @@ const ExperienceFormModal = ({ setShowingExperience, addExperience }) => {
         </div>
       </div>
       <div className="field">
-        {/* <div className="ui input"> */}
         <input
           type="checkbox"
+          className="ui checkbox"
           name="current"
           checked={current}
           value={current}
@@ -96,7 +96,6 @@ const ExperienceFormModal = ({ setShowingExperience, addExperience }) => {
           }}
         />
         {' Current Job'}
-        {/* </div> */}
       </div>
       <div className="field">
         <label className="header">End Date</label>

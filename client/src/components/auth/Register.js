@@ -8,7 +8,6 @@ import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
 
 const Register = ({ setAlert, register, auth }) => {
-  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -97,6 +96,8 @@ const Register = ({ setAlert, register, auth }) => {
                     value={password}
                     onChange={(e) => onChange(e)}
                     required
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+                    title="Password must contain at least one number and one uppercase and lowercase letter, and at least 6 or more characters"
                   />
                 </div>
               </div>
@@ -111,6 +112,8 @@ const Register = ({ setAlert, register, auth }) => {
                     value={password2}
                     onChange={(e) => onChange(e)}
                     required
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+                    title="Password must contain at least one number and one uppercase and lowercase letter, and at least 6 or more characters"
                   />
                 </div>
               </div>

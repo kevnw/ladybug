@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Moment from 'react-moment';
+import ConfirmationModal from '../ConfirmationModal';
 import { deleteComment } from '../../actions/post';
 
 const CommentItem = ({
@@ -11,6 +12,24 @@ const CommentItem = ({
   auth,
   deleteComment,
 }) => {
+  const [modalShowing, setModalShowing] = useState(false);
+  const closeModalHandler = () => {
+    setModalShowing(false);
+  };
+  const actions = (
+    <Fragment>
+      <button
+        onClick={() => deleteComment(postId, _id)}
+        className="ui button red-button"
+      >
+        Yes
+      </button>
+      <button onClick={closeModalHandler} className="ui button">
+        Cancel
+      </button>
+    </Fragment>
+  );
+
   return (
     <div className="ui clearing segment">
       <div className="comment">
@@ -37,25 +56,21 @@ const CommentItem = ({
         </div>
         {!auth.loading && author === auth.user._id && (
           <button
-            onClick={() => deleteComment(postId, _id)}
+            onClick={() => setModalShowing(true)}
             className="ui right floated icon mini button"
           >
             <i className="ui icon trash"></i>
           </button>
         )}
-        {/* <div className="ui right floated labeled mini button" tabindex="0">
-          <button className="ui icon mini button">
-            <i className="thumbs down icon"></i>
-          </button>
-          <div className="ui basic label">63</div>
-        </div>
-        <div className="ui right floated labeled mini button" tabindex="0">
-          <button className="ui icon mini button">
-            <i className="thumbs up icon"></i>
-          </button>
-          <div className="ui basic label">1,048</div>
-        </div> */}
       </div>
+      {modalShowing && (
+        <ConfirmationModal
+          onDismiss={closeModalHandler}
+          title="Delete Comment"
+          content="Are you sure you want to delete this comment?"
+          actions={actions}
+        />
+      )}
     </div>
   );
 };
