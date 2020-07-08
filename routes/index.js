@@ -19,4 +19,7 @@ router.use('/posts', require('./post'));
 // Load Profile route
 router.use('/profiles', require('./profile'))
 
+// Load Request route
+router.use('/requests', require('./request'))
+
 module.exports = router
