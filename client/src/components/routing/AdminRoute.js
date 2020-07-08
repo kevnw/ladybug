@@ -12,7 +12,7 @@ const AdminRoute = ({
     render={(props) =>
       !loading && (!user || (user && !user.verified)) ? (
         <Redirect to="/login" />
-      ) : user.role == 'user' ? (
+      ) : user && user.role == 'user' ? (
         <Redirect to="/home" />
       ) : (
         <Component {...props} />
