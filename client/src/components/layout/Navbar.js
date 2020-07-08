@@ -66,6 +66,11 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
                 <Link to="/explore" className="item">
                   Explore
                 </Link>
+                {user.role == 'admin' && (
+                  <Link to="/requests" className="item">
+                    Requests
+                  </Link>
+                )}
                 <div className="ui simple dropdown vertically fitted item">
                   <img
                     className="ui avatar image xsmall-image"
@@ -78,7 +83,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
                       <i className="heart icon"></i>Saved posts
                     </Link>
                     <Link to="/#!" className="item">
-                      <i className="pencil icon"></i>Edit my interest
+                      <i className="bell icon"></i>Notifications
                     </Link>
                     <Link to={`/profile/me`} className="item">
                       <i className="user icon"></i>Profile
