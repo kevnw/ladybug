@@ -10,8 +10,17 @@ const RequestSchema = new mongoose.Schema(
       type: String,
       required: true
     },
+    counter: [
+      { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User'
+      }
+    ],
     description: {
       type: String
+    },
+    date: {
+      type: Date
     }
   }
 )

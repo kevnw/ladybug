@@ -18,7 +18,7 @@ const {
 const findUserById = async id => {
   return new Promise((resolve, reject) => {
     User.findOne({ _id: id })
-      .select('_id name avatar')
+      .select('_id name avatar saved')
       .then(user => {
         if (!user) {
           reject(buildErrObject(422, 'User does not exist'));
@@ -326,6 +326,43 @@ exports.givePostRecommendations = async (req, res) => {
     }
 
     handleSuccess(res, buildSuccObject(temp))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message))
+  }
+}
+
+exports.savePost = async (req, res) => {
+  try {
+    const user = await findUserById(req.body._id)
+    const post = await findPostById(req.params.postId)
+
+    if (user.saved.indexOf(post._id) > -1) {
+      handleError(res, buildErrObject(422, "User already saved this post"))
+    } else {
+      user.saved.unshift(post._id)
+    }
+    
+    user.save()
+    handleSuccess(res, buildSuccObject(user))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message))
+  }
+}
+
+exports.unsavePost = async (req, res) => {
+  try {
+    const user = await findUserById(req.body._id)
+    const post = await findPostById(req.params.postId)
+
+    if (user.saved.indexOf(post._id) > -1) {
+      user.saved = user.saved.filter(element => "" + element != "" + post._id)
+    } else {
+      handleError(res, buildErrObject(422, "User does not save this Post"))
+      return
+    }
+
+    user.save()
+    handleSuccess(res, buildSuccObject(user))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message))
   }

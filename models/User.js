@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const validator = require('validator')
-const ModuleSchema = require('./Module')
 
 const UserSchema = new mongoose.Schema(
   {
@@ -40,6 +39,12 @@ const UserSchema = new mongoose.Schema(
       { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Module'
+      }
+    ],
+    saved: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post'
       }
     ],
     verification: {
