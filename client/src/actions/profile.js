@@ -62,7 +62,7 @@ export const updateProfile = (formData) => async (dispatch) => {
 
     dispatch(setAlert('Profile Updated', 'success'));
   } catch (err) {
-    console.log(err.response.data.errors);
+    // console.log(err.response.data.errors);
     dispatch({
       type: PROFILE_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status },

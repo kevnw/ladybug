@@ -7,6 +7,7 @@ import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
 
 import PrivateRoute from './components/routing/PrivateRoute';
+import AdminRoute from './components/routing/AdminRoute';
 import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
 import VerifyMail from './components/auth/VerifyMail';
@@ -17,6 +18,7 @@ import PasswordUpdated from './components/auth/PasswordUpdated';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Home from './components/home/Home';
+import Requests from './components/requests/Requests';
 import PostsCategory from './components/posts/PostsCategory';
 import Post from './components/post/Post';
 import Categories from './components/categories/Categories';
@@ -54,6 +56,7 @@ const App = () => {
             {/* Change to private route */}
             <PrivateRoute exact path="/home" component={Home} />
             <PrivateRoute exact path="/explore" component={Categories} />
+            <AdminRoute exact path="/requests" component={Requests} />
             <PrivateRoute exact path="/profile/:id" component={Profile} />
             <PrivateRoute exact path="/:uni" component={University} />
             <PrivateRoute

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Alert from '../layout/Alert';
 import CategoryItem from '../categories/CategoryItem';
-import CategoryFormModal from '../categories/CategoryFormModal';
+import CategoryFormModalFixed from '../categories/CategoryFormModalFixed';
 import { getModulesInUniversity } from '../../actions/module';
 import { getUniversity } from '../../actions/university';
 
@@ -120,7 +120,12 @@ const University = ({
           </div>
         </div>
       </div>
-      {isShowing && <CategoryFormModal setShowing={setShowing} />}
+      {isShowing && (
+        <CategoryFormModalFixed
+          uniName={university.university.name}
+          setShowing={setShowing}
+        />
+      )}
     </div>
   );
 };
