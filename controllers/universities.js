@@ -61,11 +61,11 @@ exports.getModuleList = async (req, res) => {
 
 exports.createUni = async (req, res) => {
   var newUni = new University({
-    name: req.body.name,
-    acronym: req.body.acronym,
-    overview: req.body.overview,
-    website: req.body.website,
-    logo: req.body.logo,
+    name: req.body.university.name,
+    acronym: req.body.university.acronym,
+    overview: req.body.university.overview,
+    website: req.body.university.website,
+    logo: req.body.university.logo,
   });
 
   newUni

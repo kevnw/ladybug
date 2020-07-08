@@ -12,6 +12,8 @@ import ExperienceFormModal from './ExperienceFormModal';
 import { getPostsByUser, getPostsByCurrentUser } from '../../actions/post';
 import { getProfileById, getCurrentProfile } from '../../actions/profile';
 import ProfilePosts from './ProfilePosts';
+import Graph from './Graph';
+import 'frappe-charts/dist/frappe-charts.min.css';
 
 const Profile = ({
   match,
@@ -43,7 +45,29 @@ const Profile = ({
   const profileLoading = profile.loading;
   const id = match.params.id;
 
-  const statistics = <div>Statistics</div>;
+  const [graphProperty, setGraphProperty] = useState({
+    data: {
+      dataPoints: {
+        '1451606400': 2, 
+        '1454284800': 10},
+                // object with timestamp-value pairs
+        start: new Date('2016-01-01'),
+        end: new Date('2017-01-01')      // Date objects
+      },
+      countLabel: 'Level',
+      discreteDomains: 0,  // default: 1
+      colors: ['#ebedf0', '#e8c4ba', '#d88f7d', '#c95b40', '#b82601']
+  })
+  
+const statistics = <Graph 
+  title="Contribution Graph"
+  type="heatmap"
+  data={ graphProperty.data }
+  countLabel= { graphProperty.countLabel }
+  discreteDomains = { graphProperty.discreteDomains }
+  colors= { graphProperty.colors }
+  onSelect={a => console.log(a.index)}>
+</Graph>
 
   return (
     <Fragment>
@@ -103,7 +127,9 @@ const Profile = ({
                       setShowingExperience={setShowingExperience}
                     />
                   ) : activeTab === 'statistics' ? (
-                    statistics
+                    <div className="ui segment">
+                    {statistics}
+                    </div>
                   ) : (
                     <ProfilePosts postsByUser={postsByUser} />
                   )}
