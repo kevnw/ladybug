@@ -2,7 +2,6 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Alert from '../layout/Alert';
-import PostItem from '../posts/PostItem';
 import Overview from './Overview';
 import ProfileTop from './ProfileTop';
 import BioFormModal from './BioFormModal';
@@ -18,13 +17,18 @@ const Profile = ({
   match,
   getProfileById,
   getCurrentProfile,
+  getPostsByCurrentUser,
+  getPostsByUser,
   profile,
   auth,
+  post: { postsByUser, loading },
 }) => {
   useEffect(() => {
     if (match.params.id === 'me') {
+      getPostsByCurrentUser();
       getCurrentProfile();
     } else {
+      getPostsByUser(match.params.id);
       getProfileById(match.params.id);
     }
   }, [getProfileById, getCurrentProfile, match.params.id]);
@@ -37,18 +41,22 @@ const Profile = ({
   const [isShowingExperience, setShowingExperience] = useState(false);
   const currentProfile = profile.profile;
   const profileLoading = profile.loading;
+  const id = match.params.id;
 
   const statistics = <div>Statistics</div>;
-  // const posts = !loading && postsByUser && (
-  //   <div>
-  //     {postsByUser.length > 0 &&
-  //       postsByUser.map((post) => <PostItem post={post} key={post._id} />)}
-  //   </div>
-  // );
 
   return (
     <Fragment>
-      {currentProfile && !profileLoading && auth.user && (
+      {!currentProfile ||
+      profileLoading ||
+      loading ||
+      !postsByUser ||
+      !auth.user ||
+      auth.loading ||
+      (id != 'me' && id != currentProfile.user) ||
+      (id == 'me' && auth.user && auth.user._id != currentProfile.user) ? (
+        <div className="ui active centered loader">{profile.user}</div>
+      ) : (
         <div>
           <div className="container-body">
             <Alert />
@@ -97,7 +105,7 @@ const Profile = ({
                   ) : activeTab === 'statistics' ? (
                     statistics
                   ) : (
-                    <ProfilePosts userId={match.params.id} />
+                    <ProfilePosts postsByUser={postsByUser} />
                   )}
                 </div>
               </div>

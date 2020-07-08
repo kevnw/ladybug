@@ -94,7 +94,15 @@ const PostsCategory = ({
     </Fragment>
   );
 
-  return (
+  return loading ||
+    !module ||
+    authLoading ||
+    !user ||
+    universityLoading ||
+    !universityInfo ||
+    module.name != match.params.module ? (
+    <div className="ui centered active loader"></div>
+  ) : (
     <div>
       <div className="container-body">
         <Alert />
