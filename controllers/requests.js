@@ -1,4 +1,6 @@
 const Request = require('../models/Request')
+const User = require('../models/User')
+
 const {
   handleError,
   handleSuccess,
@@ -14,7 +16,7 @@ const {
 const findRequestById = async (id) => {
   return new Promise((resolve, reject) => {
     Request.findOne({ _id: id })
-      .select('_id university module')
+      .select('_id university module counter')
       .then(request => {
         if (!request) {
           reject(buildErrObject(422, 'Request does not exist'));
@@ -50,6 +52,22 @@ const deleteRequestFromDb = async (id) => {
   })
 }
 
+/* Finds user by id  */
+const findUserById = async id => {
+  return new Promise((resolve, reject) => {
+    User.findOne({ _id: id })
+      .select('name email role verified _id following')
+      .then(user => {
+        if (!user) {
+          reject(buildErrObject(422, 'User does not exist'));
+        } else {
+          resolve(user); // returns mongoose object
+        }
+      })
+      .catch(err => reject(buildErrObject(422, err.message)));
+  });
+};
+
 /********************
  * Public functions *
  ********************/
@@ -58,19 +76,24 @@ exports.createRequest = async (req, res) => {
    try {
     const uni = req.body.university
     const mod = req.body.module
+    const userId = req.body._id
     const existingRequest = await findRequestByUniAndMod(uni, mod)
     if (existingRequest) {
-      existingRequest.counter++
-      existingRequest.save()
-      handleSuccess(res, buildSuccObject(existingRequest))
-      return
+      if (existingRequest.counter.indexOf(userId) > -1) {
+        handleError(res, buildErrObject(422, "User already made this request"));
+      } else {
+        existingRequest.counter.push(userId)
+        existingRequest.save()
+        handleSuccess(res, buildSuccObject(existingRequest))
+        return
+      }
     } else {
       var newRequest = new Request({
         university: uni,
-        module: mod,
-        counter: 0
+        module: mod
       })
       
+      newRequest.counter.push(userId)
       newRequest
       .save()
       .then(request =>
@@ -89,6 +112,36 @@ exports.deleteRequest = async (req, res) => {
     await deleteRequestFromDb(requestId)
 
     handleSuccess(res, buildSuccObject("Request deleted!"))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
+  }
+}
+
+exports.cancelRequest = async (req, res) => {
+  try {
+    const requestId = req.params.requestId
+    const userId = req.body._id
+
+    const request = await findRequestById(requestId)
+    const temp = []
+    request.counter.forEach(element => {
+      if (element != userId) {
+        temp.push(element)
+      }
+    })
+
+    if (temp.length < 1) {
+      await deleteRequestFromDb(requestId)
+      handleSuccess(res, buildSuccObject("Request deleted from DB"))
+    } else {
+      request.counter = temp
+      request.save()
+      .then(request =>
+        handleSuccess(res, buildSuccObject(request))
+      )
+      .catch(error => handleError(res, buildErrObject(422, error.message)));
+    }
+  
   } catch (err) {
     handleError(res, buildErrObject(422, err.message));
   }

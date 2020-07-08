@@ -13,6 +13,15 @@ RequestController.createRequest
 );
 
 /*
+ * Cancel request route
+ */
+router.put(
+'/cancel/:requestId',
+AuthController.verifyToken,
+RequestController.cancelRequest
+)
+
+/*
  * Delete request route
  */
 router.delete(
