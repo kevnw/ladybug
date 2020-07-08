@@ -52,21 +52,18 @@ const deleteRequestFromDb = async (id) => {
   })
 }
 
-/* Finds user by id  */
-const findUserById = async id => {
+/* Returns all requests sorted from date */
+const sortedRequest = async () => {
   return new Promise((resolve, reject) => {
-    User.findOne({ _id: id })
-      .select('name email role verified _id following')
-      .then(user => {
-        if (!user) {
-          reject(buildErrObject(422, 'User does not exist'));
-        } else {
-          resolve(user); // returns mongoose object
-        }
-      })
-      .catch(err => reject(buildErrObject(422, err.message)));
-  });
-};
+    Request.find()
+    .sort({ date: 1 })
+    .lean()
+    .then(requestList => {
+      resolve(requestList)
+    })
+    .catch(err => reject(buildErrObject(422, err.message)));
+  })
+}
 
 /********************
  * Public functions *
@@ -90,7 +87,8 @@ exports.createRequest = async (req, res) => {
     } else {
       var newRequest = new Request({
         university: uni,
-        module: mod
+        module: mod,
+        date: Date.now()
       })
       
       newRequest.counter.push(userId)
@@ -142,6 +140,16 @@ exports.cancelRequest = async (req, res) => {
       .catch(error => handleError(res, buildErrObject(422, error.message)));
     }
   
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
+  }
+}
+
+exports.getAllRequest = async (req, res) => {
+  try {
+    const requestList = await sortedRequest()
+
+    handleSuccess(res, buildSuccObject(requestList))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message));
   }

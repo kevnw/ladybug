@@ -59,6 +59,22 @@ PostController.upvote
 )
 
 /*
+ * Save post route
+ */
+router.put('/save/:postId',
+AuthController.verifyToken, 
+PostController.savePost
+)
+
+/*
+ * Unsave post route
+ */
+router.put('/unsave/:postId',
+AuthController.verifyToken, 
+PostController.unsavePost
+)
+
+/*
  * Downvote post route
  */
 router.put('/downvote/:postId', 

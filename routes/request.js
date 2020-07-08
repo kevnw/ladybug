@@ -4,6 +4,11 @@ const express = require('express')
 const router = express.Router()
 
 /*
+ * Get all request route
+ */
+router.get('/', RequestController.getAllRequest)
+
+/*
  * Create request route
  */
 router.post(

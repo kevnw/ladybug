@@ -34,49 +34,69 @@ const University = ({
     setActiveModules(true);
   };
 
-  const overview = !university.loading && university.university && (
-    <Fragment>
-      <div className="picture-container">
-        <img
-          src={`${university.university.logo}`}
-          className="university-picture"
-        />
-      </div>
-      {/* <div className="ui segment center-text">
+  const overview =
+    university.loading ||
+    !university.university ||
+    university.university.acronym != match.params.uni ? (
+      <div></div>
+    ) : (
+      <Fragment>
+        <div className="picture-container">
+          <img
+            src={`${university.university.logo}`}
+            className="university-picture"
+          />
+        </div>
+        {/* <div className="ui segment center-text">
         <h1 className="large">National University of Singapore</h1>
         <div className="lead">Singapore</div>
       </div> */}
-      <div className="ui segment">
-        <h3>Overview:</h3>
-        <p>{`${university.university.overview}`}</p>
-        <h3>Website:</h3>
-        <p>{`${university.university.website}`}</p>
-      </div>
-    </Fragment>
-  );
-
-  const moduleList = !loading && modulesInUniversity && (
-    <Fragment>
-      <button onClick={() => setShowing(true)} className="ui button red-button">
-        <i className="ui icon plus"></i>
-        Request New Module
-      </button>
-      <div className="ui segment" style={{ border: 'none', boxShadow: 'none' }}>
-        <div className="ui three doubling cards">
-          {modulesInUniversity.length > 0 &&
-            modulesInUniversity.map((module) => (
-              <CategoryItem
-                module={module}
-                key={module._id}
-                // university={match.params.uni}
-              />
-            ))}
+        <div className="ui segment">
+          <h3>Overview:</h3>
+          <p>{`${university.university.overview}`}</p>
+          <h3>Website:</h3>
+          <p>{`${university.university.website}`}</p>
         </div>
-      </div>
-    </Fragment>
-  );
+      </Fragment>
+    );
 
-  return (
+  const moduleList =
+    loading || !modulesInUniversity ? (
+      <div></div>
+    ) : (
+      <Fragment>
+        <button
+          onClick={() => setShowing(true)}
+          className="ui button red-button"
+        >
+          <i className="ui icon plus"></i>
+          Request New Module
+        </button>
+        <div
+          className="ui segment"
+          style={{ border: 'none', boxShadow: 'none' }}
+        >
+          <div className="ui three doubling cards">
+            {modulesInUniversity.length > 0 &&
+              modulesInUniversity.map((module) => (
+                <CategoryItem
+                  module={module}
+                  key={module._id}
+                  // university={match.params.uni}
+                />
+              ))}
+          </div>
+        </div>
+      </Fragment>
+    );
+
+  return university.loading ||
+    !university.university ||
+    loading ||
+    !modulesInUniversity ||
+    university.university.acronym != match.params.uni ? (
+    <div className="ui centered active loader"></div>
+  ) : (
     <div>
       <div className="container-body">
         <Alert />

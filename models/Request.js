@@ -18,6 +18,9 @@ const RequestSchema = new mongoose.Schema(
     ],
     description: {
       type: String
+    },
+    date: {
+      type: Date
     }
   }
 )
