@@ -7,8 +7,16 @@ const router = express.Router()
  * Get particular university info
  */
 router.get(
-  '/:uniName',
-  UniversityController.getUniInfo
+  '/:uniAcronym',
+  UniversityController.getUniInfoAcronym
+)
+
+/*
+ * Get particular university info
+ */
+router.get(
+  '/name/:uniName',
+  UniversityController.getUniInfoName
 )
 
 /*

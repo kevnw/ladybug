@@ -31,8 +31,18 @@ const findUniversityByName = async (name) => {
  * Public functions *
  ********************/
 
-exports.getUniInfo = async (req, res) => {
-  University.findOne({ acronym: req.params.uniName })
+exports.getUniInfoAcronym = async (req, res) => {
+  University.findOne({ acronym: req.params.uniAcronym })
+    .lean()
+    .then((uni) => {
+      if (uni) handleSuccess(res, buildSuccObject(uni));
+      else handleError(res, buildErrObject(422, 'University not found'));
+    })
+    .catch((err) => handleError(res, buildErrObject(422, err.message)));
+};
+
+exports.getUniInfoName = async (req, res) => {
+  University.findOne({ name: req.params.uniName })
     .lean()
     .then((uni) => {
       if (uni) handleSuccess(res, buildSuccObject(uni));
@@ -147,3 +157,5 @@ exports.deleteModule = async (req, res) => {
     handleError(res, buildErrObject(422, err.message));
   }
 };
+
+exports.get
