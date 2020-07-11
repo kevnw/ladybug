@@ -53,14 +53,16 @@ export const getRequests = () => async (dispatch) => {
   }
 };
 
-export const deleteRequest = (id) => async (dispatch) => {
+export const deleteRequest = (id, approve = false) => async (dispatch) => {
   try {
     const res = await axios.delete(`/requests/delete/${id}`);
     dispatch({
       type: DELETE_REQUEST,
       payload: id,
     });
-    dispatch(setAlert(res.data, 'success'));
+    if (!approve) {
+      dispatch(setAlert(res.data, 'success'));
+    }
   } catch (err) {
     console.log(err.response.data.errors.msg);
     dispatch({
