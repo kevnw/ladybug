@@ -18,6 +18,31 @@ router.get(
 )
 
 /*
+ * Get saved post
+ */
+router.get(
+  '/saved',
+  AuthController.verifyToken,
+  PostController.getSavedPosts
+)
+
+/*
+ * Get most liked posts
+ */
+router.get(
+  '/filters/most-liked',
+  PostController.mostLiked
+)
+
+/*
+ * Get most recent posts
+ */
+router.get(
+  '/filters/most-recent',
+  PostController.mostRecent
+)
+
+/*
  * Get particular module info
  */
 router.get(

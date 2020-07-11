@@ -91,10 +91,23 @@ const deletePostFromDb = async (id) => {
 };
 
 /* Returns all post sorted from upvote */
-const sortedPost = async () => {
+const sortedPostUpvote = async () => {
   return new Promise((resolve, reject) => {
     Post.find()
     .sort({ nOfUpvote: -1 })
+    .lean()
+    .then(postList => {
+      resolve(postList)
+    })
+    .catch(err => reject(buildErrObject(422, err.message)));
+  })
+}
+
+/* Returns all post sorted from date */
+const sortedPostDate = async () => {
+  return new Promise((resolve, reject) => {
+    Post.find()
+    .sort({ date: -1 })
     .lean()
     .then(postList => {
       resolve(postList)
@@ -319,7 +332,7 @@ exports.deleteComment = async (req, res) => {
 
 exports.givePostRecommendations = async (req, res) => {
   try {
-    const postList = await sortedPost()
+    const postList = await sortedPostUpvote()
     const temp = []
     for (i = 0; i < 3; i++) {
       temp.push(postList[i])
@@ -363,6 +376,43 @@ exports.unsavePost = async (req, res) => {
 
     user.save()
     handleSuccess(res, buildSuccObject(user))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message))
+  }
+}
+
+exports.getSavedPosts = async (req, res) => {
+  try {
+    const user = await findUserById(req.body._id)
+    const temp = []
+
+    for (const element of user.saved) {
+      const post = await findPostById(element)
+
+      temp.push(post)
+    }
+
+    handleSuccess(res, buildSuccObject(temp))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message))
+  }
+}
+
+exports.mostLiked = async (req, res) => {
+  try {
+    const postList = await sortedPostUpvote()
+
+    handleSuccess(res, buildSuccObject(postList))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message))
+  }
+}
+
+exports.mostRecent = async (req, res) => {
+  try {
+    const postList = await sortedPostDate()
+
+    handleSuccess(res, buildSuccObject(postList))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message))
   }
