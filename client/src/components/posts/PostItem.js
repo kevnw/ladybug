@@ -80,7 +80,7 @@ const PostItem = ({ post, auth, deletePost, upvotePost, downvotePost }) => {
         </div>
         <div className="ui thirteen wide column">
           <h3>{`${title}`}</h3>
-          <p>{`${text}`}</p>
+          <p style={{ wordWrap: 'break-word' }}>{`${text}`}</p>
 
           {!auth.loading && auth.user && (
             <Fragment>
