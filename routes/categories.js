@@ -1,4 +1,6 @@
 const CategoriesController = require('../controllers/categories')
+const AuthController = require('../controllers/auth')
+const auth = require('../middleware/auth')
 const express = require('express')
 const router = express.Router()
 
@@ -15,6 +17,8 @@ router.get(
  */
 router.post(
   '/create',
+  AuthController.verifyToken,
+  auth.roleAuthorization(['admin', 'superadmin']),
   CategoriesController.createUniAndModule
 )
 

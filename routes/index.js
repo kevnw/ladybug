@@ -22,4 +22,7 @@ router.use('/profiles', require('./profile'))
 // Load Request route
 router.use('/requests', require('./request'))
 
+// Load Contribution route
+router.use('/contributions', require('./contribution'))
+
 module.exports = router

@@ -1,5 +1,6 @@
 const RequestController = require('../controllers/requests')
 const AuthController = require('../controllers/auth')
+const auth = require('../middleware/auth')
 const express = require('express')
 const router = express.Router()
 
@@ -31,6 +32,8 @@ RequestController.cancelRequest
  */
 router.delete(
 '/delete/:requestId',
+AuthController.verifyToken,
+auth.roleAuthorization(['admin', 'superadmin']),
 RequestController.deleteRequest
 );
 
