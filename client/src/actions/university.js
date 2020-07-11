@@ -44,3 +44,22 @@ export const getUniversity = (acronym) => async (dispatch) => {
     });
   }
 };
+
+// Get university from name
+export const getUniversityFromName = (name) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/universities/name/${name}`);
+    dispatch({
+      type: GET_UNIVERSITY,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: UNIVERSITY_ERROR,
+      payload: {
+        msg: err.response.statusText,
+        status: err.response.status,
+      },
+    });
+  }
+};

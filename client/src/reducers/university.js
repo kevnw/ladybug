@@ -29,10 +29,16 @@ export default function (state = initialState, action) {
         loading: false,
       };
     case UNIVERSITIES_ERROR:
+      return {
+        ...state,
+        error: payload,
+        loading: false,
+      };
     case UNIVERSITY_ERROR:
       return {
         ...state,
         error: payload,
+        university: null,
         loading: false,
       };
     default:

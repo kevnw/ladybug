@@ -37,4 +37,6 @@ export const PROFILE_ERROR = 'PROFILE_ERROR';
 export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 export const CLEAR_PROFILE = 'CLEAR_PROFILE';
 export const ADD_REQUEST = 'ADD_REQUEST';
+export const DELETE_REQUEST = 'DELETE_REQUEST';
 export const REQUEST_ERROR = 'REQUEST_ERROR';
+export const GET_REQUESTS = 'GET_REQUESTS';

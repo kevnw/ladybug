@@ -14,7 +14,6 @@ const CategoryFormModal = ({ setShowing, addRequest }) => {
     { key: 'cn', value: 'china', flag: 'cn', text: 'China' },
     { key: 'dk', value: 'Denmark', flag: 'dk', text: 'Denmark' },
     { key: 'fi', value: 'Finland', flag: 'fi', text: 'Finland' },
-    { key: 'fr', value: 'France', flag: 'fr', text: 'France' },
     { key: 'de', value: 'Germany', flag: 'de', text: 'Germany' },
     { key: 'hk', value: 'Hong+Kong', flag: 'hk', text: 'Hong Kong' },
     { key: 'in', value: 'India', flag: 'in', text: 'India' },
