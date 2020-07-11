@@ -71,6 +71,8 @@ const ResetPassword = ({ auth, setAlert, resetPassword, history, match }) => {
                       value={password}
                       onChange={(e) => onChange(e)}
                       required
+                      pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+                      title="Password must contain at least one number and one uppercase and lowercase letter, and at least 6 or more characters"
                     />
                   </div>
                 </div>
@@ -85,6 +87,8 @@ const ResetPassword = ({ auth, setAlert, resetPassword, history, match }) => {
                       value={password2}
                       onChange={(e) => onChange(e)}
                       required
+                      pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+                      title="Password must contain at least one number and one uppercase and lowercase letter, and at least 6 or more characters"
                     />
                   </div>
                 </div>
