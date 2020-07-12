@@ -3,28 +3,24 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import Modal from '../Modal';
+import { addUniModule, addModule } from '../../actions/module';
 
-const ApproveRequestFormModal = ({ setFormShowing, request }) => {
-  useEffect(() => {
-    axios.get(`/universities/name/${name}`).then(({ data }) => {
-      setFormData({
-        ...formData,
-        acronym: data ? data.acronym : '',
-        overview: data ? data.overview : '',
-        website: data ? data.website : '',
-        logo: data ? data.logo : '',
-      });
-      setUniversity(data ? data : null);
-    });
-  }, []);
-  const [university, setUniversity] = useState(null);
+const ApproveRequestFormModal = ({
+  setFormShowing,
+  request,
+  addUniModule,
+  addModule,
+}) => {
+  const [uni, setUni] = useState(null);
   const [page, setPage] = useState(1);
   const [formData, setFormData] = useState({
-    name: request.university,
-    acronym: '',
-    overview: '',
-    website: '',
-    logo: '',
+    university: {
+      name: request.university,
+      acronym: '',
+      overview: '',
+      website: '',
+      logo: '',
+    },
     module: {
       name: request.module,
       title: '',
@@ -33,16 +29,45 @@ const ApproveRequestFormModal = ({ setFormShowing, request }) => {
     },
   });
 
-  const { name, acronym, overview, website, logo, module } = formData;
+  useEffect(() => {
+    axios.get(`/universities/name/${university.name}`).then(({ data }) => {
+      setFormData({
+        ...formData,
+        university: {
+          ...university,
+          acronym: data ? data.acronym : '',
+          overview: data ? data.overview : '',
+          website: data ? data.website : '',
+          logo: data ? data.logo : '',
+        },
+        module: {
+          ...module,
+          university: data._id,
+        },
+      });
+      setUni(data ? data : null);
+    });
+  }, []);
+
+  const { university, module } = formData;
   const onChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      university: {
+        ...university,
+        [e.target.name]: e.target.value,
+      },
+    });
 
   const onSubmit = (e) => {
     e.preventDefault();
-    if (university) {
-      console.log(module);
+    if (uni) {
+      const newModule = { module: module };
+      addModule(newModule, request._id);
+      // console.log(newModule);
     } else {
-      console.log(formData);
+      addUniModule(formData, request._id);
+      // console.log(formData);
     }
   };
 
@@ -52,7 +77,12 @@ const ApproveRequestFormModal = ({ setFormShowing, request }) => {
 
   const actions1 = (
     <Fragment>
-      <button onClick={() => setPage(2)} className="ui button red-button">
+      <button
+        type="submit"
+        onSubmit={(e) => e.preventDefault()}
+        onClick={() => setPage(2)}
+        className="ui button red-button"
+      >
         Next
       </button>
       <button onClick={closeModalHandler} className="ui button">
@@ -88,8 +118,9 @@ const ApproveRequestFormModal = ({ setFormShowing, request }) => {
             type="text"
             name="name"
             placeholder="University Name"
-            value={name}
+            value={university.name}
             onChange={(e) => onChange(e)}
+            required
           />
         </div>
       </div>
@@ -100,8 +131,9 @@ const ApproveRequestFormModal = ({ setFormShowing, request }) => {
             type="text"
             name="acronym"
             placeholder="University Acronym"
-            value={acronym}
+            value={university.acronym}
             onChange={(e) => onChange(e)}
+            required
           />
         </div>
       </div>
@@ -112,8 +144,9 @@ const ApproveRequestFormModal = ({ setFormShowing, request }) => {
             type="text"
             name="overview"
             placeholder="Overview"
-            value={overview}
+            value={university.overview}
             onChange={(e) => onChange(e)}
+            required
           />
         </div>
       </div>
@@ -124,8 +157,9 @@ const ApproveRequestFormModal = ({ setFormShowing, request }) => {
             type="text"
             name="website"
             placeholder="Website"
-            value={website}
+            value={university.website}
             onChange={(e) => onChange(e)}
+            required
           />
         </div>
       </div>
@@ -136,8 +170,9 @@ const ApproveRequestFormModal = ({ setFormShowing, request }) => {
             type="text"
             name="logo"
             placeholder="Logo URL"
-            value={logo}
+            value={university.logo}
             onChange={(e) => onChange(e)}
+            required
           />
         </div>
       </div>
@@ -160,6 +195,7 @@ const ApproveRequestFormModal = ({ setFormShowing, request }) => {
                 module: { ...module, name: e.target.value },
               })
             }
+            required
           />
         </div>
       </div>
@@ -177,6 +213,7 @@ const ApproveRequestFormModal = ({ setFormShowing, request }) => {
                 module: { ...module, title: e.target.value },
               })
             }
+            required
           />
         </div>
       </div>
@@ -194,6 +231,7 @@ const ApproveRequestFormModal = ({ setFormShowing, request }) => {
                 module: { ...module, description: e.target.value },
               })
             }
+            required
           />
         </div>
       </div>
@@ -218,6 +256,11 @@ const ApproveRequestFormModal = ({ setFormShowing, request }) => {
   );
 };
 
-ApproveRequestFormModal.propTypes = {};
+ApproveRequestFormModal.propTypes = {
+  addUniModule: PropTypes.func.isRequired,
+  addModule: PropTypes.func.isRequired,
+};
 
-export default connect(null, {})(ApproveRequestFormModal);
+export default connect(null, { addUniModule, addModule })(
+  ApproveRequestFormModal
+);
