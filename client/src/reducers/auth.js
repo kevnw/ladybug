@@ -8,6 +8,8 @@ import {
   LOGOUT,
   VERIFY_SUCCESS,
   VERIFY_FAIL,
+  SAVE_POST,
+  UNSAVE_POST,
   // ACCOUNT_DELETED,
 } from '../actions/types';
 
@@ -43,6 +45,14 @@ export default function (state = initialState, action) {
       return {
         ...state,
         ...payload,
+        isAuthenticated: true,
+        loading: false,
+      };
+    case SAVE_POST:
+    case UNSAVE_POST:
+      return {
+        ...state,
+        user: { ...state.user, saved: payload.saved },
         isAuthenticated: true,
         loading: false,
       };

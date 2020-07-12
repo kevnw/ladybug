@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Carousel } from 'react-responsive-carousel';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import _ from 'lodash';
@@ -76,6 +77,7 @@ const Categories = ({
                       className="ui segment"
                       style={{ border: 'none', boxShadow: 'none' }}
                     >
+                      {/* <Carousel> */}
                       <div className="ui three doubling cards">
                         {university.modules.length > 0 &&
                           university.modules.map((module) => (
@@ -86,6 +88,7 @@ const Categories = ({
                             />
                           ))}
                       </div>
+                      {/* </Carousel> */}
                     </div>
                   </div>
                 ))}

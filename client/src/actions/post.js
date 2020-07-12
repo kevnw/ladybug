@@ -3,6 +3,7 @@ import { setAlert } from './alert';
 import {
   GET_POSTS_FROM_MODULE,
   GET_POSTS_RECOMMENDATIONS,
+  GET_SAVED_POSTS,
   GET_POSTS_BY_USER,
   POST_ERROR,
   UPDATE_VOTES,
@@ -38,6 +39,23 @@ export const getPostsRecommendations = () => async (dispatch) => {
 
     dispatch({
       type: GET_POSTS_RECOMMENDATIONS,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+// Get saved posts
+export const getSavedPosts = () => async (dispatch) => {
+  try {
+    const res = await axios.get(`/posts/saved`);
+
+    dispatch({
+      type: GET_SAVED_POSTS,
       payload: res.data,
     });
   } catch (err) {
