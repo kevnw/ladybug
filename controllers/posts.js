@@ -119,13 +119,11 @@ const sortedPostDate = async () => {
 /* Returns all post sorted from date */
 const sortedPostComments = async () => {
   return new Promise((resolve, reject) => {
-    Post.find()
-    .sort({ date: -1 })
-    .lean()
-    .then(postList => {
-      resolve(postList)
+    Post.find().exec(function (err, post) {
+      resolve(post.sort( function (doc1, doc2) {
+        return doc2.comments.length - doc1.comments.length
+      }))
     })
-    .catch(err => reject(buildErrObject(422, err.message)));
   })
 }
 
@@ -414,8 +412,16 @@ exports.getSavedPosts = async (req, res) => {
 exports.mostLiked = async (req, res) => {
   try {
     const postList = await sortedPostUpvote()
+    const moduleId = req.body.module
 
-    handleSuccess(res, buildSuccObject(postList))
+    var temp = []
+    for (const element of postList) {
+      if (element.module == moduleId) {
+        temp.push(element)
+      }
+    }
+
+    handleSuccess(res, buildSuccObject(temp))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message))
   }
@@ -424,8 +430,16 @@ exports.mostLiked = async (req, res) => {
 exports.mostRecent = async (req, res) => {
   try {
     const postList = await sortedPostDate()
+    const moduleId = req.body.module
 
-    handleSuccess(res, buildSuccObject(postList))
+    var temp = []
+    for (const element of postList) {
+      if (element.module == moduleId) {
+        temp.push(element)
+      }
+    }
+
+    handleSuccess(res, buildSuccObject(temp))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message))
   }
@@ -434,6 +448,14 @@ exports.mostRecent = async (req, res) => {
 exports.mostDiscussed = async (req, res) => {
   try {
     const postList = await sortedPostComments()
+    const moduleId = req.body.module
+
+    var temp = []
+    for (const element of postList) {
+      if (element.module == moduleId) {
+        temp.push(element)
+      }
+    }
 
     handleSuccess(res, buildSuccObject(postList))
   } catch (err) {

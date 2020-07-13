@@ -27,30 +27,6 @@ router.get(
 )
 
 /*
- * Get most liked posts
- */
-router.get(
-  '/filters/most-liked',
-  PostController.mostLiked
-)
-
-/*
- * Get most recent posts
- */
-router.get(
-  '/filters/most-recent',
-  PostController.mostRecent
-)
-
-/*
- * Get most discussed posts
- */
-router.get(
-  '/filters/most-discussed',
-  PostController.mostRecent
-)
-
-/*
  * Get particular module info
  */
 router.get(

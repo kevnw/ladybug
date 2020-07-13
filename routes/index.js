@@ -25,4 +25,7 @@ router.use('/requests', require('./request'))
 // Load Contribution route
 router.use('/contributions', require('./contribution'))
 
+// Load Filter route
+router.use('/filters', require('./filter'))
+
 module.exports = router
