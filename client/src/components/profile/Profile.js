@@ -49,10 +49,10 @@ const Profile = ({
     data: {
       dataPoints: {
         '1451606400': 2, 
-        '1454284800': 10},
-                // object with timestamp-value pairs
-        start: new Date('2016-01-01'),
-        end: new Date('2017-01-01')      // Date objects
+        '1454284800': 10
+      }, // object with timestamp-value pairs
+        start: new Date(new Date().setMonth(new Date().getMonth() - 12)),
+        end: new Date()      // Date objects
       },
       countLabel: 'Level',
       discreteDomains: 0,  // default: 1

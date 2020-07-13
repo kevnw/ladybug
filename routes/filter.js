@@ -7,7 +7,7 @@ const router = express.Router()
  * Get most liked posts
  */
 router.get(
-  '/most-liked',
+  '/most-liked/:moduleId',
   PostController.mostLiked
 )
 
@@ -15,7 +15,7 @@ router.get(
  * Get most recent posts
  */
 router.get(
-  '/most-recent',
+  '/most-recent/:moduleId',
   PostController.mostRecent
 )
 
@@ -23,7 +23,7 @@ router.get(
  * Get most discussed posts
  */
 router.get(
-  '/most-discussed',
+  '/most-discussed/:moduleId',
   PostController.mostDiscussed
 )
 

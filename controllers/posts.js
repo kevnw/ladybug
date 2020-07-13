@@ -412,7 +412,7 @@ exports.getSavedPosts = async (req, res) => {
 exports.mostLiked = async (req, res) => {
   try {
     const postList = await sortedPostUpvote()
-    const moduleId = req.body.module
+    const moduleId = req.params.moduleId
 
     var temp = []
     for (const element of postList) {
@@ -430,7 +430,7 @@ exports.mostLiked = async (req, res) => {
 exports.mostRecent = async (req, res) => {
   try {
     const postList = await sortedPostDate()
-    const moduleId = req.body.module
+    const moduleId = req.params.moduleId
 
     var temp = []
     for (const element of postList) {
@@ -448,7 +448,7 @@ exports.mostRecent = async (req, res) => {
 exports.mostDiscussed = async (req, res) => {
   try {
     const postList = await sortedPostComments()
-    const moduleId = req.body.module
+    const moduleId = req.params.moduleId
 
     var temp = []
     for (const element of postList) {
