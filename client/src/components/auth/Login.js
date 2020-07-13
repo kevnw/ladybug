@@ -61,6 +61,7 @@ const Login = ({ login, auth }) => {
                       placeholder="Email address"
                       value={email}
                       onChange={(e) => onChange(e)}
+                      required
                     />
                   </div>
                 </div>
@@ -74,6 +75,7 @@ const Login = ({ login, auth }) => {
                       placeholder="Password"
                       value={password}
                       onChange={(e) => onChange(e)}
+                      required
                     />
                   </div>
                 </div>
@@ -87,9 +89,13 @@ const Login = ({ login, auth }) => {
                   </div>
                 </button>
               </div>
-              <div className="ui bottom attached message">
+              <div className="ui bottom attached message center-mobile">
                 New to us? <Link to="/register">Register</Link>
-                <Link style={{ float: 'right' }} to="/forgot-password">
+                <Link
+                  className="float-mobile"
+                  // style={{ float: 'right' }}
+                  to="/forgot-password"
+                >
                   Forgot Password?
                 </Link>
               </div>

@@ -13,6 +13,9 @@ import {
   GET_POSTS_RECOMMENDATIONS,
   GET_SAVED_POSTS,
   UNSAVE_POST,
+  GET_MOST_RECENT_POSTS,
+  GET_MOST_LIKED_POSTS,
+  GET_MOST_DISCUSSED_POSTS,
 } from '../actions/types';
 
 const initialState = {
@@ -36,6 +39,9 @@ export default function (state = initialState, action) {
         loading: false,
       };
     case GET_POSTS_FROM_MODULE:
+    case GET_MOST_RECENT_POSTS:
+    case GET_MOST_LIKED_POSTS:
+    case GET_MOST_DISCUSSED_POSTS:
       return {
         ...state,
         posts: payload,

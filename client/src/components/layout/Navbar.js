@@ -67,7 +67,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
                   Explore
                 </Link>
                 {user.role == 'admin' && (
-                  <Link to="/requests" className="item">
+                  <Link to="/requests" className="hide-content item">
                     Requests
                   </Link>
                 )}
@@ -85,6 +85,15 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
                     <Link to="/#!" className="item">
                       <i className="bell icon"></i>Notifications
                     </Link>
+                    {user.role == 'admin' && (
+                      <Link
+                        to="/requests"
+                        className="item show-content"
+                        style={{ display: 'none' }}
+                      >
+                        <i className="sticky note icon"></i> Requests
+                      </Link>
+                    )}
                     <Link to={`/profile/me`} className="item">
                       <i className="user icon"></i>Profile
                     </Link>

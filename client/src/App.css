@@ -51,8 +51,22 @@
     margin-top: 6rem;
   }
 
-  .hide-sm {
-    display: none;
+  .hide-content {
+    display: none !important;
+  }
+
+  .show-content {
+    display: block !important;
+  }
+
+  .float-mobile {
+    display: block;
+    float: none !important;
+    text-align: center;
+  }
+
+  .center-mobile {
+    text-align: center;
   }
 
   /* Text Styles */
@@ -162,6 +176,18 @@
 .grey-text {
   color: grey;
 }
+
+.float-mobile {
+  float: right;
+}
+
+/* .hide-content {
+  display: block !important;
+} */
+
+/* .show-content {
+  display: none !important;
+} */
 
 .one.wide.column.remove-padding {
   padding-right: 0;
