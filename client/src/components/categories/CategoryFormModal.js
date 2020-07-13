@@ -15,22 +15,22 @@ const CategoryFormModal = ({ setShowing, addRequest }) => {
     { key: 'dk', value: 'Denmark', flag: 'dk', text: 'Denmark' },
     { key: 'fi', value: 'Finland', flag: 'fi', text: 'Finland' },
     { key: 'de', value: 'Germany', flag: 'de', text: 'Germany' },
-    { key: 'hk', value: 'Hong+Kong', flag: 'hk', text: 'Hong Kong' },
+    { key: 'hk', value: 'HongKong', flag: 'hk', text: 'Hong Kong' },
     { key: 'in', value: 'India', flag: 'in', text: 'India' },
     { key: 'id', value: 'Indonesia', flag: 'id', text: 'Indonesia' },
     { key: 'it', value: 'Italy', flag: 'it', text: 'Italy' },
     { key: 'jp', value: 'Japan', flag: 'jp', text: 'Japan' },
     { key: 'my', value: 'Malaysia', flag: 'my', text: 'Malaysia' },
     { key: 'nl', value: 'Netherlands', flag: 'nl', text: 'Netherlands' },
-    { key: 'nz', value: 'New+Zealand', flag: 'nz', text: 'New Zealand' },
+    { key: 'nz', value: 'NewZealand', flag: 'nz', text: 'New Zealand' },
     { key: 'ph', value: 'Philippines', flag: 'ph', text: 'Philippines' },
     { key: 'sg', value: 'Singapore', flag: 'sg', text: 'Singapore' },
-    { key: 'za', value: 'South+Africa', flag: 'za', text: 'South Africa' },
+    { key: 'za', value: 'SouthAfrica', flag: 'za', text: 'South Africa' },
     { key: 'es', value: 'Spain', flag: 'es', text: 'Spain' },
     { key: 'ch', value: 'Switzerland', flag: 'ch', text: 'Switzerland' },
     { key: 'tw', value: 'Taiwan', flag: 'tw', text: 'Taiwan' },
     { key: 'th', value: 'Thailand', flag: 'th', text: 'Thailand' },
-    { key: 'us', value: 'United+States', flag: 'us', text: 'United States' },
+    { key: 'us', value: 'UnitedStates', flag: 'us', text: 'United States' },
     { key: 'vn', value: 'Vietnam', flag: 'vn', text: 'Vietnam' },
   ];
   const [country, setCountry] = useState(null);
@@ -47,9 +47,9 @@ const CategoryFormModal = ({ setShowing, addRequest }) => {
 
   useEffect(() => {
     if (country) {
-      axios
-        .get(`http://universities.hipolabs.com/search?country=${country}`)
-        .then((response) => setUniList(response.data));
+      const path = `university/${country}.json`
+      axios.get(path)
+      .then((response) => setUniList(response.data))
     }
   }, [country]);
 
