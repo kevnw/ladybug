@@ -43,6 +43,14 @@ router.get(
 )
 
 /*
+ * Get most discussed posts
+ */
+router.get(
+  '/filters/most-discussed',
+  PostController.mostRecent
+)
+
+/*
  * Get particular module info
  */
 router.get(

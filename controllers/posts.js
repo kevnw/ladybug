@@ -116,6 +116,19 @@ const sortedPostDate = async () => {
   })
 }
 
+/* Returns all post sorted from date */
+const sortedPostComments = async () => {
+  return new Promise((resolve, reject) => {
+    Post.find()
+    .sort({ date: -1 })
+    .lean()
+    .then(postList => {
+      resolve(postList)
+    })
+    .catch(err => reject(buildErrObject(422, err.message)));
+  })
+}
+
  /********************
  * Public functions *
  ********************/
@@ -411,6 +424,16 @@ exports.mostLiked = async (req, res) => {
 exports.mostRecent = async (req, res) => {
   try {
     const postList = await sortedPostDate()
+
+    handleSuccess(res, buildSuccObject(postList))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message))
+  }
+}
+
+exports.mostDiscussed = async (req, res) => {
+  try {
+    const postList = await sortedPostComments()
 
     handleSuccess(res, buildSuccObject(postList))
   } catch (err) {
