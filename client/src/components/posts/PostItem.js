@@ -6,8 +6,17 @@ import Moment from 'react-moment';
 import EditPostFormModal from './EditPostFormModal';
 import ConfirmationModal from '../ConfirmationModal';
 import { deletePost, upvotePost, downvotePost } from '../../actions/post';
+import { unsavePost, savePost } from '../../actions/auth';
 
-const PostItem = ({ post, auth, deletePost, upvotePost, downvotePost }) => {
+const PostItem = ({
+  post,
+  auth,
+  deletePost,
+  upvotePost,
+  downvotePost,
+  savePost,
+  unsavePost,
+}) => {
   const {
     _id,
     moduleName,
@@ -120,6 +129,24 @@ const PostItem = ({ post, auth, deletePost, upvotePost, downvotePost }) => {
             </Link>
             <div className="ui basic label">{`${comments.length}`}</div>
           </div>
+          {!auth.loading && auth.user && (
+            <Fragment>
+              <button
+                onClick={() =>
+                  auth.user.saved && auth.user.saved.indexOf(_id) > -1
+                    ? unsavePost(_id)
+                    : savePost(_id)
+                }
+                className={`ui icon small button ${
+                  auth.user.saved && auth.user.saved.indexOf(_id) > -1
+                    ? 'red-button'
+                    : ''
+                }`}
+              >
+                <i className="ui icon bookmark"></i>
+              </button>
+            </Fragment>
+          )}
           {!auth.loading && author === auth.user._id && (
             <Fragment>
               <button
@@ -167,4 +194,6 @@ export default connect(mapStateToProps, {
   deletePost,
   upvotePost,
   downvotePost,
+  savePost,
+  unsavePost,
 })(PostItem);

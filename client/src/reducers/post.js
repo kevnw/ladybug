@@ -11,12 +11,15 @@ import {
   REMOVE_COMMENT,
   GET_POSTS_BY_USER,
   GET_POSTS_RECOMMENDATIONS,
+  GET_SAVED_POSTS,
+  UNSAVE_POST,
 } from '../actions/types';
 
 const initialState = {
   posts: [],
   postsByUser: [],
   recommendedPosts: [],
+  savedPosts: [],
   post: null,
   loading: true,
   error: {},
@@ -59,6 +62,7 @@ export default function (state = initialState, action) {
         recommendedPosts: state.recommendedPosts.filter(
           (post) => post._id !== payload
         ),
+        savedPosts: state.savedPosts.filter((post) => post._id !== payload),
       };
     case ADD_POST:
       return {
@@ -80,6 +84,11 @@ export default function (state = initialState, action) {
             : post
         ),
         recommendedPosts: state.recommendedPosts.map((post) =>
+          post._id === payload.id
+            ? { ...post, text: payload.post.text, title: payload.post.title }
+            : post
+        ),
+        savedPosts: state.savedPosts.map((post) =>
           post._id === payload.id
             ? { ...post, text: payload.post.text, title: payload.post.title }
             : post
@@ -118,6 +127,11 @@ export default function (state = initialState, action) {
             ? { ...post, upvote: payload.upvote, downvote: payload.downvote }
             : post
         ),
+        savedPosts: state.savedPosts.map((post) =>
+          post._id === payload.id
+            ? { ...post, upvote: payload.upvote, downvote: payload.downvote }
+            : post
+        ),
         post:
           state.post && state.post._id === payload.id
             ? {
@@ -127,6 +141,17 @@ export default function (state = initialState, action) {
               }
             : null,
         loading: false,
+      };
+    case GET_SAVED_POSTS:
+      return {
+        ...state,
+        savedPosts: payload,
+        loading: false,
+      };
+    case UNSAVE_POST:
+      return {
+        ...state,
+        savedPosts: state.savedPosts.filter((post) => post._id !== payload.id),
       };
     case ADD_COMMENT:
       return {

@@ -10,6 +10,8 @@ import {
   LOGOUT,
   VERIFY_SUCCESS,
   VERIFY_FAIL,
+  SAVE_POST,
+  UNSAVE_POST,
   //   CLEAR_PROFILE,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
@@ -157,7 +159,7 @@ export const resetPassword = (formData, token, history) => async (dispatch) => {
       },
     };
 
-    console.log(formData);
+    // console.log(formData);
 
     const res = await axios.put(
       `/users/reset-password/${token}`,
@@ -169,6 +171,46 @@ export const resetPassword = (formData, token, history) => async (dispatch) => {
 
     // dispatch(setAlert(`${res.data}`, 'success'));
     history.push('/password-updated');
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      dispatch(setAlert(errors.msg, 'error'));
+    }
+  }
+};
+
+// Save Post
+export const savePost = (id) => async (dispatch) => {
+  try {
+    const res = await axios.put(`/posts/save/${id}`);
+
+    dispatch({
+      type: SAVE_POST,
+      payload: res.data,
+    });
+
+    dispatch(setAlert(`Post saved`, 'success'));
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      dispatch(setAlert(errors.msg, 'error'));
+    }
+  }
+};
+
+// Save Post
+export const unsavePost = (id) => async (dispatch) => {
+  try {
+    const res = await axios.put(`/posts/unsave/${id}`);
+
+    dispatch({
+      type: UNSAVE_POST,
+      payload: { ...res.data, id: id },
+    });
+
+    dispatch(setAlert(`Post unsaved`, 'success'));
   } catch (err) {
     const errors = err.response.data.errors;
 

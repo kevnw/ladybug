@@ -21,6 +21,7 @@ import Home from './components/home/Home';
 import Requests from './components/requests/Requests';
 import PostsCategory from './components/posts/PostsCategory';
 import Post from './components/post/Post';
+import SavedPosts from './components/posts/SavedPosts';
 import Categories from './components/categories/Categories';
 import University from './components/university/University';
 import Profile from './components/profile/Profile';
@@ -56,6 +57,7 @@ const App = () => {
             {/* Change to private route */}
             <PrivateRoute exact path="/home" component={Home} />
             <PrivateRoute exact path="/explore" component={Categories} />
+            <PrivateRoute exact path="/saved-posts" component={SavedPosts} />
             <AdminRoute exact path="/requests" component={Requests} />
             <PrivateRoute exact path="/profile/:id" component={Profile} />
             <PrivateRoute exact path="/:uni" component={University} />
