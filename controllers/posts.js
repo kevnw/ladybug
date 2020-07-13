@@ -120,7 +120,7 @@ const sortedPostDate = async () => {
 const sortedPostComments = async () => {
   return new Promise((resolve, reject) => {
     Post.find().exec(function (err, post) {
-      resolve(post.sort( function (doc1, doc2) {
+      resolve(post.sort(function (doc1, doc2) {
         return doc2.comments.length - doc1.comments.length
       }))
     })
@@ -457,7 +457,7 @@ exports.mostDiscussed = async (req, res) => {
       }
     }
 
-    handleSuccess(res, buildSuccObject(postList))
+    handleSuccess(res, buildSuccObject(temp))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message))
   }
