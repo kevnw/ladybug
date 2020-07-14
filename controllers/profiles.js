@@ -2,6 +2,7 @@ const User = require('../models/User')
 const Post = require('../models/Post')
 const Profile = require('../models/Profile')
 const avatar = require('../middleware/avatar')
+const { cloudinary } = require('../config/cloudinary')
 
 const {
   handleError,
@@ -222,6 +223,27 @@ exports.createProfile = async (req, res) => {
       if (err) handleError(res, buildErrObject(422, err.message))
       handleSuccess(res, item)
     })
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message))
+  }
+}
+
+exports.uploadProfilePicture = async (req, res) => {
+  try {
+    const fileStr = req.body.data
+    const user = await findUserById(req.body._id)
+    const profile = await findProfileByUserId(user._id)
+    const uploadedResponse = await cloudinary.uploader.
+    upload(fileStr, {
+      upload_preset: 'profile_picture'
+    })
+
+    const pictureUrl = uploadedResponse.secure_url
+    user.avatar = pictureUrl
+    profile.avatar = pictureUrl
+    user.save()
+    profile.save()
+    handleSuccess(res, "Profile picture successfully changed")
   } catch (err) {
     handleError(res, buildErrObject(422, err.message))
   }

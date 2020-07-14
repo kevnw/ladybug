@@ -19,7 +19,7 @@ const {
 const findUserById = async id => {
   return new Promise((resolve, reject) => {
     User.findOne({ _id: id })
-      .select('name email role verified _id following')
+      .select('name email role verified _id following avatar')
       .then(user => {
         if (!user) {
           reject(buildErrObject(422, 'User does not exist'));
@@ -264,15 +264,22 @@ exports.getContributions = async (req, res) => {
     const allPost = await findAllPostRange(startDate, endDate)
     console.log(allPost)
     for (const element of allPost) {
-      if (element.author === user._id) {
-        console.log("hello")
+      if ("" + element.author == "" + user._id) {
+        
       }  
     }
-    console.log("start = " + startDate)
-    // console.log(user)
-    console.log("end = " + endDate)
 
     handleSuccess(res, buildSuccObject("API CREATED"))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
+  }
+}
+
+exports.getAvatarFromUserId = async (req, res) => {
+  try {
+    const user = await findUserById(req.params.userId)
+
+    handleSuccess(res, buildSuccObject(user.avatar))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message));
   }
