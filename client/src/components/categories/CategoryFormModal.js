@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import ModalDropdown from '../ModalDropdown';
 import { Dropdown } from 'semantic-ui-react';
 import { addRequest } from '../../actions/request';
+import data from '../../data'
 
 const CategoryFormModal = ({ setShowing, addRequest }) => {
   const countryOptions = [
@@ -47,9 +48,12 @@ const CategoryFormModal = ({ setShowing, addRequest }) => {
 
   useEffect(() => {
     if (country) {
-      const path = `university/${country}.json`
+      var countryCode = country.toLowerCase()
+      const path = `university/${countryCode}.json`
       axios.get(path)
-      .then((response) => setUniList(response.data))
+        .then((response) => setUniList(response.data));
+      // console.log(countryCode)
+      // setUniList(data[0][`${countryCode}`])
     }
   }, [country]);
 
