@@ -49,11 +49,11 @@ const CategoryFormModal = ({ setShowing, addRequest }) => {
   useEffect(() => {
     if (country) {
       var countryCode = country.toLowerCase()
-      const path = `university/${countryCode}.json`
-      axios.get(path)
-        .then((response) => setUniList(response.data));
+      // const path = `university/${countryCode}.json`
+      // axios.get(path)
+        // .then((response) => setUniList(response.data));
       // console.log(countryCode)
-      // setUniList(data[0][`${countryCode}`])
+      setUniList(data[0][`${countryCode}`])
     }
   }, [country]);
 
