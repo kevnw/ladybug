@@ -48,9 +48,11 @@ const CategoryFormModal = ({ setShowing, addRequest }) => {
 
   useEffect(() => {
     if (country) {
-      var countryCode = country.toLowerCase()
-      const path = 'https://raw.githubusercontent.com/kevnw/ladybug-assets/master/data.json'
-      axios.get(path)
+      var countryCode = country.toLowerCase();
+      const path =
+        'https://raw.githubusercontent.com/kevnw/ladybug-assets/master/data.json';
+      axios
+        .get(path)
         .then((response) => setUniList(response.data[0][`${countryCode}`]));
       // console.log(countryCode)
       // setUniList(data[0][`${countryCode}`])
