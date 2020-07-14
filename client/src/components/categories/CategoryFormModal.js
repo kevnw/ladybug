@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import ModalDropdown from '../ModalDropdown';
 import { Dropdown } from 'semantic-ui-react';
 import { addRequest } from '../../actions/request';
-import data from '../../data'
+// import data from '../../data'
 
 const CategoryFormModal = ({ setShowing, addRequest }) => {
   const countryOptions = [
@@ -49,11 +49,11 @@ const CategoryFormModal = ({ setShowing, addRequest }) => {
   useEffect(() => {
     if (country) {
       var countryCode = country.toLowerCase()
-      // const path = `university/${countryCode}.json`
-      // axios.get(path)
-        // .then((response) => setUniList(response.data));
+      const path = 'https://raw.githubusercontent.com/kevnw/ladybug-assets/master/data.json'
+      axios.get(path)
+        .then((response) => setUniList(response.data[0][`${countryCode}`]));
       // console.log(countryCode)
-      setUniList(data[0][`${countryCode}`])
+      // setUniList(data[0][`${countryCode}`])
     }
   }, [country]);
 
