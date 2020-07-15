@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import ConfirmationModal from '../ConfirmationModal';
+import ProfileModal from '../ProfileModal';
 import ReactAvatarEditor from 'react-avatar-editor';
 import { changePicture } from '../../actions/profile';
 
@@ -138,7 +138,7 @@ const ChangeProfileModal = ({ setShowingPhoto, profile, changePicture }) => {
   );
 
   return (
-    <ConfirmationModal
+    <ProfileModal
       onDismiss={closeModalHandler}
       title="Profile Photo"
       content={content}
