@@ -49,11 +49,8 @@ const CategoryFormModal = ({ setShowing, addRequest }) => {
     if (country) {
       var countryCode = country.toLowerCase()
       const path = `assets/university/${country}.json`
-      // 'https://raw.githubusercontent.com/kevnw/ladybug-assets/master/data.json'
       axios.get(path)
         .then((response) => setUniList(response.data));
-      // console.log(countryCode)
-      // setUniList(data[0][`${countryCode}`])
     }
   }, [country]);
 
@@ -68,7 +65,7 @@ const CategoryFormModal = ({ setShowing, addRequest }) => {
   const onSubmit = (e) => {
     e.preventDefault();
     // console.log(formData);
-    addRequest(formData);
+    addRequest(formData.data);
     closeModalHandler();
   };
 

@@ -234,9 +234,7 @@ exports.uploadProfilePicture = async (req, res) => {
     const user = await findUserById(req.body._id)
     const profile = await findProfileByUserId(user._id)
     const uploadedResponse = await cloudinary.uploader.
-    upload(fileStr, {
-      upload_preset: 'profile_picture'
-    })
+    upload(fileStr.data)
 
     const pictureUrl = uploadedResponse.secure_url
     user.avatar = pictureUrl
