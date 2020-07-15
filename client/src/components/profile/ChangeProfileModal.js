@@ -19,6 +19,10 @@ const ChangeProfileModal = ({ setShowingPhoto, profile }) => {
     height: 200 
   });
 
+  const [formData, setFormData] = useState({
+    data: ''
+  })
+
   const handleNewImage = e => {
     setState({ ...state, image: e.target.files[0] })
   }
