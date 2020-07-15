@@ -17,43 +17,43 @@ const ChangeProfileModal = ({ setShowingPhoto, profile, changePicture }) => {
     preview: null,
     width: 200,
     height: 200,
-    editor: null
+    editor: null,
   });
 
   const [formData, setFormData] = useState({
-    data: ''
-  })
+    data: '',
+  });
 
-  const handleNewImage = e => {
-    const file = e.target.files[0]
-    const { type } = file
+  const handleNewImage = (e) => {
+    const file = e.target.files[0];
+    const { type } = file;
     if (type.endsWith('jpeg') || type.endsWith('png') || type.endsWith('jpg')) {
-      setState({ ...state, image: file })
+      setState({ ...state, image: file });
     }
-  }
+  };
 
-  const setEditorRef = editor => {
-    state.editor = editor
-  }
+  const setEditorRef = (editor) => {
+    state.editor = editor;
+  };
 
   const onCrop = () => {
-    const { editor } = state
+    const { editor } = state;
     if (editor) {
       const url = editor.getImageScaledToCanvas().toDataURL();
       setState({ ...state, image: url, scale: 1 });
-      formData.data = url
-      // setFormData({ data: url })
+      formData.data = url;
+      // setFormData({ data: url });
     }
-  }
+  };
 
-  const handleScale = e => {
-    const scale = parseFloat(e.target.value)
-    setState({ ...state, scale: scale })
-  }
+  const handleScale = (e) => {
+    const scale = parseFloat(e.target.value);
+    setState({ ...state, scale: scale });
+  };
 
-  const handlePositionChange = position => {
-    setState({ ...state, position: position })
-  }
+  const handlePositionChange = (position) => {
+    setState({ ...state, position: position });
+  };
 
   const closeModalHandler = () => {
     setShowingPhoto(false);
@@ -61,18 +61,23 @@ const ChangeProfileModal = ({ setShowingPhoto, profile, changePicture }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    // console.log(formData)
-    changePicture(formData)
+    // console.log(formData);
+    changePicture(formData);
     closeModalHandler();
     // console.log(newProfile);
   };
 
   const actions = (
     <Fragment>
-      <button onClick={(e) => {
-        onCrop()
-        onSubmit(e)}
-        } className="ui button red-button">Save</button>
+      <button
+        onClick={(e) => {
+          onCrop();
+          onSubmit(e);
+        }}
+        className="ui button red-button"
+      >
+        Save
+      </button>
       <button onClick={closeModalHandler} className="ui button">
         Cancel
       </button>
@@ -144,7 +149,7 @@ const ChangeProfileModal = ({ setShowingPhoto, profile, changePicture }) => {
 
 ChangeProfileModal.propTypes = {
   //   updateProfile: PropTypes.func.isRequired,
-  changePicture: PropTypes.func.isRequired
+  changePicture: PropTypes.func.isRequired,
 };
 
 export default connect(null, { changePicture })(ChangeProfileModal);

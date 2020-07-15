@@ -10,6 +10,7 @@ import {
   VERIFY_FAIL,
   SAVE_POST,
   UNSAVE_POST,
+  UPDATE_PROFILE,
   // ACCOUNT_DELETED,
 } from '../actions/types';
 
@@ -67,6 +68,13 @@ export default function (state = initialState, action) {
         ...state,
         token: null,
         isAuthenticated: false,
+        loading: false,
+      };
+    case UPDATE_PROFILE:
+      return {
+        ...state,
+        user: { ...state.user, avatar: payload.avatar },
+        isAuthenticated: true,
         loading: false,
       };
     default:

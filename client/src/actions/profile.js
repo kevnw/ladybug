@@ -184,7 +184,7 @@ export const changePicture = (data) => async (dispatch) => {
 
   const body = JSON.stringify({ data });
   try {
-    const res = await axios.post('/profiles/picture', body, config)
+    const res = await axios.post('/profiles/picture', body, config);
 
     dispatch({
       type: UPDATE_PROFILE,
@@ -197,4 +197,4 @@ export const changePicture = (data) => async (dispatch) => {
       payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
-}
+};
