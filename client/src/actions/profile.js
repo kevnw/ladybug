@@ -173,3 +173,28 @@ export const deleteEducation = (id) => async (dispatch) => {
     });
   }
 };
+
+// Change profile picture
+export const changePicture = (data) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const body = JSON.stringify({ data });
+  try {
+    const res = await axios.post('/profiles/picture', body, config)
+
+    dispatch({
+      type: UPDATE_PROFILE,
+      payload: res.data,
+    });
+    dispatch(setAlert('Profile Picture successfully changed!', 'success'));
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+}

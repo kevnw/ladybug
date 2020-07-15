@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import ModalDropdown from '../ModalDropdown';
 import { Dropdown } from 'semantic-ui-react';
 import { addRequest } from '../../actions/request';
-// import data from '../../data'
 
 const CategoryFormModal = ({ setShowing, addRequest }) => {
   const countryOptions = [
@@ -27,12 +26,12 @@ const CategoryFormModal = ({ setShowing, addRequest }) => {
     { key: 'ph', value: 'philippines', flag: 'ph', text: 'Philippines' },
     { key: 'sg', value: 'singapore', flag: 'sg', text: 'Singapore' },
     { key: 'za', value: 'southafrica', flag: 'za', text: 'South Africa' },
-    { key: 'es', value: 'Spain', flag: 'es', text: 'Spain' },
-    { key: 'ch', value: 'Switzerland', flag: 'ch', text: 'Switzerland' },
-    { key: 'tw', value: 'Taiwan', flag: 'tw', text: 'Taiwan' },
-    { key: 'th', value: 'Thailand', flag: 'th', text: 'Thailand' },
-    { key: 'us', value: 'UnitedStates', flag: 'us', text: 'United States' },
-    { key: 'vn', value: 'Vietnam', flag: 'vn', text: 'Vietnam' },
+    { key: 'es', value: 'spain', flag: 'es', text: 'Spain' },
+    { key: 'ch', value: 'switzerland', flag: 'ch', text: 'Switzerland' },
+    { key: 'tw', value: 'taiwan', flag: 'tw', text: 'Taiwan' },
+    { key: 'th', value: 'thailand', flag: 'th', text: 'Thailand' },
+    { key: 'us', value: 'unitedstates', flag: 'us', text: 'United States' },
+    { key: 'vn', value: 'vietnam', flag: 'vn', text: 'Vietnam' },
   ];
   const [country, setCountry] = useState(null);
   const [uniList, setUniList] = useState([]);
@@ -49,7 +48,7 @@ const CategoryFormModal = ({ setShowing, addRequest }) => {
   useEffect(() => {
     if (country) {
       var countryCode = country.toLowerCase()
-      const path = `/university/${country}.json`
+      const path = `assets/university/${country}.json`
       // 'https://raw.githubusercontent.com/kevnw/ladybug-assets/master/data.json'
       axios.get(path)
         .then((response) => setUniList(response.data));

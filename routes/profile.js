@@ -74,4 +74,13 @@ router.delete(
   ProfileController.deleteEducation
 )
 
+/*
+ * Change profile picture route
+ */
+router.post(
+  '/picture',
+  AuthController.verifyToken,
+  ProfileController.uploadProfilePicture
+)
+
 module.exports = router

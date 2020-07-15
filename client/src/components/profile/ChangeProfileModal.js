@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Modal from '../Modal';
 import ReactAvatarEditor from 'react-avatar-editor'
+import { changePicture } from '../../actions/profile'
 
 const ChangeProfileModal = ({ setShowingPhoto, profile }) => {
   const src = profile.avatar;
