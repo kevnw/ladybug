@@ -80,7 +80,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
                   <div className="ui small vertical menu">
                     {/* CHANGE LINK !!!! */}
                     <Link to="/saved-posts" className="item">
-                      <i className="heart icon"></i>Saved posts
+                      <i className="bookmark icon"></i>Saved posts
                     </Link>
                     <Link to="/#!" className="item">
                       <i className="bell icon"></i>Notifications

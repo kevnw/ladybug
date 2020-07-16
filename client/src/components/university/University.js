@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Alert from '../layout/Alert';
-import CategoryItem from '../categories/CategoryItem';
 import CategoryFormModalFixed from '../categories/CategoryFormModalFixed';
+import ModuleList from './ModuleList';
 import { getModulesInUniversity } from '../../actions/module';
 import { getUniversity } from '../../actions/university';
 
@@ -47,10 +47,6 @@ const University = ({
             className="university-picture"
           />
         </div>
-        {/* <div className="ui segment center-text">
-        <h1 className="large">National University of Singapore</h1>
-        <div className="lead">Singapore</div>
-      </div> */}
         <div className="ui segment">
           <h3>Overview:</h3>
           <p>{`${university.university.overview}`}</p>
@@ -64,30 +60,7 @@ const University = ({
     loading || !modulesInUniversity ? (
       <div></div>
     ) : (
-      <Fragment>
-        <button
-          onClick={() => setShowing(true)}
-          className="ui button red-button"
-        >
-          <i className="ui icon plus"></i>
-          Request New Module
-        </button>
-        <div
-          className="ui segment"
-          style={{ border: 'none', boxShadow: 'none' }}
-        >
-          <div className="ui three doubling cards">
-            {modulesInUniversity.length > 0 &&
-              modulesInUniversity.map((module) => (
-                <CategoryItem
-                  module={module}
-                  key={module._id}
-                  // university={match.params.uni}
-                />
-              ))}
-          </div>
-        </div>
-      </Fragment>
+      <ModuleList modules={modulesInUniversity} setShowing={setShowing} />
     );
 
   return university.loading ||
