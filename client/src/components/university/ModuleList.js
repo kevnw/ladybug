@@ -15,7 +15,6 @@ const ModuleList = ({ modules, setShowing }) => {
         module.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
         module.title.toLowerCase().includes(e.target.value.toLowerCase())
     );
-    // filteredResult = filteredResult.map((module) => console.log(module));
     setState({ results: filteredResult, value: e.target.value });
   };
   return (
