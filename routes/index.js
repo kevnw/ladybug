@@ -28,4 +28,7 @@ router.use('/contributions', require('./contribution'))
 // Load Filter route
 router.use('/filters', require('./filter'))
 
+// Load Notification route
+router.use('/notifications', require('./notification'))
+
 module.exports = router
