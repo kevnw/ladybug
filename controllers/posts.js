@@ -3,6 +3,7 @@ const User = require('../models/User');
 const Module = require('../models/Module');
 const University = require('../models/University');
 
+const notif = require('../middleware/notification')
 const {
   handleError,
   handleSuccess,
@@ -18,7 +19,7 @@ const {
 const findUserById = async (id) => {
   return new Promise((resolve, reject) => {
     User.findOne({ _id: id })
-      .select('_id name avatar saved')
+      .select('_id name avatar saved notifications')
       .then((user) => {
         if (!user) {
           reject(buildErrObject(422, 'User does not exist'));
@@ -260,6 +261,12 @@ exports.upvote = async (req, res) => {
       post.upvote = temp;
     }
 
+    const data = {
+      type: 'upvote',
+      action: post._id
+    }
+    
+    await notif.createNotification(data, user)
     post.nOfUpvote = post.upvote.length;
     post.save();
     handleSuccess(res, buildSuccObject(post));
@@ -318,6 +325,12 @@ exports.comment = async (req, res) => {
       avatar: user.avatar,
     };
 
+    const data = {
+      type: 'comment',
+      action: post._id
+    }
+
+    await notif.createNotification(data, user)
     post.comments.push(comment);
     post.save();
     handleSuccess(res, buildSuccObject(post.comments));

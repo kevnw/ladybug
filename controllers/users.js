@@ -262,7 +262,6 @@ exports.getContributions = async (req, res) => {
     const endDate = new Date(req.params.date)
     const startDate = new Date(req.params.date).setDate(endDate.getDate() - 3)
     const allPost = await findAllPostRange(startDate, endDate)
-    console.log(allPost)
     for (const element of allPost) {
       if ("" + element.author == "" + user._id) {
         

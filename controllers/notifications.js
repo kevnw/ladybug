@@ -63,30 +63,6 @@ const deleteNotifFromDb = async (id) => {
  * Public functions *
  ********************/
 
-exports.createNotification = async (req, res) => {
-  try {
-    var newNotif = new Notification({
-      title: req.body.title,
-      type: req.body.type,
-      user: req.body.user,
-      action: req.body.action
-    })
-
-    const user = await findUserById(newNotif.user)
-    user.notifications.push(newNotif._id)
-
-    user.save()
-    newNotif
-      .save()
-      .then(notif =>
-        handleSuccess(res, buildSuccObject(notif))
-      )
-      .catch(error => handleError(res, buildErrObject(422, error.message)));
-  } catch (err) {
-    handleError(res, buildErrObject(422, err.message))
-  }
-}
-
 exports.deleteNotification = async (req, res) => {
   try {
     const notifId = req.params.notifId

@@ -2,10 +2,6 @@ const mongoose = require('mongoose')
 
 const NotificationSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
-      required: true
-    },
     read: {
       type: Boolean,
       default: false,
@@ -18,10 +14,6 @@ const NotificationSchema = new mongoose.Schema(
     action: {
       type: mongoose.Schema.Types.ObjectId, 
       required: true
-    },
-    user: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'User' 
     }
   }
 )

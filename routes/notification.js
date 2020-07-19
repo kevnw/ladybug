@@ -5,15 +5,8 @@ const express = require('express')
 const router = express.Router()
 
 /*
- * Create notification route
+ * Get user notification route
  */
-router.post(
-  '/add',
-  AuthController.verifyToken,
-  auth.roleAuthorization(['admin', 'superadmin']),
-  NotificationController.createNotification
-);
-
 router.get(
   '/',
   AuthController.verifyToken,
