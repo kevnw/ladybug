@@ -4,7 +4,7 @@
   z-index: 1;
   width: 100%;
   top: 0;
-  opacity: 0.95;
+  /* opacity: 0.95; */
 }
 
 /* Utilities */
@@ -36,6 +36,18 @@
   margin-bottom: 1rem;
 }
 
+.small-text {
+  font-size: small;
+  color: #b3b3b3 !important;
+}
+
+.grey-text {
+  color: grey !important;
+}
+
+.read-background {
+  background-color: blueviolet !important;
+}
 /* Image */
 .large-image {
   position: relative;
@@ -86,6 +98,12 @@
   .navbar {
     display: block;
     text-align: center;
+  }
+}
+
+@media (max-width: 540px) {
+  .hidemobile-content {
+    display: none !important;
   }
 }
 

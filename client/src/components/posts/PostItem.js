@@ -133,7 +133,7 @@ const PostItem = ({
                 rel="noopener noreferrer"
                 className="ui icon small button"
               >
-                <i className="conversation icon"></i> Discussion
+                <i className="conversation icon"></i>
               </Link>
               <div className="ui basic label">{`${comments.length}`}</div>
             </div>
