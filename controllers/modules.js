@@ -3,6 +3,7 @@ const Post = require('../models/Post')
 const University = require('../models/University')
 const axios = require('axios')
 
+const notif = require('../middleware/notification')
 const {
   handleError,
   handleSuccess,
@@ -37,6 +38,22 @@ const findModuleyById = async (id) => {
       .select('_id name title description posts followers university')
       .then(mod => {
         resolve(mod)
+      })
+      .catch(err => reject(buildErrObject(422, err.message)));
+  });
+};
+
+/* Finds user by id  */
+const findUserById = async id => {
+  return new Promise((resolve, reject) => {
+    User.findOne({ _id: id })
+      .select('name email role verified _id following avatar notifications')
+      .then(user => {
+        if (!user) {
+          reject(buildErrObject(422, 'User does not exist'));
+        } else {
+          resolve(user); // returns mongoose object
+        }
       })
       .catch(err => reject(buildErrObject(422, err.message)));
   });
@@ -111,6 +128,23 @@ const sortedModule = async () => {
   })
 }
 
+/* Finds request by id*/
+const findRequestById = async (id) => {
+  return new Promise((resolve, reject) => {
+    Request.findOne({ _id: id })
+      .select('_id university module counter')
+      .then(request => {
+        if (!request) {
+          reject(buildErrObject(422, 'Request does not exist'));
+        } else {
+          resolve(request); // returns mongoose object
+        }
+      })
+      .catch(err => reject(buildErrObject(422, err.message)));
+  });
+};
+
+
  /********************
  * Public functions *
  ********************/
@@ -132,6 +166,8 @@ exports.getPostList = async (req, res) => {
 
 exports.createModule = async (req, res) => {
   try {
+    const request = await findRequestById(req.body.request)
+    const admin = req.body._id
     var newModule = new Module({
       name: req.body.module.name,
       title: req.body.module.title,
@@ -139,6 +175,16 @@ exports.createModule = async (req, res) => {
       university: req.body.module.university,
       nOfFollowers: 0
     });
+
+    const data = {
+      type: 'request',
+      action: newModule._id
+    }
+
+    for (const element of request.counter) {
+      const user = await findUserById(element) 
+      notif.createNotification(data, user, admin)
+    }
 
     const uni = await findUniversityById(newModule.university)
     const checkMod = await findModuleyByName(newModule.name, uni._id)
