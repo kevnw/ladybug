@@ -66,7 +66,10 @@ const deleteNotifFromDb = async (id) => {
 exports.deleteNotification = async (req, res) => {
   try {
     const notifId = req.params.notifId
-    await deleteNotifFromDb(notifId)
+    const notif = await findNotificationById(notifId) 
+    if (notif.type != 'request') {
+      await deleteNotifFromDb(notifId)
+    }
     const user = await findUserById(req.body._id)
 
     const temp = []

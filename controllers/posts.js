@@ -251,6 +251,11 @@ exports.upvote = async (req, res) => {
 
     if (upvote_idx <= -1) {
       post.upvote.unshift(user._id);
+      const data = {
+        type: 'upvote',
+        action: post._id
+      }
+      await notif.createNotification(data, targetUser, user._id)
     } else {
       const temp = [];
       for (i = 0; i < post.upvote.length; i++) {
@@ -261,12 +266,7 @@ exports.upvote = async (req, res) => {
       post.upvote = temp;
     }
 
-    const data = {
-      type: 'upvote',
-      action: post._id
-    }
     
-    await notif.createNotification(data, targetUser)
     post.nOfUpvote = post.upvote.length;
     post.save();
     handleSuccess(res, buildSuccObject(post));
@@ -331,7 +331,7 @@ exports.comment = async (req, res) => {
       action: post._id
     }
 
-    await notif.createNotification(data, targetUser)
+    await notif.createNotification(data, targetUser, user._id)
     post.comments.push(comment);
     post.save();
     handleSuccess(res, buildSuccObject(post.comments));

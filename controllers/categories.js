@@ -61,6 +61,8 @@ exports.getUniversityList = async (req, res) => {
 exports.createUniAndModule = async (req, res) => {
   try {
     const request = await findRequestById(req.body.request)
+    const admin = req.body._id
+
     var newUni = new University({
       name: req.body.university.name,
       acronym: req.body.university.acronym,
@@ -84,8 +86,9 @@ exports.createUniAndModule = async (req, res) => {
 
     for (const element of request.counter) {
       const user = await findUserById(element) 
-      notif.createNotification(data, user)
+      notif.createNotification(data, user, admin)
     }
+
     newModule.uniAcronym = newUni.acronym
     newUni.modules.push(newModule._id)
     newUni.save()

@@ -1,10 +1,10 @@
 const Notification = require('../models/Notification')
 
-exports.createNotification = async (data, user) => {
+exports.createNotification = async (data, user, actor) => {
   try {
     var newNotif = new Notification({
       type: data.type,
-      user: user._id,
+      user: actor,
       action: data.action,
       date: new Date()
     })
