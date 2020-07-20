@@ -57,14 +57,15 @@ const findAllPost = async () => {
   })
 }
 
-const findAllPostRange = async (start, end) => {
+const findAllPostRange = async (author, start, end) => {
   return new Promise((resolve, reject) => {
     Post.find(
       {
         "date": {
           "$gte": start, 
           "$lt": end
-        }
+        },
+        author: author
       }
     )
     .lean()
@@ -261,11 +262,9 @@ exports.getContributions = async (req, res) => {
     const user = await findUserById(req.body._id)
     const endDate = new Date(req.params.date)
     const startDate = new Date(req.params.date).setDate(endDate.getDate() - 3)
-    const allPost = await findAllPostRange(startDate, endDate)
+    const allPost = await findAllPostRange(user._id, startDate, endDate)
     for (const element of allPost) {
-      if ("" + element.author == "" + user._id) {
-        
-      }  
+      
     }
 
     handleSuccess(res, buildSuccObject("API CREATED"))
