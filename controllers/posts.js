@@ -235,7 +235,7 @@ exports.upvote = async (req, res) => {
   try {
     const post = await findPostById(req.params.postId);
     const user = await findUserById(req.body._id);
-
+    const targetUser = await findUserById(post.author)
     const downvote_idx = post.downvote.indexOf(user._id);
     const upvote_idx = post.upvote.indexOf(user._id);
 
@@ -266,7 +266,7 @@ exports.upvote = async (req, res) => {
       action: post._id
     }
     
-    await notif.createNotification(data, user)
+    await notif.createNotification(data, targetUser)
     post.nOfUpvote = post.upvote.length;
     post.save();
     handleSuccess(res, buildSuccObject(post));
@@ -317,6 +317,7 @@ exports.comment = async (req, res) => {
   try {
     const post = await findPostById(req.params.postId);
     const user = await findUserById(req.body._id);
+    const targetUser = await findUserById(post.author)
 
     var comment = {
       author: user._id,
@@ -330,7 +331,7 @@ exports.comment = async (req, res) => {
       action: post._id
     }
 
-    await notif.createNotification(data, user)
+    await notif.createNotification(data, targetUser)
     post.comments.push(comment);
     post.save();
     handleSuccess(res, buildSuccObject(post.comments));

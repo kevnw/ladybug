@@ -100,8 +100,13 @@ exports.setNotificationRead = async (req, res) => {
 exports.getNotificationList = async (req, res) => {
   try {
     const user = await findUserById(req.body._id)
+    const temp = []
+    for (const element of user.notifications) {
+      const notif = await findNotificationById(element)
+      temp.push(notif)
+    }
 
-    handleSuccess(res, buildSuccObject(user))
+    handleSuccess(res, buildSuccObject(temp))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message))
   }
