@@ -59,7 +59,7 @@ const CommentItem = ({
 
             <div className="metadata">
               <span className="date">
-                Posted on <Moment format="YYYY/MM/DD">{date}</Moment>
+                <Moment fromNow>{date}</Moment>
               </span>
             </div>
             <div className="text">{text}</div>

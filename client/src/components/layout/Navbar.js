@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import Badge from '@material-ui/core/Badge';
 import NotificationDropdown from '../notifications/NotificationsDropdown';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -43,17 +42,6 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
                 )}
 
                 <div className="ui simple dropdown item">
-                  <Badge
-                    badgeContent={4}
-                    color="error"
-                    anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    // invisible
-                  >
-                    <i className="bell icon" style={{ margin: 'auto' }}></i>
-                  </Badge>
                   <NotificationDropdown />
                 </div>
                 <div className="ui simple dropdown vertically fitted item">
