@@ -348,20 +348,35 @@ exports.login = async (req, res) => {
       user.loginAttempts = 0
       await saveLoginAttemptsToDB(user)
       const token = generateToken(user._id)
-
-      handleSuccess(
-        res,
-        buildSuccObject({
-          user: {
-            name: user.name,
-            initials: user.name[0],
-            email: user.email,
-            role: user.role,
-            verified: user.verified
-          },
+      if (user.verified) {
+        handleSuccess(
+          res,
+          buildSuccObject({
+            user: {
+              name: user.name,
+              initials: user.name[0],
+              email: user.email,
+              role: user.role,
+              verified: user.verified
+            },
+            token
+          })
+        );
+      } else {
+        const responseToken = {
+          user,
           token
+        }
+        
+        UserMailer.verifyRegistration(responseToken)
+        .then((info, response) => {
+          handleSuccess(
+            res,
+            buildSuccObject(responseToken)
+          );
         })
-      );
+        .catch(err => handleError(res, buildErrObject(422, err.message)));
+      }
     }
   } catch (err) {
     handleError(res, buildErrObject(422, err.message));

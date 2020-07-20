@@ -5,7 +5,8 @@ exports.createNotification = async (data, user) => {
     var newNotif = new Notification({
       type: data.type,
       user: user._id,
-      action: data.action
+      action: data.action,
+      date: new Date()
     })
 
     user.notifications.push(newNotif._id)

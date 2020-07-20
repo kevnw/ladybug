@@ -14,6 +14,9 @@ const NotificationSchema = new mongoose.Schema(
     action: {
       type: mongoose.Schema.Types.ObjectId, 
       required: true
+    },
+    date: {
+      type: Date
     }
   }
 )
