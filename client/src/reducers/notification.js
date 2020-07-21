@@ -3,6 +3,7 @@ import {
   MARK_NOTIFICATION_AS_READ,
   DELETE_NOTIFICATION,
   NOTIFICATION_ERROR,
+  CLEAR_NOTIFICATIONS,
 } from '../actions/types';
 
 const initialState = {
@@ -36,6 +37,12 @@ export default function (state = initialState, action) {
         notifications: state.notifications.filter(
           (notification) => notification._id !== payload
         ),
+        loading: false,
+      };
+    case CLEAR_NOTIFICATIONS:
+      return {
+        ...state,
+        notifications: [],
         loading: false,
       };
     case NOTIFICATION_ERROR:

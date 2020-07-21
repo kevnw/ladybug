@@ -12,9 +12,11 @@ import {
   VERIFY_FAIL,
   SAVE_POST,
   UNSAVE_POST,
+  CLEAR_NOTIFICATIONS,
   //   CLEAR_PROFILE,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
+import { getNotifications } from './notification';
 
 // Load User
 export const loadUser = () => async (dispatch) => {
@@ -85,6 +87,7 @@ export const login = (email, password) => async (dispatch) => {
     });
 
     dispatch(loadUser());
+    dispatch(getNotifications());
   } catch (err) {
     // console.log(err.response.data);
     const errors = err.response.data.errors;
@@ -102,6 +105,7 @@ export const login = (email, password) => async (dispatch) => {
 export const logout = () => (dispatch) => {
   //TODO
   // dispatch({ type: CLEAR_PROFILE });
+  dispatch({ type: CLEAR_NOTIFICATIONS });
   dispatch({ type: LOGOUT });
 };
 

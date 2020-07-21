@@ -20,13 +20,16 @@ const Notifications = ({
           <div className="ui stackable grid">
             <div className="ten wide centered column">
               <h1 className="red-text">Notifications</h1>
-              {notifications.length > 0 &&
+              {notifications.length > 0 ? (
                 notifications.map((notification) => (
                   <NotificationsItem
                     key={notification._id}
                     notification={notification}
                   />
-                ))}
+                ))
+              ) : (
+                <div>You have no notifications</div>
+              )}
               <div className="ui hidden divider"></div>
               <div className="ui hidden divider"></div>
             </div>

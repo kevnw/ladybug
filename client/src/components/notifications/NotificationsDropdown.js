@@ -18,6 +18,7 @@ const NotificationsDropdown = ({
   );
   return (
     !loading &&
+    notifications &&
     unreadNotifications && (
       <Fragment>
         <Badge
@@ -40,7 +41,7 @@ const NotificationsDropdown = ({
         >
           <div className="header">Notifications</div>
           <div className="divider"></div>
-          {notifications.length > 0 &&
+          {notifications.length > 0 ? (
             notifications.map(
               (notification, index) =>
                 index < 3 && (
@@ -49,7 +50,12 @@ const NotificationsDropdown = ({
                     notification={notification}
                   />
                 )
-            )}
+            )
+          ) : (
+            <div className="center-text small-text">
+              You have no notifications
+            </div>
+          )}
           <div className="divider"></div>
           <div className="header center-text">
             <Link to="/notifications">
