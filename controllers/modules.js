@@ -1,6 +1,8 @@
 const Module = require('../models/Module')
 const Post = require('../models/Post')
 const University = require('../models/University')
+const Request = require('../models/Request')
+
 const axios = require('axios')
 
 const notif = require('../middleware/notification')
