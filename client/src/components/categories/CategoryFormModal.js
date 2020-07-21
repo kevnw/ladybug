@@ -47,10 +47,9 @@ const CategoryFormModal = ({ setShowing, addRequest }) => {
 
   useEffect(() => {
     if (country) {
-      var countryCode = country.toLowerCase()
-      const path = `assets/university/${country}.json`
-      axios.get(path)
-        .then((response) => setUniList(response.data));
+      var countryCode = country.toLowerCase();
+      const path = `assets/university/${country}.json`;
+      axios.get(path).then((response) => setUniList(response.data));
     }
   }, [country]);
 
@@ -64,8 +63,7 @@ const CategoryFormModal = ({ setShowing, addRequest }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    // console.log(formData);
-    addRequest(formData.data);
+    addRequest(formData);
     closeModalHandler();
   };
 

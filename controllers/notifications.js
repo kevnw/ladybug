@@ -1,49 +1,49 @@
-const User = require('../models/User')
-const Notification = require('../models/Notification')
+const User = require('../models/User');
+const Notification = require('../models/Notification');
 
 const {
   handleError,
   handleSuccess,
   buildErrObject,
-  buildSuccObject
+  buildSuccObject,
 } = require('../middleware/utils');
 
 /*********************
  * Private functions *
  *********************/
 
- /**
+/**
  * Finds notification by ID
  * @param {string} id - universitiy's id
  */
 const findNotificationById = async (notifId) => {
   return new Promise((resolve, reject) => {
     Notification.findOne({ _id: notifId })
-      .select('_id title type user read action')
-      .then(notif => {
+      .select('_id title type user read action date')
+      .then((notif) => {
         if (!notif) {
           reject(buildErrObject(422, 'Notification does not exist'));
         } else {
           resolve(notif); // returns mongoose object
         }
       })
-      .catch(err => reject(buildErrObject(422, err.message)));
-  })
-}
+      .catch((err) => reject(buildErrObject(422, err.message)));
+  });
+};
 
 /* Finds user by id  */
-const findUserById = async id => {
+const findUserById = async (id) => {
   return new Promise((resolve, reject) => {
     User.findOne({ _id: id })
       .select('name email role verified _id following avatar notifications')
-      .then(user => {
+      .then((user) => {
         if (!user) {
           reject(buildErrObject(422, 'User does not exist'));
         } else {
           resolve(user); // returns mongoose object
         }
       })
-      .catch(err => reject(buildErrObject(422, err.message)));
+      .catch((err) => reject(buildErrObject(422, err.message)));
   });
 };
 
@@ -65,52 +65,52 @@ const deleteNotifFromDb = async (id) => {
 
 exports.deleteNotification = async (req, res) => {
   try {
-    const notifId = req.params.notifId
-    const notif = await findNotificationById(notifId) 
+    const notifId = req.params.notifId;
+    const notif = await findNotificationById(notifId);
     if (notif.type != 'request') {
-      await deleteNotifFromDb(notifId)
+      await deleteNotifFromDb(notifId);
     }
-    const user = await findUserById(req.body._id)
+    const user = await findUserById(req.body._id);
 
-    const temp = []
+    const temp = [];
     for (const element of user.notifications) {
       if (element != notifId) {
-        temp.push(element)
+        temp.push(element);
       }
     }
 
-    user.notifications = temp
-    user.save()
-    handleSuccess(res, buildSuccObject(user.notifications))
+    user.notifications = temp;
+    user.save();
+    handleSuccess(res, buildSuccObject(user.notifications));
   } catch (err) {
-    handleError(res, buildErrObject(422, err.message))
+    handleError(res, buildErrObject(422, err.message));
   }
-}
+};
 
 exports.setNotificationRead = async (req, res) => {
   try {
-    const notif = await findNotificationById(req.params.notifId)
+    const notif = await findNotificationById(req.params.notifId);
 
-    notif.read = true
-    notif.save()
+    notif.read = true;
+    notif.save();
 
-    handleSuccess(res, buildSuccObject(notif))
+    handleSuccess(res, buildSuccObject(notif));
   } catch (err) {
-    handleError(res, buildErrObject(422, err.message))
+    handleError(res, buildErrObject(422, err.message));
   }
-}
+};
 
 exports.getNotificationList = async (req, res) => {
   try {
-    const user = await findUserById(req.body._id)
-    const temp = []
+    const user = await findUserById(req.body._id);
+    const temp = [];
     for (const element of user.notifications) {
-      const notif = await findNotificationById(element)
-      temp.push(notif)
+      const notif = await findNotificationById(element);
+      temp.push(notif);
     }
 
-    handleSuccess(res, buildSuccObject(temp))
+    handleSuccess(res, buildSuccObject(temp));
   } catch (err) {
-    handleError(res, buildErrObject(422, err.message))
+    handleError(res, buildErrObject(422, err.message));
   }
-}
+};

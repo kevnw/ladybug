@@ -2,6 +2,7 @@ const Module = require('../models/Module')
 const Post = require('../models/Post')
 const University = require('../models/University')
 const Request = require('../models/Request')
+const User = require('../models/User')
 
 const axios = require('axios')
 

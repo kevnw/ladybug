@@ -71,7 +71,7 @@ const PostItem = ({
               </Link>
             </div>
             <div className="ui right floated twelve wide column right-text">
-              Posted on <Moment format="DD/MM/YYYY">{date}</Moment>
+              <Moment fromNow>{date}</Moment>
             </div>
           </div>
         </div>

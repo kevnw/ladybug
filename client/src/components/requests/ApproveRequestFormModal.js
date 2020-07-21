@@ -27,6 +27,7 @@ const ApproveRequestFormModal = ({
       description: '',
       university: '',
     },
+    request: request._id,
   });
 
   useEffect(() => {
@@ -62,7 +63,7 @@ const ApproveRequestFormModal = ({
   const onSubmit = (e) => {
     e.preventDefault();
     if (uni) {
-      const newModule = { module: module };
+      const newModule = { module: module, request: request._id };
       addModule(newModule, request._id);
       // console.log(newModule);
     } else {
