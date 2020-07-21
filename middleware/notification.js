@@ -9,7 +9,7 @@ exports.createNotification = async (data, user, actor) => {
       date: new Date()
     })
 
-    user.notifications.push(newNotif._id)
+    user.notifications.unshift(newNotif._id)
 
     user.save()
     newNotif.save()
