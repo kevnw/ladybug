@@ -10,7 +10,7 @@ import HeaderFormModal from './HeaderFormModal';
 import EducationFormModal from './EducationFormModal';
 import ExperienceFormModal from './ExperienceFormModal';
 import { getPostsByUser, getPostsByCurrentUser } from '../../actions/post';
-import { getProfileById, getCurrentProfile } from '../../actions/profile';
+import { getProfileById, getCurrentProfile, getContributions } from '../../actions/profile';
 import ProfilePosts from './ProfilePosts';
 import Graph from './Graph';
 import 'frappe-charts/dist/frappe-charts.min.css';
@@ -19,6 +19,7 @@ const Profile = ({
   match,
   getProfileById,
   getCurrentProfile,
+  getContributions,
   getPostsByCurrentUser,
   getPostsByUser,
   profile,
@@ -29,11 +30,13 @@ const Profile = ({
     if (match.params.id === 'me') {
       getPostsByCurrentUser();
       getCurrentProfile();
+      getContributions();
     } else {
       getPostsByUser(match.params.id);
       getProfileById(match.params.id);
+      getContributions();
     }
-  }, [getProfileById, getCurrentProfile, match.params.id]);
+  }, [getProfileById, getCurrentProfile, getContributions, match.params.id]);
 
   const [activeTab, setActiveTab] = useState('overview');
   const [isShowingBio, setShowingBio] = useState(false);
@@ -44,14 +47,10 @@ const Profile = ({
   const currentProfile = profile.profile;
   const profileLoading = profile.loading;
   const id = match.params.id;
-
+  
   const [graphProperty, setGraphProperty] = useState({
     data: {
-      dataPoints: {
-        '1451606400': 2, 
-        '1454284800': 10,
-        '1595347200': 12
-      }, // object with timestamp-value pairs
+      dataPoints: profile.contributions, // object with timestamp-value pairs
         start: new Date(new Date().setMonth(new Date().getMonth() - 12)),
         end: new Date()      // Date objects
       },
@@ -60,7 +59,7 @@ const Profile = ({
       colors: ['#ebedf0', '#e8c4ba', '#d88f7d', '#c95b40', '#b82601']
   })
   
-const statistics = <Graph 
+const statistics = ( profile.contributions && <Graph 
   title="Contribution Graph"
   type="heatmap"
   data={ graphProperty.data }
@@ -68,7 +67,7 @@ const statistics = <Graph
   discreteDomains = { graphProperty.discreteDomains }
   colors= { graphProperty.colors }
   onSelect={a => console.log(a.index)}>
-</Graph>
+</Graph> )
 
   return (
     <Fragment>
@@ -181,6 +180,7 @@ Profile.propTypes = {
   getProfileById: PropTypes.func.isRequired,
   getPostsByCurrentUser: PropTypes.func.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
+  getContributions: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -194,4 +194,5 @@ export default connect(mapStateToProps, {
   getProfileById,
   getPostsByCurrentUser,
   getCurrentProfile,
+  getContributions
 })(Profile);

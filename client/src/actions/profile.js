@@ -5,6 +5,7 @@ import {
   PROFILE_ERROR,
   UPDATE_PROFILE,
   CLEAR_PROFILE,
+  GET_CONTRIBUTIONS,
   //   ACCOUNT_DELETED,
 } from './types';
 
@@ -192,6 +193,24 @@ export const changePicture = (data) => async (dispatch) => {
     });
     dispatch(setAlert('Profile Picture successfully changed!', 'success'));
   } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+export const getContributions = () => async (dispatch) => {
+  try {
+    const res = await axios.get('/contributions/');
+
+    dispatch({
+      type: GET_CONTRIBUTIONS,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({ type: CLEAR_PROFILE });
+
     dispatch({
       type: PROFILE_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status },
