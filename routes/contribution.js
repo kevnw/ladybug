@@ -7,7 +7,7 @@ const router = express.Router()
  * Retrieves all universities
  */
 router.get(
-  '/:date',
+  '/',
   AuthController.verifyToken,
   UserController.getContributions
 );

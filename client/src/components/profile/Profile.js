@@ -49,7 +49,8 @@ const Profile = ({
     data: {
       dataPoints: {
         '1451606400': 2, 
-        '1454284800': 10
+        '1454284800': 10,
+        '1595347200': 12
       }, // object with timestamp-value pairs
         start: new Date(new Date().setMonth(new Date().getMonth() - 12)),
         end: new Date()      // Date objects

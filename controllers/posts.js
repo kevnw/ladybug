@@ -9,6 +9,7 @@ const {
   handleSuccess,
   buildErrObject,
   buildSuccObject,
+  roundDate
 } = require('../middleware/utils');
 
 /*********************
@@ -19,7 +20,7 @@ const {
 const findUserById = async (id) => {
   return new Promise((resolve, reject) => {
     User.findOne({ _id: id })
-      .select('_id name avatar saved notifications')
+      .select('_id name avatar saved notifications contributions')
       .then((user) => {
         if (!user) {
           reject(buildErrObject(422, 'User does not exist'));
@@ -156,6 +157,28 @@ exports.createPost = async (req, res) => {
     const mod = await findModuleyById(newPost.module);
     const uni = await findUniversityById(mod.university);
 
+    const date = roundDate(new Date())
+    if (author.contributions) {
+      if (author.contributions[`${date}`]) {
+        const data = {
+          ...author.contributions
+        }
+        const n = author.contributions[`${date}`] + 1
+        data[`${date}`] = n
+        author.contributions = data
+      } else {
+        author.contributions = {
+          ...author.contributions,
+          [date]: 1
+        }
+      }
+    } else {
+      author.contributions = {
+        [date]: 1
+      }
+    }
+
+    author.save()
     newPost.authorName = author.name;
     newPost.moduleName = mod.name;
     newPost.avatar = author.avatar;
@@ -335,11 +358,33 @@ exports.comment = async (req, res) => {
       action: post._id
     }
 
+    const date = roundDate(new Date())
+    if (user.contributions) {
+      if (user.contributions[`${date}`]) {
+        const data = {
+          ...user.contributions
+        }
+        const n = user.contributions[`${date}`] + 1
+        data[`${date}`] = n
+        user.contributions = data
+      } else {
+        user.contributions = {
+          ...user.contributions,
+          [date]: 1
+        }
+      }
+    } else {
+      user.contributions = {
+        [date]: 1
+      }
+    }
+
     if (targetUser._id != user._id) {
       await notif.createNotification(data, targetUser, user._id)
     }
     
     post.comments.push(comment);
+    user.save()
     post.save();
     handleSuccess(res, buildSuccObject(post.comments));
   } catch (err) {

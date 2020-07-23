@@ -19,7 +19,7 @@ const {
 const findUserById = async id => {
   return new Promise((resolve, reject) => {
     User.findOne({ _id: id })
-      .select('name email role verified _id following avatar')
+      .select('name email role verified _id following avatar contributions')
       .then(user => {
         if (!user) {
           reject(buildErrObject(422, 'User does not exist'));
@@ -57,15 +57,14 @@ const findAllPost = async () => {
   })
 }
 
-const findAllPostRange = async (author, start, end) => {
+const findAllPostRange = async (start, end) => {
   return new Promise((resolve, reject) => {
     Post.find(
       {
         "date": {
           "$gte": start, 
           "$lt": end
-        },
-        author: author
+        }
       }
     )
     .lean()
@@ -260,14 +259,8 @@ exports.getAllPostFromUserToken = async (req, res) => {
 exports.getContributions = async (req, res) => {
   try {
     const user = await findUserById(req.body._id)
-    const endDate = new Date(req.params.date)
-    const startDate = new Date(req.params.date).setDate(endDate.getDate() - 3)
-    const allPost = await findAllPostRange(user._id, startDate, endDate)
-    for (const element of allPost) {
-      
-    }
 
-    handleSuccess(res, buildSuccObject("API CREATED"))
+    handleSuccess(res, buildSuccObject(user.contributions))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message));
   }

@@ -66,3 +66,9 @@ exports.itemNotFound = (err, item, reject, message) => {
     reject(this.buildErrObject(404, message))
   }
 }
+
+exports.roundDate = (timeStamp) => {
+  timeStamp -= timeStamp % (24 * 60 * 60 * 1000);//subtract amount of time since midnight
+  timeStamp += new Date().getTimezoneOffset() * 60 * 1000;//add on the timezone offset
+  return timeStamp.toString().slice(0, 10)
+}

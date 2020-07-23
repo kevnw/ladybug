@@ -53,6 +53,9 @@ const UserSchema = new mongoose.Schema(
         ref: 'Post'
       }
     ],
+    contributions: {
+      type: mongoose.Schema.Types.Mixed
+    },
     verification: {
       type: String
     },
