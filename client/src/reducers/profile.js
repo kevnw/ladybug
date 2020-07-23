@@ -11,7 +11,8 @@ const initialState = {
   profiles: [],
   loading: true,
   error: {},
-  contributions: null
+  contributions: null,
+  contributionsId: null,
 };
 
 export default function (state = initialState, action) {
@@ -41,9 +42,10 @@ export default function (state = initialState, action) {
     case GET_CONTRIBUTIONS:
       return {
         ...state,
-        contributions: payload,
-        loading: false
-      }
+        contributions: payload.data,
+        contributionsId: payload.id,
+        loading: false,
+      };
     default:
       return state;
   }

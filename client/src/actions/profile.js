@@ -206,7 +206,25 @@ export const getContributions = () => async (dispatch) => {
 
     dispatch({
       type: GET_CONTRIBUTIONS,
-      payload: res.data,
+      payload: { id: 'me', data: res.data },
+    });
+  } catch (err) {
+    dispatch({ type: CLEAR_PROFILE });
+
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+export const getContributionsById = (id) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/contributions/${id}`);
+
+    dispatch({
+      type: GET_CONTRIBUTIONS,
+      payload: { id: id, data: res.data },
     });
   } catch (err) {
     dispatch({ type: CLEAR_PROFILE });
