@@ -260,9 +260,18 @@ exports.getContributions = async (req, res) => {
   try {
     const user = await findUserById(req.body._id)
 
-    console.log("masuk contributions, user = " +user)
     handleSuccess(res, buildSuccObject(user.contributions))
   } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
+  }
+}
+
+exports.getContributionsById = async (req, res) => {
+  try {
+    const user = await findUserById(req.params.userId)
+
+    handleSuccess(res, buildSuccObject(user.contributions))
+  } catch ( err) {
     handleError(res, buildErrObject(422, err.message));
   }
 }
