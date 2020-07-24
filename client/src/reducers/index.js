@@ -5,6 +5,8 @@ import module from './module';
 import university from './university';
 import post from './post';
 import profile from './profile';
+import request from './request';
+import notification from './notification';
 
 export default combineReducers({
   alert,
@@ -13,4 +15,6 @@ export default combineReducers({
   university,
   post,
   profile,
+  request,
+  notification,
 });

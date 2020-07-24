@@ -4,17 +4,9 @@ const compression = require('compression')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const helmet = require('helmet')
-const cloudinary = require('cloudinary')
 const initMongo = require('./config/mongo')
 const app = express()
 const path = require('path')
-
-// Configure cloudinary
-cloudinary.config({
-  cloud_name: 'ladybug',
-  api_key: '',
-  api_secret: ''
-})
 
 // Setup express server port from ENV, default: 5000
 app.set('port', process.env.PORT || 5000)
@@ -25,6 +17,7 @@ app.use(
     limit: '20mb'
   })
 )
+
 // for parsing application/x-www-form-urlencoded
 app.use(
   bodyParser.urlencoded({

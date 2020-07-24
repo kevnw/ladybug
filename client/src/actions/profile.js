@@ -5,6 +5,7 @@ import {
   PROFILE_ERROR,
   UPDATE_PROFILE,
   CLEAR_PROFILE,
+  GET_CONTRIBUTIONS,
   //   ACCOUNT_DELETED,
 } from './types';
 
@@ -167,6 +168,67 @@ export const deleteEducation = (id) => async (dispatch) => {
 
     dispatch(setAlert('Education Removed', 'success'));
   } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+// Change profile picture
+export const changePicture = (data) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const body = JSON.stringify({ data });
+  try {
+    const res = await axios.post('/profiles/picture', body, config);
+
+    dispatch({
+      type: UPDATE_PROFILE,
+      payload: res.data,
+    });
+    dispatch(setAlert('Profile Picture successfully changed!', 'success'));
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+export const getContributions = () => async (dispatch) => {
+  try {
+    const res = await axios.get('/contributions/');
+
+    dispatch({
+      type: GET_CONTRIBUTIONS,
+      payload: { id: 'me', data: res.data },
+    });
+  } catch (err) {
+    dispatch({ type: CLEAR_PROFILE });
+
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+export const getContributionsById = (id) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/contributions/${id}`);
+
+    dispatch({
+      type: GET_CONTRIBUTIONS,
+      payload: { id: id, data: res.data },
+    });
+  } catch (err) {
+    dispatch({ type: CLEAR_PROFILE });
+
     dispatch({
       type: PROFILE_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status },

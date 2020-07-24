@@ -1,5 +1,7 @@
 const UniversityController = require('../controllers/universities')
 const ModuleController = require('../controllers/modules')
+const AuthController = require('../controllers/auth')
+const auth = require('../middleware/auth')
 const express = require('express')
 const router = express.Router()
 
@@ -7,8 +9,16 @@ const router = express.Router()
  * Get particular university info
  */
 router.get(
-  '/:uniName',
-  UniversityController.getUniInfo
+  '/:uniAcronym',
+  UniversityController.getUniInfoAcronym
+)
+
+/*
+ * Get particular university info
+ */
+router.get(
+  '/name/:uniName',
+  UniversityController.getUniInfoName
 )
 
 /*
@@ -16,6 +26,8 @@ router.get(
  */
 router.post(
   '/add',
+  AuthController.verifyToken,
+  auth.roleAuthorization(['admin', 'superadmin']),
   UniversityController.createUni
 )
 
@@ -24,6 +36,8 @@ router.post(
  */
 router.delete(
   '/delete',
+  AuthController.verifyToken,
+  auth.roleAuthorization(['admin', 'superadmin']),
   UniversityController.deleteUni
 )
 

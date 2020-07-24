@@ -1,5 +1,6 @@
 const CategoriesController = require('../controllers/categories')
-const UniversityController = require('../controllers/universities')
+const AuthController = require('../controllers/auth')
+const auth = require('../middleware/auth')
 const express = require('express')
 const router = express.Router()
 
@@ -11,8 +12,14 @@ router.get(
   CategoriesController.getUniversityList
 );
 
-// router.use(
-  // '/:uniName/modules', require('./university')
-// )
+/*
+ * Create new university and module
+ */
+router.post(
+  '/create',
+  AuthController.verifyToken,
+  auth.roleAuthorization(['admin', 'superadmin']),
+  CategoriesController.createUniAndModule
+)
 
 module.exports = router

@@ -1,4 +1,6 @@
 const ModuleController = require('../controllers/modules')
+const AuthController = require('../controllers/auth')
+const auth = require('../middleware/auth')
 const express = require('express')
 const router = express.Router()
 
@@ -36,6 +38,8 @@ router.get(
  */
 router.post(
   '/add',
+  AuthController.verifyToken,
+  auth.roleAuthorization(['admin', 'superadmin']),
   ModuleController.createModule
 );
 
@@ -44,6 +48,8 @@ router.post(
  */
 router.delete(
   '/delete',
+  AuthController.verifyToken,
+  auth.roleAuthorization(['admin', 'superadmin']),
   ModuleController.deleteModule
 );
 

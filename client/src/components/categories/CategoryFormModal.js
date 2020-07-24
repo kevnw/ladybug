@@ -12,27 +12,26 @@ const CategoryFormModal = ({ setShowing, addRequest }) => {
     { key: 'au', value: 'australia', flag: 'au', text: 'Australia' },
     { key: 'ca', value: 'canada', flag: 'ca', text: 'Canada' },
     { key: 'cn', value: 'china', flag: 'cn', text: 'China' },
-    { key: 'dk', value: 'Denmark', flag: 'dk', text: 'Denmark' },
-    { key: 'fi', value: 'Finland', flag: 'fi', text: 'Finland' },
-    { key: 'fr', value: 'France', flag: 'fr', text: 'France' },
-    { key: 'de', value: 'Germany', flag: 'de', text: 'Germany' },
-    { key: 'hk', value: 'Hong+Kong', flag: 'hk', text: 'Hong Kong' },
-    { key: 'in', value: 'India', flag: 'in', text: 'India' },
-    { key: 'id', value: 'Indonesia', flag: 'id', text: 'Indonesia' },
-    { key: 'it', value: 'Italy', flag: 'it', text: 'Italy' },
-    { key: 'jp', value: 'Japan', flag: 'jp', text: 'Japan' },
-    { key: 'my', value: 'Malaysia', flag: 'my', text: 'Malaysia' },
-    { key: 'nl', value: 'Netherlands', flag: 'nl', text: 'Netherlands' },
-    { key: 'nz', value: 'New+Zealand', flag: 'nz', text: 'New Zealand' },
-    { key: 'ph', value: 'Philippines', flag: 'ph', text: 'Philippines' },
-    { key: 'sg', value: 'Singapore', flag: 'sg', text: 'Singapore' },
-    { key: 'za', value: 'South+Africa', flag: 'za', text: 'South Africa' },
-    { key: 'es', value: 'Spain', flag: 'es', text: 'Spain' },
-    { key: 'ch', value: 'Switzerland', flag: 'ch', text: 'Switzerland' },
-    { key: 'tw', value: 'Taiwan', flag: 'tw', text: 'Taiwan' },
-    { key: 'th', value: 'Thailand', flag: 'th', text: 'Thailand' },
-    { key: 'us', value: 'United+States', flag: 'us', text: 'United States' },
-    { key: 'vn', value: 'Vietnam', flag: 'vn', text: 'Vietnam' },
+    { key: 'dk', value: 'denmark', flag: 'dk', text: 'Denmark' },
+    { key: 'fi', value: 'finland', flag: 'fi', text: 'Finland' },
+    { key: 'de', value: 'germany', flag: 'de', text: 'Germany' },
+    { key: 'hk', value: 'hongkong', flag: 'hk', text: 'Hong Kong' },
+    { key: 'in', value: 'india', flag: 'in', text: 'India' },
+    { key: 'id', value: 'indonesia', flag: 'id', text: 'Indonesia' },
+    { key: 'it', value: 'italy', flag: 'it', text: 'Italy' },
+    { key: 'jp', value: 'japan', flag: 'jp', text: 'Japan' },
+    { key: 'my', value: 'malaysia', flag: 'my', text: 'Malaysia' },
+    { key: 'nl', value: 'netherlands', flag: 'nl', text: 'Netherlands' },
+    { key: 'nz', value: 'newzealand', flag: 'nz', text: 'New Zealand' },
+    { key: 'ph', value: 'philippines', flag: 'ph', text: 'Philippines' },
+    { key: 'sg', value: 'singapore', flag: 'sg', text: 'Singapore' },
+    { key: 'za', value: 'southafrica', flag: 'za', text: 'South Africa' },
+    { key: 'es', value: 'spain', flag: 'es', text: 'Spain' },
+    { key: 'ch', value: 'switzerland', flag: 'ch', text: 'Switzerland' },
+    { key: 'tw', value: 'taiwan', flag: 'tw', text: 'Taiwan' },
+    { key: 'th', value: 'thailand', flag: 'th', text: 'Thailand' },
+    { key: 'us', value: 'unitedstates', flag: 'us', text: 'United States' },
+    { key: 'vn', value: 'vietnam', flag: 'vn', text: 'Vietnam' },
   ];
   const [country, setCountry] = useState(null);
   const [uniList, setUniList] = useState([]);
@@ -48,9 +47,9 @@ const CategoryFormModal = ({ setShowing, addRequest }) => {
 
   useEffect(() => {
     if (country) {
-      axios
-        .get(`http://universities.hipolabs.com/search?country=${country}`)
-        .then((response) => setUniList(response.data));
+      var countryCode = country.toLowerCase();
+      const path = `assets/university/${country}.json`;
+      axios.get(path).then((response) => setUniList(response.data));
     }
   }, [country]);
 
@@ -64,7 +63,6 @@ const CategoryFormModal = ({ setShowing, addRequest }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    // console.log(formData);
     addRequest(formData);
     closeModalHandler();
   };

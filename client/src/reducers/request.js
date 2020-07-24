@@ -1,4 +1,9 @@
-import { ADD_REQUEST, REQUEST_ERROR } from '../actions/types';
+import {
+  ADD_REQUEST,
+  REQUEST_ERROR,
+  GET_REQUESTS,
+  DELETE_REQUEST,
+} from '../actions/types';
 
 const initialState = {
   request: null,
@@ -23,6 +28,17 @@ export default function (state = initialState, action) {
         error: payload,
         loading: false,
         profile: null,
+      };
+    case GET_REQUESTS:
+      return {
+        ...state,
+        requests: payload,
+        loading: false,
+      };
+    case DELETE_REQUEST:
+      return {
+        ...state,
+        requests: state.requests.filter((request) => request._id !== payload),
       };
     default:
       return state;

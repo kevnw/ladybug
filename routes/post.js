@@ -18,6 +18,15 @@ router.get(
 )
 
 /*
+ * Get saved post
+ */
+router.get(
+  '/saved',
+  AuthController.verifyToken,
+  PostController.getSavedPosts
+)
+
+/*
  * Get particular module info
  */
 router.get(

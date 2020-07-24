@@ -19,7 +19,7 @@ const {
 const findUserById = async id => {
   return new Promise((resolve, reject) => {
     User.findOne({ _id: id })
-      .select('name email role verified _id following')
+      .select('name email role verified _id following avatar contributions')
       .then(user => {
         if (!user) {
           reject(buildErrObject(422, 'User does not exist'));
@@ -54,6 +54,22 @@ const findAllPost = async () => {
     .lean()
     .then(postList => resolve(buildSuccObject(postList)))
     .catch(err => reject(buildErrObject(422, err.message)));
+  })
+}
+
+const findAllPostRange = async (start, end) => {
+  return new Promise((resolve, reject) => {
+    Post.find(
+      {
+        "date": {
+          "$gte": start, 
+          "$lt": end
+        }
+      }
+    )
+    .lean()
+    .then(postList => resolve(buildSuccObject(postList)))
+    .catch(err => reject(buildErrObject(err.message)))
   })
 }
 
@@ -235,6 +251,36 @@ exports.getAllPostFromUserToken = async (req, res) => {
     }
 
     handleSuccess(res, buildSuccObject(temp))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
+  }
+}
+
+exports.getContributions = async (req, res) => {
+  try {
+    const user = await findUserById(req.body._id)
+
+    handleSuccess(res, buildSuccObject(user.contributions))
+  } catch (err) {
+    handleError(res, buildErrObject(422, err.message));
+  }
+}
+
+exports.getContributionsById = async (req, res) => {
+  try {
+    const user = await findUserById(req.params.userId)
+
+    handleSuccess(res, buildSuccObject(user.contributions))
+  } catch ( err) {
+    handleError(res, buildErrObject(422, err.message));
+  }
+}
+
+exports.getAvatarFromUserId = async (req, res) => {
+  try {
+    const user = await findUserById(req.params.userId)
+
+    handleSuccess(res, buildSuccObject(user.avatar))
   } catch (err) {
     handleError(res, buildErrObject(422, err.message));
   }

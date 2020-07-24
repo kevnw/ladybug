@@ -3,6 +3,10 @@ import { setAlert } from './alert';
 import {
   GET_POSTS_FROM_MODULE,
   GET_POSTS_RECOMMENDATIONS,
+  GET_MOST_RECENT_POSTS,
+  GET_MOST_LIKED_POSTS,
+  GET_MOST_DISCUSSED_POSTS,
+  GET_SAVED_POSTS,
   GET_POSTS_BY_USER,
   POST_ERROR,
   UPDATE_VOTES,
@@ -31,6 +35,56 @@ export const getPostsFromModule = (modId) => async (dispatch) => {
   }
 };
 
+// Get most recent posts
+export const getMostRecentPosts = (moduleId) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/filters/most-recent/${moduleId}`);
+    dispatch({
+      type: GET_MOST_RECENT_POSTS,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+// Get most liked posts
+export const getMostLikedPosts = (moduleId) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/filters/most-liked/${moduleId}`);
+
+    dispatch({
+      type: GET_MOST_LIKED_POSTS,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+// Get most discussed posts
+export const getMostDiscussedPosts = (moduleId) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/filters/most-discussed/${moduleId}`);
+
+    dispatch({
+      type: GET_MOST_DISCUSSED_POSTS,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
 // Get posts recommendation
 export const getPostsRecommendations = () => async (dispatch) => {
   try {
@@ -38,6 +92,23 @@ export const getPostsRecommendations = () => async (dispatch) => {
 
     dispatch({
       type: GET_POSTS_RECOMMENDATIONS,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+// Get saved posts
+export const getSavedPosts = () => async (dispatch) => {
+  try {
+    const res = await axios.get(`/posts/saved`);
+
+    dispatch({
+      type: GET_SAVED_POSTS,
       payload: res.data,
     });
   } catch (err) {

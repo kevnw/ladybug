@@ -41,12 +41,21 @@ const UserSchema = new mongoose.Schema(
         ref: 'Module'
       }
     ],
+    notifications: [
+      { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Notification'
+      }
+    ],
     saved: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post'
       }
     ],
+    contributions: {
+      type: mongoose.Schema.Types.Mixed
+    },
     verification: {
       type: String
     },

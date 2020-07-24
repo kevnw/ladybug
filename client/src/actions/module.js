@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { setAlert } from './alert';
+import { deleteRequest } from './request';
 import {
   GET_MODULES,
   GET_MODULES_RECOMMENDATIONS,
@@ -9,6 +10,7 @@ import {
   MODULE_ERROR,
   UPDATE_FOLLOWERS,
   GET_FOLLOWEDMODULES,
+  ADD_MODULE,
 } from './types';
 
 // Get all modules
@@ -151,6 +153,47 @@ export const getFollowedModules = (uniId) => async (dispatch) => {
       payload: res.data,
     });
   } catch (err) {
+    dispatch({
+      type: MODULE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+// Create university and module
+export const addUniModule = (formData, id) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const res = await axios.post(`/categories/create`, formData, config);
+    dispatch(setAlert(res.data, 'success'));
+    dispatch(deleteRequest(id, true));
+  } catch (err) {
+    console.log(err.response.data.errors);
+    dispatch({
+      type: MODULE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+export const addModule = (formData, id) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const res = await axios.post(`/modules/add`, formData, config);
+    dispatch(setAlert(res.data, 'success'));
+    dispatch(deleteRequest(id, true));
+  } catch (err) {
+    console.log(err.response.data.errors);
     dispatch({
       type: MODULE_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status },

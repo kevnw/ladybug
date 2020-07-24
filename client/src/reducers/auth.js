@@ -8,6 +8,9 @@ import {
   LOGOUT,
   VERIFY_SUCCESS,
   VERIFY_FAIL,
+  SAVE_POST,
+  UNSAVE_POST,
+  UPDATE_PROFILE,
   // ACCOUNT_DELETED,
 } from '../actions/types';
 
@@ -46,6 +49,14 @@ export default function (state = initialState, action) {
         isAuthenticated: true,
         loading: false,
       };
+    case SAVE_POST:
+    case UNSAVE_POST:
+      return {
+        ...state,
+        user: { ...state.user, saved: payload.saved },
+        isAuthenticated: true,
+        loading: false,
+      };
     case REGISTER_FAIL:
     case AUTH_ERROR:
     case LOGIN_FAIL:
@@ -57,6 +68,13 @@ export default function (state = initialState, action) {
         ...state,
         token: null,
         isAuthenticated: false,
+        loading: false,
+      };
+    case UPDATE_PROFILE:
+      return {
+        ...state,
+        user: { ...state.user, avatar: payload.avatar },
+        isAuthenticated: true,
         loading: false,
       };
     default:

@@ -10,9 +10,13 @@ import {
   LOGOUT,
   VERIFY_SUCCESS,
   VERIFY_FAIL,
+  SAVE_POST,
+  UNSAVE_POST,
+  CLEAR_NOTIFICATIONS,
   //   CLEAR_PROFILE,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
+import { getNotifications } from './notification';
 
 // Load User
 export const loadUser = () => async (dispatch) => {
@@ -83,6 +87,7 @@ export const login = (email, password) => async (dispatch) => {
     });
 
     dispatch(loadUser());
+    dispatch(getNotifications());
   } catch (err) {
     // console.log(err.response.data);
     const errors = err.response.data.errors;
@@ -100,6 +105,7 @@ export const login = (email, password) => async (dispatch) => {
 export const logout = () => (dispatch) => {
   //TODO
   // dispatch({ type: CLEAR_PROFILE });
+  dispatch({ type: CLEAR_NOTIFICATIONS });
   dispatch({ type: LOGOUT });
 };
 
@@ -157,7 +163,7 @@ export const resetPassword = (formData, token, history) => async (dispatch) => {
       },
     };
 
-    console.log(formData);
+    // console.log(formData);
 
     const res = await axios.put(
       `/users/reset-password/${token}`,
@@ -169,6 +175,46 @@ export const resetPassword = (formData, token, history) => async (dispatch) => {
 
     // dispatch(setAlert(`${res.data}`, 'success'));
     history.push('/password-updated');
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      dispatch(setAlert(errors.msg, 'error'));
+    }
+  }
+};
+
+// Save Post
+export const savePost = (id) => async (dispatch) => {
+  try {
+    const res = await axios.put(`/posts/save/${id}`);
+
+    dispatch({
+      type: SAVE_POST,
+      payload: res.data,
+    });
+
+    dispatch(setAlert(`Post saved`, 'success'));
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      dispatch(setAlert(errors.msg, 'error'));
+    }
+  }
+};
+
+// Save Post
+export const unsavePost = (id) => async (dispatch) => {
+  try {
+    const res = await axios.put(`/posts/unsave/${id}`);
+
+    dispatch({
+      type: UNSAVE_POST,
+      payload: { ...res.data, id: id },
+    });
+
+    dispatch(setAlert(`Post unsaved`, 'success'));
   } catch (err) {
     const errors = err.response.data.errors;
 

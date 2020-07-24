@@ -26,7 +26,7 @@ const CategoryItem = ({
   };
 
   return (
-    <div className="ui card">
+    <div className="ui card" style={{ display: 'flex' }}>
       <div className="ui slide masked reveal image">
         <div className="visible content module-picture">
           <i className="code huge icon center-position" />

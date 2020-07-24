@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import CategoryItem from './CategoryItem';
 import CategoryFormModal from './CategoryFormModal';
 import Alert from '../layout/Alert';
 import { getModules } from '../../actions/module';
 import { getUniversities, getUniversity } from '../../actions/university';
+import UniversityItem from './UniversityItem';
 
 const Categories = ({
   getUniversities,
@@ -16,7 +15,7 @@ const Categories = ({
   module,
   auth,
 }) => {
-  let moduleList;
+  // let moduleList;
   const universities = university.universities;
   const universityLoading = university.loading;
   const modules = module.modules;
@@ -30,7 +29,7 @@ const Categories = ({
     getUniversities();
   }, []);
 
-  moduleList = _.mapValues(_.keyBy(modules, '_id'));
+  // moduleList = _.mapValues(_.keyBy(modules, '_id'));
 
   const [isShowing, setShowing] = useState(false);
   return (
@@ -56,38 +55,18 @@ const Categories = ({
           !universityLoading &&
           !moduleLoading &&
           modules &&
-          moduleList &&
+          // moduleList &&
           universities && (
             <div>
               {universities.length > 0 &&
                 universities.map((university) => (
-                  <div
+                  <UniversityItem
                     key={university._id}
-                    className="ui segment"
-                    style={{ border: 'none', boxShadow: 'none' }}
-                  >
-                    <h3>
-                      <Link to={`/${university.acronym}`} className="red-link">
-                        {`${university.name}`}
-                      </Link>
-                    </h3>
-                    <hr />
-                    <div
-                      className="ui segment"
-                      style={{ border: 'none', boxShadow: 'none' }}
-                    >
-                      <div className="ui three doubling cards">
-                        {university.modules.length > 0 &&
-                          university.modules.map((module) => (
-                            <CategoryItem
-                              module={moduleList[module]}
-                              key={module}
-                              // university={university.acronym}
-                            />
-                          ))}
-                      </div>
-                    </div>
-                  </div>
+                    university={university}
+                    modules={modules.filter(
+                      (module) => university.modules.indexOf(module._id) > -1
+                    )}
+                  />
                 ))}
             </div>
           )}
