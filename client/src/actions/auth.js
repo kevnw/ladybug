@@ -121,11 +121,11 @@ export const verifyUser = (token) => async (dispatch) => {
       payload: res.data,
     });
   } catch (err) {
-    console.log(err.response.data);
     // const errors = err.response.data.errors;
 
     dispatch({
       type: VERIFY_FAIL,
+      payload: err.response.data.errors,
     });
   }
 };

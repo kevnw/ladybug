@@ -17,16 +17,16 @@ const Verify = ({ auth, verifyUser, loadUser, match }) => {
   if (!auth.loading && auth.user && auth.user.verified) {
     return <Redirect to="/home" />;
   }
-  return (
-    !auth.loading &&
-    auth.user &&
-    !auth.user.verified && (
-      <Fragment>
-        <div className="container-body">
-          <h1>404 Bad Request</h1>
-        </div>
-      </Fragment>
-    )
+  return auth.loading ? (
+    <div className="ui centered active loader"></div>
+  ) : auth.error ? (
+    <Fragment>
+      <div className="container-body">
+        <h1 className="large">404 Bad Request</h1>
+      </div>
+    </Fragment>
+  ) : (
+    <div></div>
   );
 };
 

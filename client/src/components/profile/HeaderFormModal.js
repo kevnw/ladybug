@@ -7,7 +7,7 @@ import { updateProfile } from '../../actions/profile';
 const HeaderFormModal = ({ setShowingHeader, profile, updateProfile }) => {
   const [formData, setFormData] = useState({
     skills: `${profile.skills.join(',')}`,
-    status: `${profile.status}`,
+    status: profile.status ? `${profile.status}` : '0',
     social: profile.social,
   });
 
