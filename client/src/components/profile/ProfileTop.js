@@ -14,28 +14,37 @@ const ProfileTop = ({ user, profile, setShowingHeader }) => {
             style={{ padding: '2rem' }}
           >
             <div>
-              <Badge
-                overlap="circle"
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right',
-                }}
-                badgeContent={
-                  <button
-                    onClick={() => setShowingPhoto(true)}
-                    className="circular ui icon button"
-                  >
-                    <i className="icon camera"></i>
-                  </button>
-                }
-              >
+              {user._id === profile.user ? (
+                <Badge
+                  overlap="circle"
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                  }}
+                  badgeContent={
+                    <button
+                      onClick={() => setShowingPhoto(true)}
+                      className="circular ui icon button"
+                    >
+                      <i className="icon camera"></i>
+                    </button>
+                  }
+                >
+                  <img
+                    className="ui small circular centered image"
+                    style={{ position: 'relative' }}
+                    src={profile.avatar}
+                    alt=""
+                  />
+                </Badge>
+              ) : (
                 <img
                   className="ui small circular centered image"
                   style={{ position: 'relative' }}
                   src={profile.avatar}
                   alt=""
                 />
-              </Badge>
+              )}
             </div>
             <div className="splitscreen">
               <h4 className="hide-buttonA large">
