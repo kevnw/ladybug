@@ -256,6 +256,7 @@ exports.getPostInfo = async (req, res) => {
 
 exports.upvote = async (req, res) => {
   try {
+    console.log("masuk function upvote")
     const post = await findPostById(req.params.postId);
     const user = await findUserById(req.body._id);
     const targetUser = await findUserById(post.author)
