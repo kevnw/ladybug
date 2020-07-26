@@ -279,7 +279,7 @@ exports.upvote = async (req, res) => {
         action: post._id
       }
       
-      if (targetUser._id != user._id) {
+      if ("" + targetUser._id != "" + user._id) {
         await notif.createNotification(data, targetUser, user._id)
       }
       
@@ -379,7 +379,7 @@ exports.comment = async (req, res) => {
       }
     }
 
-    if (targetUser._id != user._id) {
+    if ("" + targetUser._id != "" + user._id) {
       await notif.createNotification(data, targetUser, user._id)
     }
     
