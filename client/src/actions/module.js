@@ -87,7 +87,6 @@ export const getModuleByName = (uniName, moduleName) => async (dispatch) => {
     const res = await axios.get(
       `/universities/modules/${uniName}/${moduleName}`
     );
-    console.log(res.data);
     dispatch({
       type: GET_MODULE,
       payload: res.data,
