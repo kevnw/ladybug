@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import Modal from '../Modal';
 import { addPost } from '../../actions/post';
 
-const PostFormModal = ({
+const PostFormModalFixed = ({
   addPost,
   setShowing,
   auth: { user, loading },
-  module: { name, _id, acronym },
+  module: { name, _id, uniAcronym },
 }) => {
   const [formData, setFormData] = useState({
     title: '',
@@ -50,7 +50,7 @@ const PostFormModal = ({
       <div className="field">
         <label className="header">Category</label>
         <div className="ui input">
-          {`${acronym}`} - {`${name}`}
+          {`${uniAcronym}`} - {`${name}`}
         </div>
       </div>
       <div className="field">
@@ -93,7 +93,7 @@ const PostFormModal = ({
   );
 };
 
-PostFormModal.propTypes = {
+PostFormModalFixed.propTypes = {
   module: PropTypes.object.isRequired,
   addPost: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
@@ -105,4 +105,4 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   addPost,
-})(PostFormModal);
+})(PostFormModalFixed);
