@@ -7,6 +7,7 @@ const avatar = require('../middleware/avatar')
 const { addHours } = require('date-fns')
 const uuid = require('uuid')
 const UserMailer = require('../mailers/user_mailer')
+const emailExistence = require('email-existence')
 
 const {
   handleError,
@@ -313,6 +314,15 @@ exports.register = async (req, res) => {
       handleError(res, buildErrObject(409, 'Email is already registered'));
       return;
     }
+
+    const doesEmailExist = emailExistence.check(req.body.email, function(error, response){
+    });
+
+    if (!doesEmailExist) {
+      handleError(res, buildErrObject(409, 'Email is not valid!'));
+      return;
+    }
+
     const user = await registerUser(req)
     const userInfo = setUserInfo(user)
     await createProfile(userInfo)
