@@ -41,8 +41,7 @@ const PostSchema = new mongoose.Schema(
         },
         text: String,
         date: {
-          type: Date,
-          default: Date.now()
+          type: Date
         },
         authorName: {
           type: String
