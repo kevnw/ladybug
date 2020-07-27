@@ -62,6 +62,7 @@ const PostFormModalFixed = ({
             value={title}
             onChange={(e) => onChange(e)}
             placeholder="Write one sentence summary"
+            required
           />
         </div>
       </div>
@@ -73,6 +74,7 @@ const PostFormModalFixed = ({
             value={text}
             onChange={(e) => onChange(e)}
             placeholder="Write details for the question"
+            required
           ></textarea>
         </div>
       </div>

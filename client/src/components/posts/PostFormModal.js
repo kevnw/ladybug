@@ -63,6 +63,7 @@ const PostFormModal = ({
           value={module}
           onChange={(e) => onChange(e)}
           className="ui selection dropdown"
+          required
         >
           <option value="">Select Post Category</option>
           {followedModules.length > 0 &&
@@ -85,6 +86,7 @@ const PostFormModal = ({
             value={title}
             onChange={(e) => onChange(e)}
             placeholder="Write one sentence summary"
+            required
           />
         </div>
       </div>
@@ -96,6 +98,7 @@ const PostFormModal = ({
             value={text}
             onChange={(e) => onChange(e)}
             placeholder="Write details for the question"
+            required
           ></textarea>
         </div>
       </div>
