@@ -351,6 +351,7 @@ exports.comment = async (req, res) => {
       text: req.body.text,
       authorName: user.name,
       avatar: user.avatar,
+      date: new Date()
     };
 
     const data = {

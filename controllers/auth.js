@@ -313,6 +313,7 @@ exports.register = async (req, res) => {
       handleError(res, buildErrObject(409, 'Email is already registered'));
       return;
     }
+
     const user = await registerUser(req)
     const userInfo = setUserInfo(user)
     await createProfile(userInfo)

@@ -55,6 +55,7 @@ const Categories = ({
           !universityLoading &&
           !moduleLoading &&
           modules &&
+          modules.length > 0 &&
           // moduleList &&
           universities && (
             <div>
